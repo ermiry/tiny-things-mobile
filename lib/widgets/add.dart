@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 // import 'package:intl/intl.dart';
+
+import 'package:things/providers/things.dart';
 
 // import 'package:pocket/widgets/adaptive/flatButton.dart';
 
@@ -13,9 +16,29 @@ class AddThing extends StatefulWidget {
 
 class _AddThingState extends State <AddThing> {
 
-	final GlobalKey <FormState> _formKey = new GlobalKey <FormState> ();
+	final GlobalKey <FormState> _formKey = new GlobalKey ();
 
   final FocusNode _descriptionFocusNode = new FocusNode ();
+
+  Map <String, String> _data = {
+    'title': '',
+    'description': ''
+  };
+
+  @override
+  void dispose()  {
+    _descriptionFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  void _addThing() {
+    if (this._formKey.currentState.validate()) {
+      this._formKey.currentState.save();
+      Provider.of<Things>(context).addThing(this._data['title'], this._data['description']);
+      Navigator.of (context).pop();
+    }
+  }
 
 	@override
 	Widget build (BuildContext context) {
@@ -49,23 +72,22 @@ class _AddThingState extends State <AddThing> {
                               this._descriptionFocusNode
                             );
                           },
-                          // FIXME:
-                          // onSaved: (value) {
-                          //   _authData['email'] = value;
-                          // },
+                          onSaved: (value) {
+                            this._data['title'] = value;
+                          },
                         ),
 
                         new TextFormField (
-                          // focusNode: this._passwordFocusNode,
+                          focusNode: this._descriptionFocusNode,
                           decoration: const InputDecoration (labelText: 'Description'),
                           obscureText: true,
                           validator: (value) {
                             return null;
                           },
-                          // FIXME:
-                          // onSaved: (value) {
-                          //   _authData['password'] = value;
-                          // },
+                          onSaved: (value) {
+                            if (value.isNotEmpty)
+                              this._data['description'] = value;
+                          },
                         ),
                       ]
                     )
@@ -78,8 +100,8 @@ class _AddThingState extends State <AddThing> {
                     child: Text ('Add', style: TextStyle (color: Colors.white)),
                     textColor: Theme.of(context).textTheme.button.color,
                     onPressed: () {
-                      // FIXME: add new thing
-                      Navigator.of (context).pop();
+                      this._addThing();
+                      // Navigator.of (context).pop();
                   } 
                 )
               ],

@@ -24,6 +24,11 @@ class Things with ChangeNotifier {
 
   List <Thing> get things { return [..._things]; }
 
+  void addThing(String title, String description) {
+    this._things.add(new Thing (id: DateTime.now().toString(), title:  title, description: description));
+    notifyListeners();
+  }
+
   void removeThing(String id) {
     this._things.removeWhere((t) => t.id == id);
     notifyListeners();
