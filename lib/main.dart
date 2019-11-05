@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:things/providers/things.dart';
 
 import 'package:things/screens/homre.dart';
 
@@ -9,13 +12,20 @@ class TinyThings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp (
-      title: 'Tiny Things',
-      theme: new ThemeData (
-        primarySwatch: Colors.blue,
-        accentColor: Colors.redAccent
+    return MultiProvider (
+      providers: [
+        ChangeNotifierProvider.value (
+          value: new Things ()
+        )
+      ],
+      child: MaterialApp (
+        title: 'Tiny Things',
+        theme: new ThemeData (
+          primarySwatch: Colors.blue,
+          accentColor: Colors.redAccent
+        ),
+        home: new HomeScreen (),
       ),
-      home: new HomeScreen (),
     );
 
   }
