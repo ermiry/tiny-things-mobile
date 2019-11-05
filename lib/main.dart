@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:things/screens/homre.dart';
+
 void main() => runApp(TinyThings ());
 
 class TinyThings extends StatelessWidget {
@@ -14,25 +16,6 @@ class TinyThings extends StatelessWidget {
         accentColor: Colors.redAccent
       ),
       home: new HomeScreen (),
-    );
-
-  }
-
-}
-
-class HomeScreen extends StatelessWidget {
-
-  static const routename = '/home';
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold (
-      appBar: AppBar (
-        title: const Text ('Tiny Things')
-      ),
-      // drawer: AppDrawer (),
-      body: Container (),
     );
 
   }
