@@ -17,7 +17,9 @@ class Thing {
 class Things with ChangeNotifier {
 
   List <Thing> _things = [
-    new Thing (id: '1', title: 'This is a test tilte', description: 'This is a test description')
+    new Thing (id: '1', title: 'This is a test tilte', description: 'This is a test description'),
+    new Thing (id: '2', title: 'This is a test tilte', description: 'This is a test description'),
+    new Thing (id: '3', title: 'This is a test tilte', description: 'This is a test description')
   ];
 
   List <Thing> get things { return [..._things]; }
