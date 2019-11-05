@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:things/providers/things.dart';
 
+import 'package:things/widgets/add.dart';
+
 class HomeScreen extends StatelessWidget {
 
   static const routename = '/home';
@@ -12,7 +14,18 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold (
       appBar: AppBar (
-        title: const Text ('Tiny Things')
+        title: const Text ('Tiny Things'),
+        actions: <Widget>[
+          IconButton (
+						icon: Icon (Icons.add),
+						onPressed: () {
+							showModalBottomSheet(
+								context: context, 
+								builder: (bCtx) { return new AddThing (); }
+							);
+						},
+					)
+        ],
       ),
       // drawer: AppDrawer (),
       body: Consumer <Things> (
