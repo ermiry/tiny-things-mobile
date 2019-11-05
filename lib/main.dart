@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:things/providers/things.dart';
 
-import 'package:things/screens/homre.dart';
+import 'package:things/screens/home.dart';
 
 void main() => runApp(TinyThings ());
 

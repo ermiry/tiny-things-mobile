@@ -24,4 +24,9 @@ class Things with ChangeNotifier {
 
   List <Thing> get things { return [..._things]; }
 
+  void removeThing(String id) {
+    this._things.removeWhere((t) => t.id == id);
+    notifyListeners();
+  }
+
 }

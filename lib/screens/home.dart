@@ -10,16 +10,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final things = Provider.of<Things>(context);
-
     return Scaffold (
       appBar: AppBar (
         title: const Text ('Tiny Things')
       ),
       // drawer: AppDrawer (),
-      body: ListView.builder(
-        itemCount: things.things.length,
-        itemBuilder: (ctx, idx) => new _ThingItem (things.things[idx])
+      body: Consumer <Things> (
+        builder: (ctx, things, child) => ListView.builder(
+          itemCount: things.things.length,
+          itemBuilder: (ctx, idx) => new _ThingItem (things.things[idx])
+        ),
       )
     );
 
@@ -27,21 +27,11 @@ class HomeScreen extends StatelessWidget {
 
 }
 
-class _ThingItem extends StatefulWidget {
+class _ThingItem extends StatelessWidget {
 
   final Thing thing;
 
   _ThingItem (this.thing);
-
-  @override
-  _ThingItemState createState() => new _ThingItemState ();
-
-}
-
-class _ThingItemState extends State <_ThingItem> {
-
-  // FIXME:
-  // bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +39,17 @@ class _ThingItemState extends State <_ThingItem> {
     return Column (
       children: <Widget>[
         Dismissible (
-          key: ValueKey (this.widget.thing.id),
+          key: ValueKey (this.thing.id),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            // FIXME: remove from things
-            // Provider.of <Cart> (context, listen: false).removeItem(productID);
+            Provider.of <Things> (context).removeThing(this.thing.id);
           },
           confirmDismiss: (dir) {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog (
                 title: Text ('Are you sure?'),
-                content: Text ('Do you want to remove the item from the cart?'),
+                content: Text ('Do you want to delete the thing?'),
                 actions: <Widget>[
                   FlatButton (
                     child: Text ('No'),
@@ -89,14 +78,12 @@ class _ThingItemState extends State <_ThingItem> {
             // )
           ),
           child: ListTile (
-            title: Text (this.widget.thing.title),
-            subtitle: Text (this.widget.thing.description),
-            trailing: IconButton (
-              icon: Icon (Icons.more_horiz),
-              onPressed: () {
-                // Navigator.of(context).pushNamed('/project-devblog-post');
-              },
-            ),
+            title: Text (this.thing.title),
+            subtitle: Text (this.thing.description),
+            // trailing: IconButton (
+            //   icon: Icon (Icons.more_horiz),
+            //   onPressed: () {},
+            // ),
           ),
           
         ),
