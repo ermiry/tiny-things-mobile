@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:things/providers/things.dart';
 
-import 'package:things/screens/home.dart';
+import 'package:things/screens/tabs.dart';
 
 void main() => runApp(TinyThings ());
 
@@ -24,7 +24,7 @@ class TinyThings extends StatelessWidget {
           primarySwatch: Colors.blue,
           accentColor: Colors.redAccent
         ),
-        home: new HomeScreen (),
+        home: new TabScreen (),
       ),
     );
 
