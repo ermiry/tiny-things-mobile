@@ -53,30 +53,47 @@ class _ThingItem extends StatelessWidget {
       children: <Widget>[
         Dismissible (
           key: ValueKey (this.thing.id),
-          direction: DismissDirection.endToStart,
+          // direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            Provider.of <Things> (context).removeThing(this.thing.id);
+            // FIXME: add to completed tasks
+            if (direction == DismissDirection.startToEnd)
+              Provider.of <Things> (context).removeThing(this.thing.id);
+            else if (direction == DismissDirection.endToStart)
+              Provider.of <Things> (context).removeThing(this.thing.id);
           },
           confirmDismiss: (dir) {
-            return showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog (
-                title: Text ('Are you sure?'),
-                content: Text ('Do you want to delete the thing?'),
-                actions: <Widget>[
-                  FlatButton (
-                    child: Text ('No'),
-                    onPressed: () => Navigator.of(ctx).pop(false),
-                  ),
-                  FlatButton (
-                    child: Text ('Yes'),
-                    onPressed: () => Navigator.of(ctx).pop(true),
-                  ),
-                ],
-              )
-            );
+            if (dir == DismissDirection.endToStart)
+              return showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog (
+                  title: Text ('Are you sure?'),
+                  content: Text ('Do you want to delete the thing?'),
+                  actions: <Widget>[
+                    FlatButton (
+                      child: Text ('No'),
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                    ),
+                    FlatButton (
+                      child: Text ('Yes'),
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                    ),
+                  ],
+                )
+              );
+
+            return Future<bool>.value(true);
           },
           background: Container (
+            color: Colors.green,
+            child: Icon (
+              Icons.done,
+              color: Colors.white,
+              size: 40,
+            ),
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 20),
+          ),
+          secondaryBackground: Container (
             color: Theme.of(context).errorColor,
             child: Icon (
               Icons.delete,
@@ -85,10 +102,6 @@ class _ThingItem extends StatelessWidget {
             ),
             alignment: Alignment.centerRight,
             padding: EdgeInsets.only(right: 20),
-            // margin: EdgeInsets.symmetric(
-            //   horizontal: 15,
-            //   vertical: 4
-            // )
           ),
           child: ListTile (
             title: Text (this.thing.title),
@@ -100,7 +113,9 @@ class _ThingItem extends StatelessWidget {
           ),
           
         ),
-        new Divider ()
+        new Divider (
+          height: 0,
+        )
       ],
     );
 

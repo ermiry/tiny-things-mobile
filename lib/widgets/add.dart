@@ -80,7 +80,6 @@ class _AddThingState extends State <AddThing> {
                         new TextFormField (
                           focusNode: this._descriptionFocusNode,
                           decoration: const InputDecoration (labelText: 'Description'),
-                          obscureText: true,
                           validator: (value) {
                             return null;
                           },
