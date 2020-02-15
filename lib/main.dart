@@ -1,33 +1,82 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'package:provider/provider.dart';
+import 'package:things/providers/auth.dart';
 
-import 'package:things/providers/things.dart';
+import 'package:things/screens/auth.dart';
+import 'package:things/screens/loading.dart';
+import 'package:things/sidebar/sidebar_layout.dart';
 
-import 'package:things/screens/tabs.dart';
-
-void main() => runApp(TinyThings ());
+void main() => runApp(new TinyThings ());
 
 class TinyThings extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
+	@override
+	Widget build(BuildContext context) {
 
-    return MultiProvider (
+    return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value (
-          value: new Things ()
+        ChangeNotifierProvider.value(
+          value: new Auth(),
         )
       ],
-      child: MaterialApp (
-        title: 'Tiny Things',
-        theme: new ThemeData (
-          primarySwatch: Colors.blue,
-          accentColor: Colors.redAccent
-        ),
-        home: new TabScreen (),
+      child: Consumer <Auth> (
+        builder: (ctx, auth, _) => Platform.isAndroid ? MaterialApp (
+          title: 'Tiny Things',
+          theme: ThemeData (
+            // primarySwatch: mainBlue,
+            // accentColor: mainDarkBlue,
+            fontFamily: 'Quicksand',
+            appBarTheme: AppBarTheme (
+              textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle (fontFamily: 'Open Sans', fontSize: 20, fontWeight: FontWeight.bold)
+                )
+            ),
+            textTheme: ThemeData.light().textTheme.copyWith(
+              title: TextStyle (
+                fontFamily: 'Quicksand',
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+              ),
+              button: TextStyle (
+                color: Colors.white
+              )
+            )
+          ),
+          home: auth.isAuth ? new SideBarLayout () :
+            FutureBuilder(
+              future: auth.tryAutoLogin(),
+              builder: (ctx, authResultSnapshot) =>
+                authResultSnapshot.connectionState == ConnectionState.waiting ?
+                  new LoadingScreen () : new AuthScreen (),
+            ),
+          debugShowCheckedModeBanner: true,
+        )
+
+        :
+
+        CupertinoApp (
+          title: 'Tiny Things',
+          theme: CupertinoThemeData (
+            // primaryColor: Colors.blue,
+            // primaryContrastingColor: Colors.redAccent,
+            textTheme: CupertinoTextThemeData (
+              textStyle: TextStyle (
+                fontFamily: 'Quicksand',
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+              )
+            )
+          ),
+          // home: HomePage ()
+          home: new AuthScreen ()
+        )
       ),
     );
 
-  }
+	}
 
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:pocket/style/colors.dart';
+import 'package:things/style/colors.dart';
 
 const TextStyle hoursPlayedLabelTextStyle = const TextStyle(
   fontSize: 16,
