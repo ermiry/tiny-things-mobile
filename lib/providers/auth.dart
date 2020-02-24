@@ -73,42 +73,39 @@ class Auth with ChangeNotifier {
 
   Future <void> login(String email, String password) async {
 
-    // String url = serverURL + '/api/users/login';
+    String url = serverURL + '/api/users/login';
 
-    // password.replaceAll(new RegExp(r'\t'), '');
-    // var passwordBytes = utf8.encode(password);
-    // var passwordDigest = sha256.convert(passwordBytes);
+    password.replaceAll(new RegExp(r'\t'), '');
+    var passwordBytes = utf8.encode(password);
+    var passwordDigest = sha256.convert(passwordBytes);
 
-    // try {
-    //   final res = await htpp.post(url, 
-    //     body: {
-    //       'email': email.replaceAll(new RegExp(r'\t'), ''), 
-    //       'password': passwordDigest.toString(),
-    //     }
-    //   );
+    try {
+      final res = await htpp.post(url, 
+        body: {
+          'email': email.replaceAll(new RegExp(r'\t'), ''), 
+          'password': passwordDigest.toString(),
+        }
+      );
 
-    //   if (res.statusCode == 400) throw HttpException (res.body.toString());
+      if (res.statusCode == 400) throw HttpException (res.body.toString());
 
-    //   var actualRes = json.decode(res.body);
-    //   // print(actualRes);
-    //   this._token = actualRes['token'];
+      var actualRes = json.decode(res.body);
+      // print(actualRes);
+      this._token = actualRes['token'];
 
-    //   this.userValues = Jwt.parseJwt(token);
-    //   // print(this.userValues);
+      this.userValues = Jwt.parseJwt(token);
+      // print(this.userValues);
 
-    //   // when we get our token from server, save to memory
-    //   final prefs = await SharedPreferences.getInstance();
-    //   prefs.setString('user_token', this._token);
+      // when we get our token from server, save to memory
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('user_token', this._token);
 
-    //   notifyListeners();
-    // }
+      notifyListeners();
+    }
 
-    // catch (error) {
-    //   throw HttpException (error.toString());
-    // }
-
-     this._token = 'test';
-     notifyListeners();
+    catch (error) {
+      throw HttpException (error.toString());
+    }
 
   }
 
@@ -117,7 +114,7 @@ class Auth with ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('user_token')) {
-      print('No token!');
+      // print('No token!');
       return false;
     }
 
