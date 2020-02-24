@@ -6,26 +6,45 @@ import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/models/thing.dart';
 
+import 'package:provider/provider.dart';
+import 'package:things/providers/settings.dart';
+
 import 'package:things/style/colors.dart';
 
 class HomePage extends StatelessWidget with NavigationStates {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: new NotesScreen()
+    return Scaffold(
+      backgroundColor: mainBlue,
+      body: _NotesScreen(),
+
+      floatingActionButtonLocation: Provider.of<Settings>(context, listen: false).centerAddButton ? 
+        FloatingActionButtonLocation.centerFloat : FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton (
+        backgroundColor: mainBlue,
+				child: Icon (Icons.add),
+				onPressed: () {
+					// showModalBottomSheet (
+					// 	context: context, 
+					// 	builder: (bCtx) => AddTransaction ()
+					// );
+				},
+			),
     );
   }
 
 }
 
-class NotesScreen extends StatefulWidget {
+class _NotesScreen extends StatefulWidget {
+
   @override
-  _NotesScreenState createState() => _NotesScreenState();
+  _NotesScreenState createState() => new _NotesScreenState();
+
 }
 
-class _NotesScreenState extends State<NotesScreen>
-    with SingleTickerProviderStateMixin {
+class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderStateMixin {
+
   int _selectedCategoryIndex = 0;
   TabController _tabController;
   final DateFormat _dateFormatter = DateFormat('dd MMM');
@@ -47,20 +66,20 @@ class _NotesScreenState extends State<NotesScreen>
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
         height: 240.0,
-        width: 175.0,
+        width: 160.0,
         decoration: BoxDecoration(
           color: _selectedCategoryIndex == index
-              // ? Color(0xFF417BFB)
-              ? mainBlue
-              : Color(0xFFF5F7FB),
+            ? mainBlue
+            : Color(0xFFEFF4F6),
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             _selectedCategoryIndex == index
-                ? BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 10.0)
-                : BoxShadow(color: Colors.transparent),
+              ? BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, 2),
+                  blurRadius: 10.0
+                )
+              : BoxShadow(color: Colors.transparent),
           ],
         ),
         child: Column(
@@ -75,7 +94,7 @@ class _NotesScreenState extends State<NotesScreen>
                   color: _selectedCategoryIndex == index
                       ? Colors.white
                       : Color(0xFFAFB4C6),
-                  fontSize: 28.0,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -87,8 +106,9 @@ class _NotesScreenState extends State<NotesScreen>
                 style: TextStyle(
                   color: _selectedCategoryIndex == index
                       ? Colors.white
-                      : Colors.black,
-                  fontSize: 35.0,
+                      // : Colors.black,
+                      : Color(0xFF0F1426),
+                  fontSize: 32.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -104,7 +124,8 @@ class _NotesScreenState extends State<NotesScreen>
     return Scaffold(
       body: ListView(
         children: <Widget>[
-          SizedBox(height: 40.0),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             child: Row(
@@ -121,15 +142,17 @@ class _NotesScreenState extends State<NotesScreen>
               ],
             ),
           ),
-          SizedBox(height: 40.0),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
           Container(
-            height: 280.0,
+            height: 260.0,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categories.length + 1,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
-                  return SizedBox(width: 20.0);
+                  return SizedBox(width: 8);
                 }
                 return _buildCategoryCard(
                   index - 1,
@@ -139,11 +162,11 @@ class _NotesScreenState extends State<NotesScreen>
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 15.0),
+
+          Center(
             child: TabBar(
               controller: _tabController,
-              labelColor: Colors.black,
+              labelColor: Color(0xFF2F3446),
               unselectedLabelColor: Color(0xFFAFB4C6),
               indicatorColor: mainBlue,
               indicatorSize: TabBarIndicatorSize.label,
@@ -154,7 +177,7 @@ class _NotesScreenState extends State<NotesScreen>
                   child: Text(
                     'Things',
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -163,16 +186,16 @@ class _NotesScreenState extends State<NotesScreen>
                   child: Text(
                     'Important',
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 Tab(
                   child: Text(
-                    'Performed',
+                    'Completed',
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -180,12 +203,14 @@ class _NotesScreenState extends State<NotesScreen>
               ],
             ),
           ),
+
           SizedBox(height: 20.0),
+
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30.0),
             padding: EdgeInsets.all(30.0),
             decoration: BoxDecoration(
-              color: Color(0xFFF5F7FB),
+              color: Color(0xFFEFF4F6),
               borderRadius: BorderRadius.circular(30.0),
             ),
             child: Column(
@@ -249,12 +274,14 @@ class _NotesScreenState extends State<NotesScreen>
               ],
             ),
           ),
-          SizedBox(height: 20.0),
+
+          const SizedBox(height: 20.0),
+
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30.0),
             padding: EdgeInsets.all(30.0),
             decoration: BoxDecoration(
-              color: Color(0xFFF5F7FB),
+              color: Color(0xFFEFF4F6),
               borderRadius: BorderRadius.circular(30.0),
             ),
             child: Column(
@@ -292,6 +319,8 @@ class _NotesScreenState extends State<NotesScreen>
               ],
             ),
           ),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
         ],
       ),
     );
