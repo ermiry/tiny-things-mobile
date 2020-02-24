@@ -9,6 +9,7 @@ import 'package:things/providers/settings.dart';
 
 import 'package:things/screens/auth.dart';
 import 'package:things/screens/loading.dart';
+import 'package:things/screens/welcome.dart';
 import 'package:things/sidebar/sidebar_layout.dart';
 
 void main() => runApp(new TinyThings ());
@@ -50,13 +51,14 @@ class TinyThings extends StatelessWidget {
               )
             )
           ),
-          home: auth.isAuth ? new SideBarLayout () :
-            FutureBuilder(
-              future: auth.tryAutoLogin(),
-              builder: (ctx, authResultSnapshot) =>
-                authResultSnapshot.connectionState == ConnectionState.waiting ?
-                  new LoadingScreen () : new AuthScreen (),
-            ),
+          // home: auth.isAuth ? new SideBarLayout () :
+          //   FutureBuilder(
+          //     future: auth.tryAutoLogin(),
+          //     builder: (ctx, authResultSnapshot) =>
+          //       authResultSnapshot.connectionState == ConnectionState.waiting ?
+          //         new LoadingScreen () : new AuthScreen (),
+          //   ),
+          home: new WelcomeScreen(),
           debugShowCheckedModeBanner: true,
         )
 
