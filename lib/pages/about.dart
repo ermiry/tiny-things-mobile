@@ -21,7 +21,7 @@ class AboutPage extends StatelessWidget with NavigationStates {
                 child: Text(
                   "About",
                   style: const TextStyle(
-                    fontSize: 32,
+                    fontSize: 24,
                     color: mainBlue,
                     fontWeight: FontWeight.w800
                   ),

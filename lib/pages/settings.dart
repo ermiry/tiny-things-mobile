@@ -104,7 +104,7 @@ class SettingsPage extends StatelessWidget with NavigationStates {
               child: Text(
                 "Settings",
                 style: const TextStyle(
-                  fontSize: 32,
+                  fontSize: 24,
                   color: mainBlue,
                   fontWeight: FontWeight.w800
                 ),
@@ -115,24 +115,27 @@ class SettingsPage extends StatelessWidget with NavigationStates {
 
             SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text ('General', style: new TextStyle(fontSize: 18, color: mainDarkBlue, fontWeight: FontWeight.bold)),
                     ),
+
+                    const SizedBox(height: 10),
 
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(
-                          color: mainDarkBlue
+                          width: 0.7,
+                          color: mainDarkBlue.withAlpha(204)
                         ))
                       ),
                       child: ListTile(
-                        title: const Text ('Center add button'),
+                        title: Text ('Center add button', style: new TextStyle(fontSize: 16)),
                         subtitle: const Text('Display the add thing button in the center'),
                         trailing: Switch.adaptive (
                           activeColor: mainBlue,
@@ -146,19 +149,22 @@ class SettingsPage extends StatelessWidget with NavigationStates {
                     new SizedBox(height: MediaQuery.of(context).size.height * 0.1),
 
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text ('Danger Zone', style: new TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold)),
                     ),
+
+                    const SizedBox(height: 20),
 
                     Container(
                       decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(
-                          color: mainDarkBlue
+                          width: 0.7,
+                          color: Colors.red.withAlpha(204)
                         ))
                       ),
                       child: ListTile(
-                        title: const Text ('Enable cloud backup'),
-                        subtitle: const Text('Backup your transactions in the cloud'),
+                        title: Text ('Enable cloud backup', style: new TextStyle(fontSize: 16)),
+                        subtitle: const Text('Backup your data in the cloud'),
                         trailing: Switch.adaptive (
                           activeColor: mainBlue,
                           value: settings.enableCloud,
@@ -173,12 +179,13 @@ class SettingsPage extends StatelessWidget with NavigationStates {
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(
-                          color: mainDarkBlue
+                          width: 0.7,
+                          color: Colors.red.withAlpha(204)
                         ))
                       ),
                       child: ListTile(
-                        title: Text ('Delete cloud data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-                        subtitle: const Text('Delete all the transactions and data saved in the cloud'),
+                        title: Text ('Delete cloud data', style: new TextStyle(fontSize: 16, color: Colors.red)),
+                        subtitle: const Text('Delete all the data saved in the cloud'),
                       ),
                     ),
 
@@ -186,13 +193,14 @@ class SettingsPage extends StatelessWidget with NavigationStates {
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(
-                          color: mainDarkBlue
+                          width: 0.7,
+                          color: Colors.red.withAlpha(204)
                         ))
                       ),
                       child: ListTile(
-                        title: Text ('Clear local data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-                        subtitle: const Text('Clear all the transactions and data saved in this device'),
-                        onTap: () => this._showConfirmDialog(context, "Delete all transactions and data saved on this device?"),
+                        title: Text ('Clear local data', style: new TextStyle(fontSize: 16, color: Colors.red)),
+                        subtitle: const Text('Clear all the data saved in this device'),
+                        onTap: () => this._showConfirmDialog(context, "Delete all the data saved on this device?"),
                       ),
                     ),
 
