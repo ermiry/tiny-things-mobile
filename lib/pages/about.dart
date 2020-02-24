@@ -101,8 +101,7 @@ class AboutPage extends StatelessWidget with NavigationStates {
             ],
           ),
 
-          // 12/02/2020 -- added to fill remaining screen and to avoid bug with sidebar
-          new Expanded (child: Container (),),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
           Container(
             child: Center(
@@ -122,17 +121,26 @@ class AboutPage extends StatelessWidget with NavigationStates {
                   const Text('www.flaticon.com/authors/dmitri13'),
 
                   const SizedBox(height: 10),
-
-                  const Text(
-                    'Copyright \u00a9 2020 Ermiry',
-                    style: TextStyle(color: mainBlue),
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 ],
               )
             ),
-          )
+          ),
+
+          new Expanded (child: Container (),),
+
+          const Text(
+            'Tiny Things v0.1',
+            // style: TextStyle(color: mainBlue),
+          ),
+
+          const SizedBox(height: 10),
+
+          const Text(
+            'Copyright \u00a9 2020 Ermiry',
+            style: TextStyle(color: mainBlue),
+          ),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
         ],
       ),
     );
