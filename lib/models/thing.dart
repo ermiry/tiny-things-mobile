@@ -7,10 +7,9 @@ class Thing {
 }
 
 final Map<String, int> categories = {
-  'Things': 112,
+  'All': 112,
   'Work': 58,
   'Home': 23,
-  'Complete': 31,
 };
 
 final List<Thing> things = [
