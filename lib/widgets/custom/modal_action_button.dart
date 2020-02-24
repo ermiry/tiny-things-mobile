@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:things/widgets/custom/button.dart';
 
+import 'package:things/style/colors.dart';
+
 class CustomModalActionButton extends StatelessWidget {
 
   final VoidCallback onClose;
@@ -21,7 +23,7 @@ class CustomModalActionButton extends StatelessWidget {
         CustomButton(
           onPressed: onSave,
           buttonText: "Save",
-          color: Theme.of(context).accentColor,
+          color: mainBlue,
           textColor: Colors.white,
         )
       ],

@@ -9,7 +9,6 @@ import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/widgets/custom/textfield.dart';
 import 'package:things/widgets/custom/modal_action_button.dart';
-import 'package:things/widgets/custom/date_picker.dart';
 
 import 'package:things/style/colors.dart';
 // import 'package:things/style/style.dart';
@@ -23,13 +22,13 @@ class AccountPage extends StatefulWidget with NavigationStates {
 
 class AccountPageState extends State <AccountPage> {
 
-  void _showChangeDialog(String title, String placeholder) {
+  void _showChangeDialog(String title, String placeholder, String secondPlaceholder) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: _ChangeValue(title: title, placeholder: placeholder),
+          child: _ChangeValue(title: title, placeholder: placeholder, secondPlaceholder: secondPlaceholder,),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))
           )
@@ -97,7 +96,7 @@ class AccountPageState extends State <AccountPage> {
                     dense: true,
                     title: Text ('Name', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('Erick Salas', style: new TextStyle(fontSize: 14),),
-                    onTap: () => this._showChangeDialog("Change name", "Enter your name"),
+                    onTap: () => this._showChangeDialog("Change name", "Enter your name", null),
                   ),
                 ),
 
@@ -128,7 +127,7 @@ class AccountPageState extends State <AccountPage> {
                     dense: true,
                     title: Text ('Email', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('erick@test.com', style: new TextStyle(fontSize: 14),),
-                    onTap: () => this._showChangeDialog("Change email", "Enter your email"),
+                    onTap: () => this._showChangeDialog("Change email", "Enter your email", null),
                   ),
                 ),
 
@@ -144,7 +143,7 @@ class AccountPageState extends State <AccountPage> {
                     dense: true,
                     title: Text ('Password', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('Change your password', style: new TextStyle(fontSize: 14),),
-                    onTap: () => this._showChangeDialog("Change password", "Enter new password"),
+                    onTap: () => this._showChangeDialog("Change password", "Enter new password", "Confirm password"),
                   ),
                 ),
 
@@ -215,10 +214,12 @@ class _ChangeValue extends StatefulWidget {
 
   final String title;
   final String placeholder;
+  final String secondPlaceholder;
 
   _ChangeValue({
     @required this.title,
-    @required this.placeholder
+    @required this.placeholder,
+    @required this.secondPlaceholder
   });
 
   @override
@@ -241,7 +242,7 @@ class _ChangeValueState extends State <_ChangeValue> {
           Center(
             child: Text(
               widget.title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: mainDarkBlue),
             )
           ),
 
@@ -250,6 +251,10 @@ class _ChangeValueState extends State <_ChangeValue> {
           CustomTextField(labelText: widget.placeholder, controller: _textTaskControler),
           
           const SizedBox(height: 24),
+
+          widget.secondPlaceholder != null ? CustomTextField(labelText: widget.secondPlaceholder, controller: _textTaskControler) : Container (),
+
+          SizedBox(height: widget.secondPlaceholder != null ? 24 : 0),
 
           CustomModalActionButton(
             onClose: () {
