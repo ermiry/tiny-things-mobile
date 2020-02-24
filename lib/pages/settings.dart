@@ -96,108 +96,112 @@ class SettingsPage extends StatelessWidget with NavigationStates {
   Widget build(BuildContext context) {
     return Consumer <Settings> (
       builder: (ctx, settings, _) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+        return ListView(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
-                Center(
-                  child: Text(
-                    "Settings",
-                    style: const TextStyle(
-                      fontSize: 32,
-                      color: mainBlue,
-                      fontWeight: FontWeight.w800
-                    ),
-                  ),
+            Center(
+              child: Text(
+                "Settings",
+                style: const TextStyle(
+                  fontSize: 32,
+                  color: mainBlue,
+                  fontWeight: FontWeight.w800
                 ),
-
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text ('General', style: new TextStyle(fontSize: 18, color: mainDarkBlue, fontWeight: FontWeight.bold)),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(
-                      color: mainDarkBlue
-                    ))
-                  ),
-                  child: ListTile(
-                    title: const Text ('Center add button'),
-                    subtitle: const Text('Display the add transaction button in the center'),
-                    trailing: Switch.adaptive (
-                      activeColor: mainBlue,
-                      value: settings.centerAddButton,
-                      onChanged: (val) { 
-                        settings.toggleCenterAddButton();
-                      },)
-                  ),
-                ),
-
-                new SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text ('Danger Zone', style: new TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold)),
-                ),
-
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(
-                      color: mainDarkBlue
-                    ))
-                  ),
-                  child: ListTile(
-                    title: const Text ('Enable cloud backup'),
-                    subtitle: const Text('Backup your transactions in the cloud'),
-                    trailing: Switch.adaptive (
-                      activeColor: mainBlue,
-                      value: settings.enableCloud,
-                      onChanged: (val) { 
-                        // FIXME:
-                        // settings.toggleHistoryChart();
-                      },)
-                  ),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(
-                      color: mainDarkBlue
-                    ))
-                  ),
-                  child: ListTile(
-                    title: Text ('Delete cloud data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-                    subtitle: const Text('Delete all the transactions and data saved in the cloud'),
-                  ),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(
-                      color: mainDarkBlue
-                    ))
-                  ),
-                  child: ListTile(
-                    title: Text ('Clear local data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-                    subtitle: const Text('Clear all the transactions and data saved in this device'),
-                    onTap: () => this._showConfirmDialog(context, "Delete all transactions and data saved on this device?"),
-                  ),
-                ),
-
-                new SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-              ],
+              ),
             ),
-          ),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
+            SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text ('General', style: new TextStyle(fontSize: 18, color: mainDarkBlue, fontWeight: FontWeight.bold)),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(
+                          color: mainDarkBlue
+                        ))
+                      ),
+                      child: ListTile(
+                        title: const Text ('Center add button'),
+                        subtitle: const Text('Display the add thing button in the center'),
+                        trailing: Switch.adaptive (
+                          activeColor: mainBlue,
+                          value: settings.centerAddButton,
+                          onChanged: (val) { 
+                            settings.toggleCenterAddButton();
+                          },)
+                      ),
+                    ),
+
+                    new SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text ('Danger Zone', style: new TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold)),
+                    ),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(
+                          color: mainDarkBlue
+                        ))
+                      ),
+                      child: ListTile(
+                        title: const Text ('Enable cloud backup'),
+                        subtitle: const Text('Backup your transactions in the cloud'),
+                        trailing: Switch.adaptive (
+                          activeColor: mainBlue,
+                          value: settings.enableCloud,
+                          onChanged: (val) { 
+                            // FIXME:
+                            // settings.toggleHistoryChart();
+                          },)
+                      ),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(
+                          color: mainDarkBlue
+                        ))
+                      ),
+                      child: ListTile(
+                        title: Text ('Delete cloud data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+                        subtitle: const Text('Delete all the transactions and data saved in the cloud'),
+                      ),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(
+                          color: mainDarkBlue
+                        ))
+                      ),
+                      child: ListTile(
+                        title: Text ('Clear local data', style: new TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+                        subtitle: const Text('Clear all the transactions and data saved in this device'),
+                        onTap: () => this._showConfirmDialog(context, "Delete all transactions and data saved on this device?"),
+                      ),
+                    ),
+
+                    new SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
