@@ -136,7 +136,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   color: mainBlue,
                   child: Column(
                     children: <Widget>[
@@ -158,10 +158,10 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                           ),
                         ),
                         leading: CircleAvatar(
-                          backgroundColor: mainDarkBlue,
+                          backgroundColor: Color(0xFFEFF4F6),
                           child: Icon(
                             Icons.perm_identity,
-                            color: Colors.white,
+                            color: mainBlue,
                           ),
                           radius: 40,
                         ),
