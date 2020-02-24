@@ -6,13 +6,13 @@ import 'package:things/style/colors.dart';
 final titleStyle = TextStyle(
   color: Colors.white,
   fontFamily: 'CM Sans Serif',
-  fontSize: 26.0,
+  fontSize: 24.0,
   height: 1.2,
 );
 
 final subtitleStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 18.0,
+  color: Colors.white70,
+  fontSize: 16.0,
   height: 1.2,
 );
 
@@ -59,12 +59,13 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
 
     return Scaffold(
       body: Container(
+        // color: mainBlue.withAlpha(242),
         color: mainBlue,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height * 0.8,
+              height: MediaQuery.of(context).size.height * 0.84,
               child: PageView(
                 physics: ClampingScrollPhysics(),
                 controller: _pageController,
@@ -100,11 +101,11 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
                           ),
                         ),
 
-                        SizedBox(height: 15.0),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
                         Center(
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                            'Tiny Things will encourage you to be more productive by organizing all your tasks in different categories',
                             style: subtitleStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -132,17 +133,17 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
 
                         Center(
                           child: Text(
-                            'Live your life smarter\nwith us!',
+                            'Quickly create new tasks and customize them',
                             style: titleStyle,
                             textAlign: TextAlign.center
                           ),
                         ),
 
-                        SizedBox(height: 15.0),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
                         Center(
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                            'You have a lot of options to organize your tasks the way it fits your needs',
                             style: subtitleStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -170,17 +171,17 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
 
                         Center(
                           child: Text(
-                            'Live your life smarter\nwith us!',
+                            'Have a better project management',
                             style: titleStyle,
                             textAlign: TextAlign.center
                           ),
                         ),
 
-                        SizedBox(height: 15.0),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.06),
 
                         Center(
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
+                            'Create tasks for each project you have and keep track of your progress',
                             style: subtitleStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -192,14 +193,13 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
               ),
             ),
 
-            Spacer(),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildPageIndicator(),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildPageIndicator(),
+              ),
             ),
-
-            SizedBox (height: MediaQuery.of(context).size.height * 0.1)
           ],
         ),
       ),
@@ -213,15 +213,12 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
             child: GestureDetector(
               onTap: () => print('Get started'),
               child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Text(
-                    'Get started',
-                    style: TextStyle(
-                      color: mainBlue,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  'Get started',
+                  style: TextStyle(
+                    color: mainBlue,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
