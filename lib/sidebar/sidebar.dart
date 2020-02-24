@@ -24,7 +24,7 @@ class SidebarItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: <Widget>[
             Icon(
@@ -37,7 +37,7 @@ class SidebarItem extends StatelessWidget {
             ),
             Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20, color: Colors.white),
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18, color: Colors.white),
             )
           ],
         ),
@@ -109,11 +109,11 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   color: mainBlue,
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 50),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
                       // account info
                       ListTile(
@@ -145,11 +145,11 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                       ),
 
                       Divider(
-                        height: 64,
+                        height: 32,
                         thickness: 0.5,
                         color: Colors.white.withOpacity(0.3),
-                        indent: 32,
-                        endIndent: 32,
+                        indent: 24,
+                        endIndent: 24,
                       ),
 
                       // main routes
@@ -165,11 +165,11 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                       Spacer(),
 
                       Divider(
-                        height: 64,
+                        height: 32,
                         thickness: 0.5,
                         color: Colors.white.withOpacity(0.3),
-                        indent: 32,
-                        endIndent: 32,
+                        indent: 24,
+                        endIndent: 24,
                       ),
 
                       // suport routes
