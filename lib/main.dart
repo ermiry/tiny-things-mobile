@@ -33,8 +33,8 @@ class TinyThings extends StatelessWidget {
           value: new Settings(),
         )
       ],
-      child: Consumer <Auth> (
-        builder: (ctx, auth, _) => Platform.isAndroid ? MaterialApp (
+      child: Consumer <Global> (
+        builder: (ctx, global, _) => Platform.isAndroid ? MaterialApp (
           title: 'Tiny Things',
           theme: ThemeData (
             splashColor: mainBlue,
@@ -56,7 +56,8 @@ class TinyThings extends StatelessWidget {
               )
             )
           ),
-          home: Provider.of<Global>(ctx, listen: false).firstTime ?
+          home: Consumer <Auth> (
+            builder: (ctx, auth, _) => global.firstTime ?
             new WelcomeScreen() :
             auth.isAuth ? new SideBarLayout () :
               FutureBuilder(
@@ -65,6 +66,8 @@ class TinyThings extends StatelessWidget {
                   authResultSnapshot.connectionState == ConnectionState.waiting ?
                     new LoadingScreen () : new AuthScreen (),
               ),
+          ),
+          
           debugShowCheckedModeBanner: true,
         )
 

@@ -8,7 +8,8 @@ class Global with ChangeNotifier {
   bool firstTime = true;
 
   Future <void> toggleFirstTime() async { 
-    this.firstTime = !this.firstTime;
+    // this.firstTime = !this.firstTime;
+    this.firstTime = false;
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('first_time', this.firstTime);

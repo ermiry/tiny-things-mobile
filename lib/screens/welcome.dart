@@ -29,6 +29,18 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
+  Future <void> getStarted() async {
+    try {
+      await Provider.of<Global>(context, listen: false).toggleFirstTime();
+      // print('hola!');
+    }
+
+    catch (error) {
+      print(error);
+    }
+    
+  }
+
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
     for (int i = 0; i < _numPages; i++) {
