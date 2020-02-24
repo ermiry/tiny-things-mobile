@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:provider/provider.dart';
 import 'package:things/providers/auth.dart';
+import 'package:things/providers/settings.dart';
 
 import 'package:things/screens/auth.dart';
 import 'package:things/screens/loading.dart';
@@ -21,6 +22,9 @@ class TinyThings extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: new Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: new Settings(),
         )
       ],
       child: Consumer <Auth> (
