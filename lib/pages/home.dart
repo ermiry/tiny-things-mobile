@@ -207,122 +207,105 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
           SizedBox(height: 20.0),
 
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0),
-            padding: EdgeInsets.all(30.0),
-            decoration: BoxDecoration(
-              color: Color(0xFFEFF4F6),
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            child: Column(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: TabBarView(
+              controller: this._tabController,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      things[0].title,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      _timeFormatter.format(things[0].date),
-                      style: TextStyle(
-                        color: Color(0xFFAFB4C6),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15.0),
-                Text(
-                  things[0].content,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      _dateFormatter.format(things[0].date),
-                      style: TextStyle(
-                        color: Color(0xFFAFB4C6),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Container(
-                      height: 50.0,
-                      width: 50.0,
-                      decoration: BoxDecoration(
-                        color: mainBlue,
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Icon(
-                        Icons.location_on,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                _ThingsTab(),
+                _ThingsTab(),
+                _ThingsTab(),
               ],
             ),
           ),
-
-          const SizedBox(height: 20.0),
-
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 30.0),
-            padding: EdgeInsets.all(30.0),
-            decoration: BoxDecoration(
-              color: Color(0xFFEFF4F6),
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      things[1].title,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      _timeFormatter.format(things[1].date),
-                      style: TextStyle(
-                        color: Color(0xFFAFB4C6),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15.0),
-                Text(
-                  things[1].content,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
         ],
       ),
     );
   }
+}
+
+class _ThingsTab extends StatelessWidget {
+
+  final DateFormat _dateFormatter = DateFormat('dd MMM');
+  final DateFormat _timeFormatter = DateFormat('h:mm');
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30.0),
+          padding: EdgeInsets.all(30.0),
+          decoration: BoxDecoration(
+            color: Color(0xFFEFF4F6),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    things[0].title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    _timeFormatter.format(things[0].date),
+                    style: TextStyle(
+                      color: Color(0xFFAFB4C6),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15.0),
+              Text(
+                things[0].content,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    _dateFormatter.format(things[0].date),
+                    style: TextStyle(
+                      color: Color(0xFFAFB4C6),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Container(
+                    height: 50.0,
+                    width: 50.0,
+                    decoration: BoxDecoration(
+                      color: mainBlue,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+      ],
+    );
+  }
+
 }
