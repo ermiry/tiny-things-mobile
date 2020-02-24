@@ -7,10 +7,36 @@ import 'package:things/sidebar/navigation_bloc.dart';
 // import 'package:provider/provider.dart';
 // import 'package:things/providers/auth.dart';
 
+import 'package:things/widgets/custom/textfield.dart';
+import 'package:things/widgets/custom/modal_action_button.dart';
+import 'package:things/widgets/custom/date_picker.dart';
+
 import 'package:things/style/colors.dart';
 // import 'package:things/style/style.dart';
 
-class AccountPage extends StatelessWidget with NavigationStates {
+class AccountPage extends StatefulWidget with NavigationStates {
+
+  @override
+  AccountPageState createState() => AccountPageState();
+
+}
+
+class AccountPageState extends State <AccountPage> {
+
+  void _showChangeDialog(String title, String placeholder) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: _ChangeValue(title: title, placeholder: placeholder),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          )
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +97,7 @@ class AccountPage extends StatelessWidget with NavigationStates {
                     dense: true,
                     title: Text ('Name', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('Erick Salas', style: new TextStyle(fontSize: 14),),
+                    onTap: () => this._showChangeDialog("Change name", "Enter your name"),
                   ),
                 ),
 
@@ -101,6 +128,7 @@ class AccountPage extends StatelessWidget with NavigationStates {
                     dense: true,
                     title: Text ('Email', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('erick@test.com', style: new TextStyle(fontSize: 14),),
+                    onTap: () => this._showChangeDialog("Change email", "Enter your email"),
                   ),
                 ),
 
@@ -116,6 +144,7 @@ class AccountPage extends StatelessWidget with NavigationStates {
                     dense: true,
                     title: Text ('Password', style: new TextStyle(fontSize: 16)),
                     subtitle: Text('Change your password', style: new TextStyle(fontSize: 14),),
+                    onTap: () => this._showChangeDialog("Change password", "Enter new password"),
                   ),
                 ),
 
@@ -180,4 +209,71 @@ class AccountPage extends StatelessWidget with NavigationStates {
     );
   }
 
+}
+
+class _ChangeValue extends StatefulWidget {
+
+  final String title;
+  final String placeholder;
+
+  _ChangeValue({
+    @required this.title,
+    @required this.placeholder
+  });
+
+  @override
+  _ChangeValueState createState() => _ChangeValueState();
+
+}
+
+class _ChangeValueState extends State <_ChangeValue> {
+
+  final _textTaskControler = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    _textTaskControler.clear();
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Center(
+            child: Text(
+              widget.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )
+          ),
+
+          const SizedBox(height: 24),
+
+          CustomTextField(labelText: widget.placeholder, controller: _textTaskControler),
+          
+          const SizedBox(height: 24),
+
+          CustomModalActionButton(
+            onClose: () {
+              Navigator.of(context).pop();
+            },
+            onSave: () {
+              // if (_textTaskControler.text == "") {
+              //   print("data not found");
+              // } else {
+              //   provider
+              //       .insertTodoEntries(new TodoData(
+              //           date: _selectedDate,
+              //           time: DateTime.now(),
+              //           isFinish: false,
+              //           task: _textTaskControler.text,
+              //           description: "",
+              //           todoType: TodoType.TYPE_TASK.index,
+              //           id: null))
+              //       .whenComplete(() => Navigator.of(context).pop());
+              // }
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
