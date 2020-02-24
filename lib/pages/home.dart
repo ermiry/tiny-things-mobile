@@ -47,8 +47,6 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
 
   int _selectedCategoryIndex = 0;
   TabController _tabController;
-  final DateFormat _dateFormatter = DateFormat('dd MMM');
-  final DateFormat _timeFormatter = DateFormat('h:mm');
 
   @override
   void initState() {
@@ -212,8 +210,8 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               controller: this._tabController,
               children: <Widget>[
                 _ThingsTab(),
-                _ThingsTab(),
-                _ThingsTab(),
+                _ImportantTab(),
+                _CompletedTab(),
               ],
             ),
           ),
@@ -303,6 +301,86 @@ class _ThingsTab extends StatelessWidget {
           ),
         ),
 
+        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+      ],
+    );
+  }
+
+}
+
+class _ImportantTab extends StatelessWidget {
+
+  final DateFormat _dateFormatter = DateFormat('dd MMM');
+  final DateFormat _timeFormatter = DateFormat('h:mm');
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30.0),
+          padding: EdgeInsets.all(30.0),
+          decoration: BoxDecoration(
+            color: Color(0xFFEFF4F6),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    things[1].title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    _timeFormatter.format(things[1].date),
+                    style: TextStyle(
+                      color: Color(0xFFAFB4C6),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15.0),
+              Text(
+                things[1].content,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+      ],
+    );
+  }
+
+}
+
+class _CompletedTab extends StatelessWidget {
+
+  // final DateFormat _dateFormatter = DateFormat('dd MMM');
+  // final DateFormat _timeFormatter = DateFormat('h:mm');
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: <Widget>[
+        
         SizedBox(height: MediaQuery.of(context).size.height * 0.05),
       ],
     );
