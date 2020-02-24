@@ -91,6 +91,33 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
     }
   }
 
+  void _showConfirmDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog (
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))
+        ),
+        title: Text ('Are you sure?', style: const TextStyle(color: mainDarkBlue, fontSize: 28)),
+        content: Text (message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Provider.of<Auth>(context, listen: false).logout();
+            },
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -190,10 +217,11 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                           BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.SettingsPageClickedEvent);
                         },
                       ),
+
                       SidebarItem(
                         icon: Icons.exit_to_app,
                         title: "Logout",
-                        onTap: () => Provider.of<Auth>(context, listen: false).logout(),
+                        onTap: () => this._showConfirmDialog(context, 'Are you sure you want to logout?')
                       ),
 
                       SizedBox(height: 20),
