@@ -147,6 +147,19 @@ class AccountPage extends StatelessWidget with NavigationStates {
                   decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(
                       width: 0.7,
+                    ))
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    leading: Icon(Icons.exit_to_app, color: Colors.black87,),
+                    title: Text ('Logout', style: new TextStyle(fontSize: 16)),
+                  ),
+                ),
+
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(
+                      width: 0.7,
                       color: Colors.red.withAlpha(204)
                     ))
                   ),
