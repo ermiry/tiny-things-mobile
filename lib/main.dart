@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:provider/provider.dart';
+import 'package:things/providers/global.dart';
 import 'package:things/providers/auth.dart';
 import 'package:things/providers/settings.dart';
 
@@ -11,6 +12,7 @@ import 'package:things/screens/auth.dart';
 import 'package:things/screens/loading.dart';
 import 'package:things/screens/welcome.dart';
 import 'package:things/sidebar/sidebar_layout.dart';
+import 'package:things/style/colors.dart';
 
 void main() => runApp(new TinyThings ());
 
@@ -22,6 +24,9 @@ class TinyThings extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+          value: new Global(),
+        ),
+        ChangeNotifierProvider.value(
           value: new Auth(),
         ),
         ChangeNotifierProvider.value(
@@ -32,8 +37,8 @@ class TinyThings extends StatelessWidget {
         builder: (ctx, auth, _) => Platform.isAndroid ? MaterialApp (
           title: 'Tiny Things',
           theme: ThemeData (
-            // primarySwatch: mainBlue,
-            // accentColor: mainDarkBlue,
+            splashColor: mainBlue,
+            primaryColor: mainBlue,
             fontFamily: 'Quicksand',
             appBarTheme: AppBarTheme (
               textTheme: ThemeData.light().textTheme.copyWith(
@@ -51,14 +56,15 @@ class TinyThings extends StatelessWidget {
               )
             )
           ),
-          // home: auth.isAuth ? new SideBarLayout () :
-          //   FutureBuilder(
-          //     future: auth.tryAutoLogin(),
-          //     builder: (ctx, authResultSnapshot) =>
-          //       authResultSnapshot.connectionState == ConnectionState.waiting ?
-          //         new LoadingScreen () : new AuthScreen (),
-          //   ),
-          home: new WelcomeScreen(),
+          home: Provider.of<Global>(ctx, listen: false).firstTime ?
+            new WelcomeScreen() :
+            auth.isAuth ? new SideBarLayout () :
+              FutureBuilder(
+                future: auth.tryAutoLogin(),
+                builder: (ctx, authResultSnapshot) =>
+                  authResultSnapshot.connectionState == ConnectionState.waiting ?
+                    new LoadingScreen () : new AuthScreen (),
+              ),
           debugShowCheckedModeBanner: true,
         )
 
