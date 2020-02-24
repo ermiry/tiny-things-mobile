@@ -6,6 +6,8 @@ import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/models/thing.dart';
 
+import 'package:things/style/colors.dart';
+
 class HomePage extends StatelessWidget with NavigationStates {
 
   @override
@@ -48,7 +50,8 @@ class _NotesScreenState extends State<NotesScreen>
         width: 175.0,
         decoration: BoxDecoration(
           color: _selectedCategoryIndex == index
-              ? Color(0xFF417BFB)
+              // ? Color(0xFF417BFB)
+              ? mainBlue
               : Color(0xFFF5F7FB),
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
@@ -107,19 +110,9 @@ class _NotesScreenState extends State<NotesScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  height: 50.0,
-                  width: 50.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/user.png'),
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
                 SizedBox(width: 20.0),
                 Text(
-                  'Jenny Breaks',
+                  'Home',
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.bold,
@@ -152,7 +145,7 @@ class _NotesScreenState extends State<NotesScreen>
               controller: _tabController,
               labelColor: Colors.black,
               unselectedLabelColor: Color(0xFFAFB4C6),
-              indicatorColor: Color(0xFF417BFB),
+              indicatorColor: mainBlue,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 4.0,
               isScrollable: true,
@@ -243,7 +236,7 @@ class _NotesScreenState extends State<NotesScreen>
                       height: 50.0,
                       width: 50.0,
                       decoration: BoxDecoration(
-                        color: Color(0xFF417BFB),
+                        color: mainBlue,
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Icon(
