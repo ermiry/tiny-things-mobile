@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:provider/provider.dart';
+import 'package:things/providers/global.dart';
+
 import 'package:things/style/colors.dart';
 
 final titleStyle = TextStyle(
   color: Colors.white,
   fontFamily: 'CM Sans Serif',
+  fontWeight: FontWeight.w600,
   fontSize: 24.0,
   height: 1.2,
 );
 
 final subtitleStyle = TextStyle(
-  color: Colors.white70,
+  color: Color(0xFFEFF4F6),
   fontSize: 16.0,
   height: 1.2,
 );
@@ -98,7 +102,7 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
                         Container(
                           child: Image(
                             image: AssetImage(
-                              'assets/img/app.png',
+                              'assets/img/productivity.png',
                             ),
                           ),
                         ),
@@ -174,7 +178,7 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
                         Container(
                           child: Image(
                             image: AssetImage(
-                              'assets/img/app.png',
+                              'assets/img/project.png',
                             ),
                           ),
                         ),
@@ -221,9 +225,10 @@ class _WelcomeScreenState extends State <WelcomeScreen> {
         ? Container(
             height: MediaQuery.of(context).size.height * 0.16,
             width: double.infinity,
-            color: Colors.white,
+            // color: Colors.white,
+            color: Color(0xFFEFF4F6),
             child: GestureDetector(
-              onTap: () => print('Get started'),
+              onTap: () => this.getStarted(),
               child: Center(
                 child: Text(
                   'Get started',
