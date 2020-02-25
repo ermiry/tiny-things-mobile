@@ -111,6 +111,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
             child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
             onPressed: () {
               Provider.of<Auth>(context, listen: false).logout();
+              Navigator.of(context).pop();
             },
           )
         ],
