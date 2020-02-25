@@ -9,6 +9,9 @@ import 'package:things/models/thing.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/settings.dart';
 
+import 'package:things/widgets/bottom.dart';
+import 'package:things/widgets/custom/textfield.dart';
+
 import 'package:things/style/colors.dart';
 
 class HomePage extends StatelessWidget with NavigationStates {
@@ -25,10 +28,69 @@ class HomePage extends StatelessWidget with NavigationStates {
         backgroundColor: mainBlue,
 				child: Icon (Icons.add),
 				onPressed: () {
-					// showModalBottomSheet (
-					// 	context: context, 
-					// 	builder: (bCtx) => AddTransaction ()
-					// );
+          var maxHeight = MediaQuery.of(context).size.height;
+          showModalBottomSheetApp(
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
+                  return Container(
+                    height: maxHeight * 0.4,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column (
+                      children: <Widget>[
+                        SizedBox(height: 20),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                CustomTextField(labelText: "Title", controller: null),
+
+                                SizedBox(height: 20),
+
+                                CustomTextField(labelText: "Description", controller: null),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 24),
+
+                        Container(
+                          height: 50,
+                          margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: mainBlue
+                          ),
+                          child: Center(
+                            child: RawMaterialButton(
+                              onPressed: null,
+                              elevation: 0,
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                                // fontSize: 18,
+                                fontWeight: FontWeight.w800
+                              ),
+                              child: Text("Add!")
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }
+              );
+            },
+          );
 				},
 			),
     );
@@ -122,7 +184,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
     return Scaffold(
       body: ListView(
         children: <Widget>[
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.04),
           
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -135,13 +197,14 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF2F3446)
                   ),
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
           Container(
             height: 260.0,

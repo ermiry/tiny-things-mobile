@@ -15,7 +15,8 @@ class CustomTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12))
         ),
-        labelText: labelText),
+        labelText: labelText
+      ),
     );
   }
 
