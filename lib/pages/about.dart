@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:things/sidebar/navigation_bloc.dart';
 
@@ -8,6 +9,11 @@ class AboutPage extends StatelessWidget with NavigationStates {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      // DeviceOrientation.portraitDown,
+    ]);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(

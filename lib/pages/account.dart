@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:things/sidebar/navigation_bloc.dart';
 
@@ -39,6 +40,11 @@ class AccountPageState extends State <AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      // DeviceOrientation.portraitDown,
+    ]);
+
     return ListView(
       children: <Widget>[
         SizedBox(height: MediaQuery.of(context).size.height * 0.05),

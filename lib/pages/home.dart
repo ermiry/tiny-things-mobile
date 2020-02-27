@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:things/sidebar/navigation_bloc.dart';
 
@@ -18,6 +19,11 @@ class HomePage extends StatelessWidget with NavigationStates {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      // DeviceOrientation.portraitDown,
+    ]);
+
     return Scaffold(
       backgroundColor: mainBlue,
       body: _NotesScreen(),

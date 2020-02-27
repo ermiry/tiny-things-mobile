@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:things/providers/settings.dart';
@@ -94,6 +95,11 @@ class SettingsPage extends StatelessWidget with NavigationStates {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      // DeviceOrientation.portraitDown,
+    ]);
+
     return Consumer <Settings> (
       builder: (ctx, settings, _) {
         return ListView(

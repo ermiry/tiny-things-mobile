@@ -11,13 +11,13 @@ import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/style/colors.dart';
 
-class SidebarItem extends StatelessWidget {
+class _SidebarItem extends StatelessWidget {
 
   final IconData icon;
   final String title;
   final Function onTap;
 
-  const SidebarItem({Key key, this.icon, this.title, this.onTap}) : super(key: key);
+  const _SidebarItem({Key key, this.icon, this.title, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
       context: context,
       builder: (ctx) => AlertDialog (
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0))
+          borderRadius: BorderRadius.all(Radius.circular(12.0))
         ),
         title: Text ('Are you sure?', style: const TextStyle(color: mainDarkBlue, fontSize: 28)),
         content: Text (message),
@@ -181,7 +181,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                       ),
 
                       // main routes
-                      SidebarItem(
+                      _SidebarItem(
                         icon: Icons.home,
                         title: "Home",
                         onTap: () {
@@ -201,7 +201,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                       ),
 
                       // suport routes
-                      SidebarItem(
+                      _SidebarItem(
                         icon: Icons.info,
                         title: "About",
                         onTap: () {
@@ -210,7 +210,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                         },
                       ),
 
-                      SidebarItem(
+                      _SidebarItem(
                         icon: Icons.settings,
                         title: "Settings",
                         onTap: () {
@@ -219,7 +219,7 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
                         },
                       ),
 
-                      SidebarItem(
+                      _SidebarItem(
                         icon: Icons.exit_to_app,
                         title: "Logout",
                         onTap: () => this._showConfirmDialog(context, 'Are you sure you want to logout?')
