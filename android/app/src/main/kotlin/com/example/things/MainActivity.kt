@@ -1,4 +1,4 @@
-package com.example.things
+package com.ermiry.things
 
 import android.os.Bundle
 
