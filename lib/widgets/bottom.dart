@@ -48,30 +48,27 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
-        onTap: widget.route.dismissOnTap ? () => Navigator.pop(context) : null,
-        child: new AnimatedBuilder(
-            animation: widget.route.animation,
-            builder: (BuildContext context, Widget child) {
-              double bottomInset = widget.route.resizeToAvoidBottomPadding
-                  ? MediaQuery.of(context).viewInsets.bottom : 0.0;
-              return new ClipRect(
-                  child: new CustomSingleChildLayout(
-                      delegate: new _ModalBottomSheetLayout(widget.route.animation.value, bottomInset),
-                      child: new BottomSheet(
-                        animationController: widget.route._animationController,
-                        onClosing: () => Navigator.pop(context),
-                        builder: widget.route.builder,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0))
-                        ),
-                        // enableDrag: true,
-                        clipBehavior: Clip.none,
-                      )
-                  )
-              );
-            }
-        )
+    return new AnimatedBuilder(
+      animation: widget.route.animation,
+      builder: (BuildContext context, Widget child) {
+        double bottomInset = widget.route.resizeToAvoidBottomPadding
+            ? MediaQuery.of(context).viewInsets.bottom : 0.0;
+        return new ClipRect(
+          child: new CustomSingleChildLayout(
+            delegate: new _ModalBottomSheetLayout(widget.route.animation.value, bottomInset),
+            child: new BottomSheet(
+              animationController: widget.route._animationController,
+              onClosing: () => Navigator.pop(context),
+              builder: widget.route.builder,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))
+              ),
+              // enableDrag: true,
+              clipBehavior: Clip.none,
+            )
+          )
+        );
+      }
     );
   }
 }
@@ -83,20 +80,20 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.barrierLabel,
     RouteSettings settings,
     this.resizeToAvoidBottomPadding,
-    this.dismissOnTap,
+    this.isDismissible,
   }) : super(settings: settings);
 
   final WidgetBuilder builder;
   final ThemeData theme;
   final bool resizeToAvoidBottomPadding;
-  final bool dismissOnTap;
+  final bool isDismissible;
   
   @override
   Duration get transitionDuration => _kBottomSheetDuration;
 
   // this to falso if you wnat to dismiss it if you touch the gray area
   @override
-  bool get barrierDismissible => false;
+  bool get barrierDismissible => isDismissible;
 
   @override
   final String barrierLabel;
@@ -157,7 +154,7 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 Future<T> showModalBottomSheetApp<T>({
   @required BuildContext context,
   @required WidgetBuilder builder,
-  bool dismissOnTap: false,
+  bool isDismissible: false,
   bool resizeToAvoidBottomPadding : true,
 }) {
   assert(context != null);
@@ -167,6 +164,6 @@ Future<T> showModalBottomSheetApp<T>({
     theme: Theme.of(context, shadowThemeOnly: true),
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
-    dismissOnTap: dismissOnTap,
+    isDismissible: isDismissible,
   ));
 }
