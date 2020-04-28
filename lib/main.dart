@@ -8,9 +8,11 @@ import 'package:things/providers/global.dart';
 import 'package:things/providers/auth.dart';
 import 'package:things/providers/settings.dart';
 
-import 'package:things/screens/auth.dart';
+// import 'package:things/screens/splash.dart';
 import 'package:things/screens/loading.dart';
 import 'package:things/screens/welcome.dart';
+import 'package:things/screens/auth/login.dart';
+import 'package:things/screens/auth/register.dart';
 import 'package:things/sidebar/sidebar_layout.dart';
 import 'package:things/style/colors.dart';
 
@@ -57,18 +59,21 @@ class TinyThings extends StatelessWidget {
             )
           ),
           home: Consumer <Auth> (
-            builder: (ctx, auth, _) => new SideBarLayout (),
-
-            // builder: (ctx, auth, _) => global.firstTime ?
-            // new WelcomeScreen() :
-            // auth.isAuth ? new SideBarLayout () :
-            //   FutureBuilder(
-            //     future: auth.tryAutoLogin(),
-            //     builder: (ctx, authResultSnapshot) =>
-            //       authResultSnapshot.connectionState == ConnectionState.waiting ?
-            //         new LoadingScreen () : new AuthScreen (),
-            //   ),
+            // builder: (ctx, auth, _) => Provider.of<Global>(ctx, listen: false).firstTime ? new WelcomeScreen()
+            builder: (ctx, auth, _) => auth.isAuth ? new SideBarLayout () :
+                FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                    authResultSnapshot.connectionState == ConnectionState.waiting ?
+                      new LoadingScreen () : new LoginScreen (),
+                ),
           ),
+
+          routes: {
+            // '/splash': (ctx) => new SplashScreen (),
+
+            '/register': (ctx) => new RegisterScreen (),
+          },
 
           debugShowCheckedModeBanner: true,
         )
@@ -89,7 +94,7 @@ class TinyThings extends StatelessWidget {
             )
           ),
           // home: HomePage ()
-          home: new AuthScreen ()
+          home: new LoginScreen ()
         )
       ),
     );
