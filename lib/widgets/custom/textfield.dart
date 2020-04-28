@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -17,6 +17,12 @@ class CustomTextField extends StatelessWidget {
         ),
         labelText: labelText
       ),
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.done,
+      // validator: (value) {
+      //   if (value.isEmpty) return 'Name field is required!';
+      //   return null;
+      // },
     );
   }
 
