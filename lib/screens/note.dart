@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:things/style/colors.dart';
+
 class NoteScreen extends StatefulWidget {
   @override
   _NoteScreenState createState() => _NoteScreenState();
@@ -37,46 +39,56 @@ class _NoteScreenState extends State<NoteScreen> {
                 leading: IconButton(
                   icon: Icon(
                     Icons.arrow_back,
-                    // color: myTheme.mainAccentColor,
+                    color: mainDarkBlue,
+                    size: 36,
                   ),
                   onPressed: () {
+                    // TODO: add on will pop scope
                     Navigator.pop(context);
                   },
                 ),
               ),
+
+              // title
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: TextField(
                   controller: titleEditingController,
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Title', border: InputBorder.none
+                  ),
                   onSubmitted: (value) {
                     // note.title = value;
                   },
                   onChanged: (value) {
                     // note.title = value;
                   },
-                  style: TextStyle(
-                      // fontFamily: "BalooTamma2",
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold),
-                  decoration: InputDecoration(
-                      hintText: 'Add Title', border: InputBorder.none),
                 ),
               ),
+
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: TextField(
                   controller: textEditingController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  style: TextStyle(
+                    fontSize: 24, 
+                    color: Colors.blueGrey
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Description', border: InputBorder.none
+                  ),
                   onSubmitted: (value) {
                     // note.text = value;
                   },
                   onChanged: (value) {
                     // note.text = value;
                   },
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-                  decoration: InputDecoration(
-                      hintText: 'Add note', border: InputBorder.none),
                 ),
               ),
             ],
@@ -85,41 +97,61 @@ class _NoteScreenState extends State<NoteScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  // add to favorites / importants
                   IconButton(
                     // icon: Icon(
                     //     note.starred == 0 ? Icons.star_border : Icons.star,
                     //     color: myTheme.mainAccentColor),
                     icon: Icon(Icons.star_border),
                     onPressed: () {
-                      // setState(() {
-                      //   note.starred = note.starred == 0 ? 1 : 0;
-                      // });
+                      print('star!');
                     },
                   ),
+
+                  // select label
                   IconButton(
                     icon: Icon(Icons.label_outline),
                     onPressed: () {
-                      // showCategories(context);
+                      print('label!');
                     },
                   ),
-                  Icon(
-                    Icons.share,
-                    // color: myTheme.mainAccentColor,
+
+                  // add
+                  Container(
+                    decoration: ShapeDecoration(
+                      shape: CircleBorder (),
+                      color: mainBlue
+                    ),
+                    child: IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.add,
+                      ),
+                      onPressed: () {
+                        print('add!');
+                      },
+                    ),
                   ),
-                  Icon(
-                    Icons.playlist_add_check,
-                    // color: myTheme.mainAccentColor,
+
+                  // clear
+                  IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                    ),
+                    onPressed: () {
+                      print('clear!');
+                    },
                   ),
+
+                  // delete
                   IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
-                      // databaseHelper.deleteNote(note.id);
-                      // note.title = '';
-                      // Navigator.pop(context);
+                      print('delete!');
                     },
                   ),
                 ],
