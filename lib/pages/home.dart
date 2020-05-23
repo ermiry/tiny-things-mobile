@@ -12,9 +12,6 @@ import 'package:things/models/thing.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/settings.dart';
 
-import 'package:things/widgets/bottom.dart';
-import 'package:things/widgets/custom/textfield.dart';
-
 import 'package:things/style/colors.dart';
 
 class HomePage extends StatelessWidget with NavigationStates {
@@ -29,78 +26,6 @@ class HomePage extends StatelessWidget with NavigationStates {
     return Scaffold(
       backgroundColor: Colors.white,
       body: _NotesScreen(),
-
-      // floatingActionButtonLocation: Provider.of<Settings>(context, listen: false).centerAddButton ? 
-      //   FloatingActionButtonLocation.centerFloat : FloatingActionButtonLocation.endFloat,
-      // floatingActionButton: FloatingActionButton (
-      //   backgroundColor: mainBlue,
-			// 	child: Icon (Icons.add),
-			// 	onPressed: () {
-      //     var maxHeight = MediaQuery.of(context).size.height;
-      //     showModalBottomSheetApp(
-      //       context: context,
-      //       builder: (BuildContext context) {
-      //         return StatefulBuilder(
-      //           builder: (BuildContext context, StateSetter setModalState) {
-      //             return Container(
-      //               height: maxHeight * 0.4,
-      //               decoration: BoxDecoration(
-      //                 color: Colors.white,
-      //                 borderRadius: BorderRadius.only(
-      //                   topLeft: Radius.circular(20),
-      //                   topRight: Radius.circular(20),
-      //                 ),
-      //               ),
-      //               child: Column (
-      //                 children: <Widget>[
-      //                   SizedBox(height: 20),
-
-      //                   Padding(
-      //                     padding: const EdgeInsets.symmetric(horizontal: 20),
-      //                     child: Container(
-      //                       child: Column(
-      //                         children: <Widget>[
-      //                           CustomTextField(labelText: "Title", controller: null),
-
-      //                           SizedBox(height: 20),
-
-      //                           CustomTextField(labelText: "Description", controller: null),
-      //                         ],
-      //                       ),
-      //                     ),
-      //                   ),
-
-      //                   SizedBox(height: 24),
-
-      //                   Container(
-      //                     height: 50,
-      //                     margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.4),
-      //                     decoration: BoxDecoration(
-      //                       borderRadius: BorderRadius.circular(50),
-      //                       color: mainBlue
-      //                     ),
-      //                     child: Center(
-      //                       child: RawMaterialButton(
-      //                         onPressed: null,
-      //                         elevation: 0,
-      //                         textStyle: TextStyle(
-      //                           color: Colors.white,
-      //                           // fontSize: 18,
-      //                           fontWeight: FontWeight.w800
-      //                         ),
-      //                         child: Text("Add!")
-      //                       ),
-      //                     ),
-      //                   )
-      //                 ],
-      //               ),
-      //             );
-      //           }
-      //         );
-      //       },
-      //     );
-			// 	},
-			// ),
     );
   }
 
