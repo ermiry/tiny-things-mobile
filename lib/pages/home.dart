@@ -326,14 +326,14 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
   }
 }
 
-class _ThingsTab extends StatefulWidget {
+class _ThingItem extends StatefulWidget {
 
   @override
-  _ThingsTabState createState() => new _ThingsTabState();
+  _ThingState createState() => new _ThingState();
 
 }
 
-class _ThingsTabState extends State <_ThingsTab> {
+class _ThingState extends State <_ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('hh:mm - dd MMM');
 
@@ -359,64 +359,78 @@ class _ThingsTabState extends State <_ThingsTab> {
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+          color: Color(0xFFEFF4F6),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Column(
+          children: <Widget>[
+            // title
+            Text(
+              things[0].title,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(height: 12.0),
+
+            // description
+            Text(
+              things[0].content,
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            // date
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  _dateFormatter.format(things[0].date),
+                  style: TextStyle(
+                    color: Color(0xFFAFB4C6),
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+
+      onTap: () => _reviewThing(),
+    );
+  }
+
+}
+
+class _ThingsTab extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       children: <Widget>[
-        InkWell(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0),
-            padding: EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: Color(0xFFEFF4F6),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                // title
-                Text(
-                  things[0].title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                SizedBox(height: 12.0),
-
-                // description
-                Text(
-                  things[0].content,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                // date
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      _dateFormatter.format(things[0].date),
-                      style: TextStyle(
-                        color: Color(0xFFAFB4C6),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          onTap: () => _reviewThing(),
-        ),
-
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+        _ThingItem(),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        _ThingItem(),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        _ThingItem(),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        _ThingItem(),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
       ],
     );
   }
@@ -424,9 +438,6 @@ class _ThingsTabState extends State <_ThingsTab> {
 }
 
 class _ImportantTab extends StatelessWidget {
-
-  final DateFormat _dateFormatter = DateFormat('dd MMM');
-  final DateFormat _timeFormatter = DateFormat('h:mm');
 
   @override
   Widget build(BuildContext context) {
