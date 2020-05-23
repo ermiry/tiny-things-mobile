@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'package:things/sidebar/navigation_bloc.dart';
 
+import 'package:things/screens/note.dart';
+
 import 'package:things/models/thing.dart';
 
 import 'package:provider/provider.dart';
@@ -297,6 +299,10 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               color: mainBlue
             ),
             child: IconButton(
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               color: Colors.white,
               icon: Icon(Icons.category),
               iconSize: 42,
@@ -314,9 +320,18 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               color: mainBlue
             ),
             child: IconButton(
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               color: Colors.white,
               icon: Icon(Icons.add),
-              onPressed: () => print('Add new thing!'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new NoteScreen ()),
+                );
+              },
               iconSize: 42
             )
           ),
