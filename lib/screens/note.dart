@@ -10,13 +10,18 @@ class NoteScreen extends StatefulWidget {
 
 class _NoteScreenState extends State<NoteScreen> {
 
-  TextEditingController titleEditingController = TextEditingController();
-  TextEditingController textEditingController = TextEditingController();
+  final TextEditingController _titleEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
+
+  final FocusNode _textFocusNode = new FocusNode ();
 
   @override
   void dispose() {
-    textEditingController.dispose();
-    titleEditingController.dispose();
+    this._textEditingController.dispose();
+    this._titleEditingController.dispose();
+
+    this._textFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -53,9 +58,15 @@ class _NoteScreenState extends State<NoteScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: TextField(
-                  controller: titleEditingController,
+                  textCapitalization: TextCapitalization.sentences,
+                  controller: this._titleEditingController,
+                  maxLength: 128,
+                  maxLines: null,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
                   style: TextStyle(
                     fontSize: 36,
+                    color: mainDarkBlue,
                     fontWeight: FontWeight.bold
                   ),
                   decoration: InputDecoration(
@@ -67,18 +78,27 @@ class _NoteScreenState extends State<NoteScreen> {
                   onChanged: (value) {
                     // note.title = value;
                   },
+                  onEditingComplete: () {
+                    FocusScope.of(context).requestFocus(
+                      this._textFocusNode
+                    );
+                  },
                 ),
               ),
 
+              // description
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: TextField(
-                  controller: textEditingController,
+                  focusNode: this._textFocusNode,
+                  textCapitalization: TextCapitalization.sentences,
+                  controller: this._textEditingController,
                   keyboardType: TextInputType.multiline,
+                  maxLength: 512,
                   maxLines: null,
                   style: TextStyle(
                     fontSize: 24, 
-                    color: Colors.blueGrey
+                    color: Colors.black87
                   ),
                   decoration: InputDecoration(
                     hintText: 'Description', border: InputBorder.none
