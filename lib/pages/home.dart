@@ -187,113 +187,175 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-          
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(width: 20.0),
-                Text(
-                  'Home',
-                  style: TextStyle(
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2F3446)
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-
-          Container(
-            height: 260.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return SizedBox(width: 8);
-                }
-                return _buildCategoryCard(
-                  index - 1,
-                  categories.keys.toList()[index - 1],
-                  categories.values.toList()[index - 1],
-                );
-              },
-            ),
-          ),
-
-          Center(
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Color(0xFF2F3446),
-              unselectedLabelColor: Color(0xFFAFB4C6),
-              indicatorColor: mainBlue,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorWeight: 4.0,
-              isScrollable: true,
-              tabs: <Widget>[
-                Tab(
-                  child: Text(
-                    'Things',
+    return Stack (
+      children: <Widget>[
+        ListView(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+            
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(width: 20.0),
+                  Text(
+                    'Home',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 28.0,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF2F3446)
                     ),
                   ),
-                ),
-                Tab(
-                  child: Text(
-                    'Important',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                ],
+              ),
+            ),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
+            Container(
+              height: 260.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return SizedBox(width: 8);
+                  }
+                  return _buildCategoryCard(
+                    index - 1,
+                    categories.keys.toList()[index - 1],
+                    categories.values.toList()[index - 1],
+                  );
+                },
+              ),
+            ),
+
+            Center(
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Color(0xFF2F3446),
+                unselectedLabelColor: Color(0xFFAFB4C6),
+                indicatorColor: mainBlue,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorWeight: 4.0,
+                isScrollable: true,
+                tabs: <Widget>[
+                  Tab(
+                    child: Text(
+                      'Things',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Tab(
-                  child: Text(
-                    'Completed',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Tab(
+                    child: Text(
+                      'Important',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Tab(
+                    child: Text(
+                      'Completed',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          SizedBox(height: 20.0),
+            SizedBox(height: 20.0),
 
-          Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: TabBarView(
-              controller: this._tabController,
-              children: <Widget>[
-                _ThingsTab(),
-                _ImportantTab(),
-                _CompletedTab(),
-              ],
+            Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: TabBarView(
+                controller: this._tabController,
+                children: <Widget>[
+                  _ThingsTab(),
+                  _ImportantTab(),
+                  _CompletedTab(),
+                ],
+              ),
             ),
+          ],
+        ),
+
+        Positioned(
+          bottom: MediaQuery.of(context).size.width * 0.05 + 78,
+          left: MediaQuery.of(context).size.width * 0.83,
+          child: Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: mainBlue
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.category),
+              iconSize: 42,
+              onPressed: () => print('Review categories'),
+            )
           ),
-        ],
-      ),
+        ),
+
+        Positioned(
+          bottom: MediaQuery.of(context).size.width * 0.05,
+          left: MediaQuery.of(context).size.width * 0.83,
+          child: Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: mainBlue
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.add),
+              onPressed: () => print('Add new thing!'),
+              iconSize: 42
+            )
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _ThingsTab extends StatelessWidget {
+class _ThingsTab extends StatefulWidget {
 
-  final DateFormat _dateFormatter = DateFormat('dd MMM');
-  final DateFormat _timeFormatter = DateFormat('h:mm');
+  @override
+  _ThingsTabState createState() => new _ThingsTabState();
+
+}
+
+class _ThingsTabState extends State <_ThingsTab> {
+
+  final DateFormat _dateFormatter = DateFormat('hh:mm - dd MMM');
+
+  void _reviewThing() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext bc) {
+        return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            height: 300.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Container ()
+          ),
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,73 +363,57 @@ class _ThingsTab extends StatelessWidget {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 30.0),
-          padding: EdgeInsets.all(30.0),
-          decoration: BoxDecoration(
-            color: Color(0xFFEFF4F6),
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    things[0].title,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
-                    ),
+        InkWell(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: Color(0xFFEFF4F6),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Column(
+              children: <Widget>[
+                // title
+                Text(
+                  things[0].title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    _timeFormatter.format(things[0].date),
-                    style: TextStyle(
-                      color: Color(0xFFAFB4C6),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15.0),
-              Text(
-                things[0].content,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    _dateFormatter.format(things[0].date),
-                    style: TextStyle(
-                      color: Color(0xFFAFB4C6),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500,
-                    ),
+
+                SizedBox(height: 12.0),
+
+                // description
+                Text(
+                  things[0].content,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      color: mainBlue,
-                      borderRadius: BorderRadius.circular(15.0),
+                ),
+
+                // date
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      _dateFormatter.format(things[0].date),
+                      style: TextStyle(
+                        color: Color(0xFFAFB4C6),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
+
+          onTap: () => _reviewThing(),
         ),
 
         SizedBox(height: MediaQuery.of(context).size.height * 0.05),
@@ -388,50 +434,7 @@ class _ImportantTab extends StatelessWidget {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 30.0),
-          padding: EdgeInsets.all(30.0),
-          decoration: BoxDecoration(
-            color: Color(0xFFEFF4F6),
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    things[1].title,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    _timeFormatter.format(things[1].date),
-                    style: TextStyle(
-                      color: Color(0xFFAFB4C6),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15.0),
-              Text(
-                things[1].content,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
 
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
       ],
     );
   }
@@ -440,17 +443,13 @@ class _ImportantTab extends StatelessWidget {
 
 class _CompletedTab extends StatelessWidget {
 
-  // final DateFormat _dateFormatter = DateFormat('dd MMM');
-  // final DateFormat _timeFormatter = DateFormat('h:mm');
-
   @override
   Widget build(BuildContext context) {
     return ListView(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       children: <Widget>[
-        
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+
       ],
     );
   }
