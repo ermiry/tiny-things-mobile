@@ -45,14 +45,10 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
 
   Future <void> _addCategory() async {
     try {
-      // await Provider.of<Auth>(context, listen: false).changeName(
-      //   this._data['name']
-      // ).then((_) {
-        Provider.of<Things>(context, listen: false).addCategory(
-          this._data['name'], 
-          this._data['description'], 
-        );
-
+      await Provider.of<Things>(context, listen: false).addCategory(
+        this._data['name'], 
+        this._data['description'], 
+      ).then((_) {
         FocusScope.of(context).requestFocus(FocusNode());
         Scaffold.of(context).showSnackBar(
           SnackBar(
@@ -63,7 +59,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
             )
           )
         );
-      // });
+      });
     }
 
     catch (err) {

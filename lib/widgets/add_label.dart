@@ -23,6 +23,8 @@ class _AddLabelState extends State <AddLabel> {
   final _mainTextControler = new TextEditingController();
   final _subTextControler = new TextEditingController();
 
+  final FocusNode _descriptionFocusNode = new FocusNode ();
+
   bool _loading = false;
 
   int _selectedIdx = -1;
@@ -46,6 +48,16 @@ class _AddLabelState extends State <AddLabel> {
     'name': '',
     'description': '',
   };
+
+  @override
+  void dispose() {
+    this._mainTextControler.dispose();
+    this._subTextControler.dispose();
+
+    this._descriptionFocusNode.dispose();
+
+    super.dispose();
+  }
 
   String validateName(value) {
     if (value.isEmpty) return 'Name field is required!';
@@ -165,15 +177,21 @@ class _AddLabelState extends State <AddLabel> {
                 labelText: "Name"
               ),
               keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.next,
               obscureText: false,
               validator: this.validateName,
               onSaved: this.saveName,
+              onFieldSubmitted: (value) {
+                FocusScope.of(context).requestFocus(
+                  this._descriptionFocusNode
+                );
+              },
             ),
             
             const SizedBox(height: 16),
 
             TextFormField(
+              focusNode: this._descriptionFocusNode,
               controller: this._subTextControler,
               decoration: InputDecoration(
                 border: OutlineInputBorder(

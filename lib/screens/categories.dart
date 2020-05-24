@@ -51,7 +51,8 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
       title: new Text(
         label.title,
         style: const TextStyle(
-          color: Colors.black,
+          // color: Colors.black,
+          color: Color(0xFF2F3446),
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),

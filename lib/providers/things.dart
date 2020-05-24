@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:pref_dessert/pref_dessert.dart';
 
 class Thing {
 
@@ -80,13 +84,46 @@ class Category {
     this._things.add(thing);
   }
 
+  Category.fromJson(Map <String, dynamic> json)
+    : id = json['name'],
+      title = json['title'],
+      description = json['description'];
+
+  Map <String, dynamic> toJson() => {
+    'id': this.id,
+    'title': this.title,
+    'description': this.description,
+  };
+
+}
+
+class CategoryDesSer extends DesSer <Category> {
+
+  @override
+  String get key => "PREF_CATEGORY";
+
+  @override
+  Category deserialize(String s) {
+    var map = json.decode(s);
+    return new Category(
+      id: map['id'] as String,
+      title: map['title'] as String, 
+      description: map['description'] as String,
+    );
+  }
+
+  @override
+  String serialize(Category c) {
+    return json.encode(c);
+  }
+
 }
 
 class Things with ChangeNotifier {
 
   List <Category> _categories = [
-    new Category(id: '1', title: 'All', description: 'All'),
-    new Category(id: '2', title: 'Home', description: 'Home')
+    // new Category(id: '1', title: 'All', description: 'All'),
+    // new Category(id: '2', title: 'Home', description: 'Home')
   ];
 
   List <Category> get categories { return [..._categories]; }
@@ -100,7 +137,7 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(String title, String description) {
+  Future <void> addCategory(String title, String description) async {
     Category cat = new Category(
       id: DateTime.now().toString(),
       title: title, 
@@ -108,6 +145,23 @@ class Things with ChangeNotifier {
     );
 
     this._categories.add(cat);
+
+    // save to local storage
+    var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
+    await repo.save(cat);
+
+    notifyListeners();
+  }
+
+  Future <void> loadCategories() async {
+    try {
+      var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer ());
+      this._categories = await repo.findAll();
+    }
+
+    catch (error) {
+      print('Failed to load categories from local storage!');
+    }
 
     notifyListeners();
   }
