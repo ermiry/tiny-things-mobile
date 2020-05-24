@@ -22,6 +22,18 @@ class _ThingItemState extends State <ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
+  Widget _label() {
+    return Container(
+      margin: EdgeInsets.only(right: 4, bottom: 4),
+      // width: 24,
+      // height: 24,
+      decoration: BoxDecoration(
+        color: mainBlue,
+        borderRadius: BorderRadius.circular(6)
+      ),
+    );
+  }
+
   Widget _button(Color color, IconData iconData) {
     return new Container(
       decoration: ShapeDecoration(
@@ -165,16 +177,37 @@ class _ThingItemState extends State <ThingItem> {
 
                 SizedBox(height: 16.0),
 
-                // date
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      _dateFormatter.format(this.widget.thing.date),
-                      style: TextStyle(
-                        color: Color(0xFFAFB4C6),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
+                    // labels
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.46,
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 8,
+                        children: <Widget>[
+                          this._label(),
+                          this._label(),
+                          this._label(),
+                          this._label(),
+                          this._label(),
+                        ],
+                      )
+                    ),
+
+                    // date
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.36,
+                      child: Text(
+                        _dateFormatter.format(this.widget.thing.date),
+                        style: TextStyle(
+                          color: Color(0xFFAFB4C6),
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ],
