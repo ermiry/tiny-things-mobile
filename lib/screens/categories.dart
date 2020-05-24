@@ -123,6 +123,42 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
 
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
+                Consumer <Things> (
+                  builder: (ctx, things, _) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Description',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2F3446)
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          Text(
+                            things.categories[things.selectedCategoryIdx].description,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                ),
+
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Text(
