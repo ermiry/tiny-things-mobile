@@ -86,6 +86,45 @@ class _ThingItemState extends State <ThingItem> {
                         textAlign: TextAlign.start,
                       ),
 
+                      this.widget.thing.description.isNotEmpty ? 
+                        Column (
+                          children: <Widget>[
+                            SizedBox(height: 12.0),
+
+                            // description
+                            Text(
+                              this.widget.thing.description,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        )
+
+                      :
+
+                        Container (),
+
+                      SizedBox(height: 24.0),
+
+                      // labels
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.64,
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisCount: 8,
+                          children: <Widget>[
+                            this._label(),
+                            this._label(),
+                            this._label(),
+                            this._label(),
+                          ],
+                        )
+                      ),
+
                       SizedBox(height: 16.0),
 
                       // date
