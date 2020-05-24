@@ -185,7 +185,7 @@ class _ThingItemState extends State <ThingItem> {
                 // title
                 Text(
                   this.widget.thing.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -201,7 +201,7 @@ class _ThingItemState extends State <ThingItem> {
                       // description
                       Text(
                         this.widget.thing.description,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
