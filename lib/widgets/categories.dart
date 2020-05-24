@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/widgets/change_value.dart';
+
 import 'package:things/style/colors.dart';
 
 class CategoriesDisplay extends StatefulWidget {
@@ -18,11 +20,83 @@ class CategoriesDisplay extends StatefulWidget {
 
 class _CategoriesDisplayState extends State <CategoriesDisplay> {
 
+  final Map <String, String> _data = {
+    'name': '',
+    'description': '',
+  };
+
+  String validateName(value) {
+    if (value.isEmpty) return 'Name field is required!';
+    return null;
+  }
+
+  void saveName(value) {
+    this._data['name'] = value;
+  }
+
+  String validateDescription(value) {
+    if (value.isEmpty) return 'Description field is required!';
+    return null;
+  }
+
+  void saveDescription(value) {
+    this._data['description'] = value;
+  }
+
+  Future <void> addCategory() async {
+    try {
+      // await Provider.of<Auth>(context, listen: false).changeName(
+      //   this._data['name']
+      // ).then((_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Created new category!',
+              textAlign: TextAlign.center,
+            )
+          )
+        );
+      // });
+    }
+
+    catch (err) {
+      print(err);
+    }
+  }
+
+  void _showNameChangeDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: new ChangeValue(
+            title: "Add category", 
+
+            placeholder: "Name",
+            mainObscure: false,
+            mainValidate: this.validateName,
+            mainSave: this.saveName,
+
+            subPlaceholder: "Description",
+            subObscure: true,
+            subValidate: this.validateDescription,
+            subSave: this.saveDescription,
+
+            callback: this.addCategory,
+          )
+        );
+      }
+    );
+  }
+
   Widget _create() {
     return GestureDetector(
-      onTap: () {
-        
-      },
       child: Container(
         margin: EdgeInsets.only(
           top: 16,
@@ -47,6 +121,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
           ),
         ) 
       ),
+      onTap: () => this._showNameChangeDialog()
     );
   }
 

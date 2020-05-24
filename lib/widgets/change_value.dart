@@ -79,7 +79,11 @@ class _ChangeValueState extends State <ChangeValue> {
             Center(
               child: Text(
                 widget.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: mainDarkBlue),
+                style: TextStyle(
+                  fontSize: 24, 
+                  fontWeight: FontWeight.bold, 
+                  color: mainDarkBlue
+                ),
               )
             ),
 
@@ -111,7 +115,7 @@ class _ChangeValueState extends State <ChangeValue> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12))
                 ),
-                labelText: widget.placeholder
+                labelText: widget.subPlaceholder
               ),
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
