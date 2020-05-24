@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:provider/provider.dart';
+import 'package:things/providers/things.dart';
+
 import 'package:things/style/colors.dart';
 
 class NoteScreen extends StatefulWidget {
@@ -241,7 +244,15 @@ class _NoteScreenState extends State<NoteScreen> {
                           Icons.add,
                         ),
                         onPressed: () {
-                          print('add!');
+                          Provider.of<Things>(context, listen: false).addThing(
+                            Provider.of<Things>(context, listen: false).categories[0], 
+                            this._titleEditingController.text, 
+                            this._textEditingController.text
+                          );
+
+                          // return to home screen
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          Navigator.pop(context);
                         },
                       ),
                     ),

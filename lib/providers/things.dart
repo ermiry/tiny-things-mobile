@@ -1,5 +1,36 @@
 import 'package:flutter/foundation.dart';
 
+class Thing {
+
+  final String id;
+
+  final String title;
+  final String description;
+
+  // Things status:
+  // 0 -> todo
+  // 1 -> in progress
+  // 2 -> done
+  final int status;
+
+  final String category;
+
+  final DateTime date;
+
+  Thing ({
+    @required this.id,
+
+    @required this.title,
+    @required this.description,
+    @required this.status,
+
+    @required this.category,
+
+    @required this.date
+  });
+
+}
+
 class Category {
 
   final String id;
@@ -17,32 +48,9 @@ class Category {
     @required this.description,
   });
 
-}
-
-class Thing {
-
-  final String id;
-
-  final String title;
-  final String description;
-
-  // Things status:
-  // 0 -> todo
-  // 1 -> in progress
-  // 2 -> done
-  final int status;
-
-  final DateTime date;
-
-  Thing ({
-    @required this.id,
-
-    @required this.title,
-    @required this.description,
-    @required this.status,
-
-    @required this.date
-  });
+  void add(Thing thing) {
+    this._things.add(thing);
+  }
 
 }
 
@@ -57,13 +65,6 @@ class Things with ChangeNotifier {
 
   int _selectedCategoryIdx = 0;
 
-  // int get doors => _doors;
-  // set doors(int numberOfDoors) {
-  //   if(numberOfDoors >= 2 && numberOfDoors <= 6) {
-  //     _doors = numberOfDoors;
-  //   }
-  // }
-
   int get selectedCategoryIdx => this._selectedCategoryIdx;
 
   set selectedCategoryIdx(int idx) {
@@ -71,18 +72,26 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  // new Thing (id: '1', title: 'This is a test tilte', description: 'This is a test description', status: 0, date: DateTime.now()),
-  // new Thing (id: '2', title: 'This is a test tilte', description: 'This is a test description', status: 0, date: DateTime.now()),
-  // new Thing (id: '3', title: 'This is a test tilte', description: 'This is a test description', status: 0, date: DateTime.now())
+  void addThing(Category category, String title, String description) {
+    Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
-  // void addThing(String title, String description) {
-  //   // this._things.add(new Thing (id: DateTime.now().toString(), title:  title, description: description));
-  //   // notifyListeners();
-  // }
+    Thing thing = new Thing(
+      id: DateTime.now().toString(),
+      title: title, 
+      description: description, 
+      status: 0,      // todo
+      category: category.title, 
+      date: DateTime.now()
+    );
 
-  // void removeThing(String id) {
-  //   this._things.removeWhere((t) => t.id == id);
-  //   notifyListeners();
-  // }
+    cat.add(thing);
+
+    notifyListeners();
+  }
+
+  void removeThing(String id) {
+    // this._things.removeWhere((t) => t.id == id);
+    // notifyListeners();
+  }
 
 }
