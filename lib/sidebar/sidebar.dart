@@ -98,23 +98,42 @@ class _SideBarState extends State <SideBar> with SingleTickerProviderStateMixin 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))
         ),
-        title: Text ('Are you sure?', style: const TextStyle(color: mainDarkBlue, fontSize: 28)),
-        content: Text (message),
-        actions: <Widget>[
-          FlatButton(
-            child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          FlatButton(
-            child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
-            onPressed: () {
-              Provider.of<Auth>(context, listen: false).logout();
-              Navigator.of(context).pop();
-            },
-          )
-        ],
+        title: Text (
+          'Are you sure?', 
+          style: const TextStyle(color: mainDarkBlue, fontSize: 28),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text (
+              message,
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 16),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                FlatButton(
+                  child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Provider.of<Auth>(context, listen: false).logout();
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            )
+          ],
+        ),
       )
     );
   }
