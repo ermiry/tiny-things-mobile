@@ -18,6 +18,7 @@ class Thing {
   // 2 -> done
   final int status;
 
+  // category's id - used for easier local storage
   final String category;
 
   final DateTime date;
@@ -33,6 +34,51 @@ class Thing {
 
     @required this.date
   });
+
+  factory Thing.fromJson(Map <String, dynamic> json) {
+    return new Thing(
+      id : json['id'] as String,
+      title : json['title'] as String,
+      description : json['description'] as String,
+      status: json['color'] as int,
+      category : json['category'] as String,
+      date: DateTime.parse(json['date'] as String),
+    );
+  }
+
+  Map <String, dynamic> toJson() => {
+    'id': this.id,
+    'title': this.title,
+    'description': this.description,
+    'status': this.status,
+    'category': this.category,
+    'date': this.date.toIso8601String()
+  };
+
+}
+
+class ThingDesSer extends DesSer <Thing> {
+
+  @override
+  String get key => "PREF_TING";
+
+  @override
+  Thing deserialize(String s) {
+    var map = json.decode(s);
+    return new Thing(
+      id: map['id'] as String,
+      title: map['title'] as String, 
+      description: map['description'] as String,
+      status: map['status'] as int,
+      category: map['category'] as String,
+      date: DateTime.parse(map['date'] as String),
+    );
+  }
+
+  @override
+  String serialize(Thing t) {
+    return json.encode(t);
+  }
 
 }
 
@@ -66,7 +112,7 @@ class Label {
 
   factory Label.fromJson(Map <String, dynamic> json) {
     return new Label(
-      id : json['name'],
+      id : json['id'],
       title : json['title'],
       description : json['description'],
       color : _colorFromJson(json['color']),
@@ -141,7 +187,7 @@ class Category {
   }
 
   Category.fromJson(Map <String, dynamic> json)
-    : id = json['name'],
+    : id = json['id'],
       title = json['title'],
       description = json['description'];
 
@@ -287,26 +333,57 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void addThing(Category category, String title, String description) {
-    Category cat = this._categories.firstWhere((c) => c.title == category.title);
+  Future <void> addThing(Category category, String title, String description) async {
+    try {
+      Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
-    Thing thing = new Thing(
-      id: DateTime.now().toString(),
-      title: title, 
-      description: description, 
-      status: 0,      // todo
-      category: category.title, 
-      date: DateTime.now()
-    );
+      Thing thing = new Thing(
+        id: DateTime.now().toString(),
+        title: title, 
+        description: description, 
+        status: 0,      // todo
+        category: cat.id, 
+        date: DateTime.now()
+      );
 
-    cat.addThing(thing);
+      cat.addThing(thing);
+
+      // save to local storage
+      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+      await repo.save(thing);
+    }
+
+    catch (error) {
+      print('Failed to save thing!');
+    } 
 
     notifyListeners();
   }
 
-  void removeThing(String id) {
+  void deleteThing(String id) {
     // this._things.removeWhere((t) => t.id == id);
     // notifyListeners();
+  }
+
+  Future <void> loadThings() async {
+    try {
+      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer ());
+      List <Thing> things = await repo.findAll();
+
+      for (var t in things) {
+        for (var c in this._categories) {
+          if (t.category == c.id) {
+            c.addThing(t);
+          }
+        }
+      }
+    }
+
+    catch (error) {
+      print('Failed to load things from local storage!');
+    }
+
+    notifyListeners();
   }
 
 }

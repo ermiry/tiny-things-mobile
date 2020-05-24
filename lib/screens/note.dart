@@ -245,9 +245,10 @@ class _NoteScreenState extends State <NoteScreen> {
                         icon: Icon(
                           Icons.add,
                         ),
-                        onPressed: () {
-                          Provider.of<Things>(context, listen: false).addThing(
-                            Provider.of<Things>(context, listen: false).categories[0], 
+                        onPressed: () async {
+                          var things = Provider.of<Things>(context, listen: false);
+                          await things.addThing(
+                            things.categories[things.selectedCategoryIdx],
                             this._titleEditingController.text, 
                             this._textEditingController.text
                           );

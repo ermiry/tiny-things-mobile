@@ -48,8 +48,11 @@ class _SplashScreenState extends State <SplashScreen> {
         }
 
         else {
-          await things.loadCategories();
-          await things.loadLabels();
+          things.loadCategories().then((_) {
+            things.loadLabels().then((_) async {
+              await things.loadThings();
+            });
+          });
         }
       });
       
