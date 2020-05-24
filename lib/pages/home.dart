@@ -39,7 +39,6 @@ class _NotesScreen extends StatefulWidget {
 
 class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderStateMixin {
 
-  int _selectedCategoryIndex = 0;
   TabController _tabController;
 
   @override
@@ -49,23 +48,22 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
   }
 
   Widget _buildCategoryCard(int index, String title, int count) {
+    int selectedIdx = Provider.of<Things>(context).selectedCategoryIdx;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedCategoryIndex = index;
-        });
+        Provider.of<Things>(context).selectedCategoryIdx = index;
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
         height: 240.0,
         width: 160.0,
         decoration: BoxDecoration(
-          color: _selectedCategoryIndex == index
+          color: selectedIdx == index
             ? mainBlue
             : Color(0xFFEFF4F6),
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
-            _selectedCategoryIndex == index
+            selectedIdx == index
               ? BoxShadow(
                   color: Colors.black26,
                   offset: Offset(0, 2),
@@ -83,7 +81,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               child: Text(
                 title,
                 style: TextStyle(
-                  color: _selectedCategoryIndex == index
+                  color: selectedIdx == index
                       ? Colors.white
                       : Color(0xFFAFB4C6),
                   fontSize: 24,
@@ -96,7 +94,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               child: Text(
                 count.toString(),
                 style: TextStyle(
-                  color: _selectedCategoryIndex == index
+                  color: selectedIdx == index
                       ? Colors.white
                       // : Colors.black,
                       : Color(0xFF0F1426),
@@ -108,6 +106,30 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
           ],
         ),
       ),
+    );
+  }
+
+  Widget categories() {
+    return Consumer <Things> (
+      builder: (ctx, things, _) {
+        return Container(
+          height: 240.0,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: things.categories.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return SizedBox(width: 8);
+              }
+              return _buildCategoryCard(
+                index - 1,
+                things.categories[index - 1].title,
+                things.categories[index - 1].things.length
+              );
+            },
+          ),
+        );
+      }
     );
   }
 
@@ -139,23 +161,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
 
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-            Container(
-              height: 260.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return SizedBox(width: 8);
-                  }
-                  return _buildCategoryCard(
-                    index - 1,
-                    categories.keys.toList()[index - 1],
-                    categories.values.toList()[index - 1],
-                  );
-                },
-              ),
-            ),
+            this.categories(),
 
             Center(
               child: TabBar(
@@ -171,7 +177,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                     child: Text(
                       'Things',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -180,7 +186,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                     child: Text(
                       'Important',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -189,16 +195,16 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                     child: Text(
                       'In Progress',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Tab(
                     child: Text(
-                      'Completed',
+                      'Done',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -288,7 +294,7 @@ class _ThingItem extends StatefulWidget {
 
 class _ThingItemState extends State <_ThingItem> {
 
-  final DateFormat _dateFormatter = DateFormat('hh:mm - dd MMM');
+  final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
   void _reviewThing() {
     showModalBottomSheet(
@@ -385,14 +391,15 @@ class _ThingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int selectedIdx = Provider.of<Things>(context).selectedCategoryIdx;
     return Consumer <Things> (
       builder: (ctx, things, _) {
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: things.things.length,
+          itemCount: things.categories[selectedIdx].things.length,
           itemBuilder: (ctx, idx) {
-            return _ThingItem (things.things[idx]);
+            return _ThingItem (things.categories[selectedIdx].things[idx]);
           }
         );
       }
