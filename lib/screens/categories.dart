@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:provider/provider.dart';
-import 'package:things/providers/things.dart';
+// import 'package:provider/provider.dart';
+// import 'package:things/providers/things.dart';
+
+import 'package:things/widgets/categories.dart';
 
 import 'package:things/style/colors.dart';
 
@@ -10,7 +12,7 @@ class CategoriesScreen extends StatefulWidget {
 
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
-  
+
 }
 
 class _CategoriesScreenState extends State <CategoriesScreen> {
@@ -51,6 +53,10 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
                   ),
                 )
               ),
+
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
+              new CategoriesDisplay(),
             ],
           ),
         ],
