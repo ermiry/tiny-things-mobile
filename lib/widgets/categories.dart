@@ -7,6 +7,10 @@ import 'package:things/style/colors.dart';
 
 class CategoriesDisplay extends StatefulWidget {
 
+  final bool add;
+
+  CategoriesDisplay (this.add);
+
   @override
   _CategoriesDisplayState createState() => _CategoriesDisplayState();
   
@@ -14,14 +18,51 @@ class CategoriesDisplay extends StatefulWidget {
 
 class _CategoriesDisplayState extends State <CategoriesDisplay> {
 
-  Widget _buildCategoryCard(int index, String title, int count) {
+  Widget _create() {
+    return GestureDetector(
+      onTap: () {
+        
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 16,
+          bottom: 16,
+          right: 6,
+          left: 16
+        ),
+        height: 240.0,
+        width: 160.0,
+        decoration: BoxDecoration(
+          color: Color(0xFFEFF4F6),
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(color: Colors.transparent),
+          ],
+        ),
+        child: Center(
+          child: Icon(
+            Icons.add,
+            color: mainBlue,
+            size: 84,
+          ),
+        ) 
+      ),
+    );
+  }
+
+  Widget _category(int index, double left, String title, int count) {
     int selectedIdx = Provider.of<Things>(context).selectedCategoryIdx;
     return GestureDetector(
       onTap: () {
         Provider.of<Things>(context).selectedCategoryIdx = index;
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+        margin: EdgeInsets.only(
+          top: 16,
+          bottom: 16,
+          right: 8,
+          left: left
+        ),
         height: 240.0,
         width: 160.0,
         decoration: BoxDecoration(
@@ -49,8 +90,8 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
                 title,
                 style: TextStyle(
                   color: selectedIdx == index
-                      ? Colors.white
-                      : Color(0xFFAFB4C6),
+                    ? Colors.white
+                    : Color(0xFFAFB4C6),
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -62,9 +103,9 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
                 count.toString(),
                 style: TextStyle(
                   color: selectedIdx == index
-                      ? Colors.white
-                      // : Colors.black,
-                      : Color(0xFF0F1426),
+                    ? Colors.white
+                    // : Colors.black,
+                    : Color(0xFF0F1426),
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -81,18 +122,25 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
     return Consumer <Things> (
       builder: (ctx, things, _) {
         return Container(
+          // padding: EdgeInsets.symmetric(horizontal: 16),
           height: 240.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: things.categories.length + 1,
+            itemCount: this.widget.add ? things.categories.length + 1 : things.categories.length,
             itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return SizedBox(width: 8);
+              int idx = this.widget.add ? index - 1 : index;
+
+              if (this.widget.add) {
+                if (index == 0) {
+                  return this._create();
+                }
               }
-              return _buildCategoryCard(
-                index - 1,
-                things.categories[index - 1].title,
-                things.categories[index - 1].things.length
+
+              return this._category(
+                idx,
+                index == 0 ? 16 : 6,
+                things.categories[idx].title,
+                things.categories[idx].things.length
               );
             },
           ),

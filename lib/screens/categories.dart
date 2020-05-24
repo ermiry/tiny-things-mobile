@@ -89,7 +89,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
 
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-                new CategoriesDisplay(),
+                new CategoriesDisplay (true),
 
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 

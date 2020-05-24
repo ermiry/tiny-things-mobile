@@ -77,7 +77,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
 
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-            new CategoriesDisplay(),
+            new CategoriesDisplay (false),
 
             Center(
               child: TabBar(
