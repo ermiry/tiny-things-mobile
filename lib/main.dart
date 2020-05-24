@@ -6,9 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/global.dart';
 import 'package:things/providers/auth.dart';
+import 'package:things/providers/things.dart';
 import 'package:things/providers/settings.dart';
 
-// import 'package:things/screens/splash.dart';
+import 'package:things/screens/splash.dart';
 import 'package:things/screens/loading.dart';
 import 'package:things/screens/welcome.dart';
 import 'package:things/screens/auth/login.dart';
@@ -30,6 +31,9 @@ class TinyThings extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: new Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: new Things(),
         ),
         ChangeNotifierProvider.value(
           value: new Settings(),
@@ -58,19 +62,20 @@ class TinyThings extends StatelessWidget {
               )
             )
           ),
+          initialRoute: '/splash',
           home: Consumer <Auth> (
-            // builder: (ctx, auth, _) => Provider.of<Global>(ctx, listen: false).firstTime ? new WelcomeScreen()
-            builder: (ctx, auth, _) => auth.isAuth ? new SideBarLayout () :
-                FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                    authResultSnapshot.connectionState == ConnectionState.waiting ?
-                      new LoadingScreen () : new LoginScreen (),
-                ),
+            builder: (ctx, auth, _) => global.firstTime ? new WelcomeScreen() : new SideBarLayout ()
+            // builder: (ctx, auth, _) => auth.isAuth ? new SideBarLayout () :
+            //     FutureBuilder(
+            //       future: auth.tryAutoLogin(),
+            //       builder: (ctx, authResultSnapshot) =>
+            //         authResultSnapshot.connectionState == ConnectionState.waiting ?
+            //           new LoadingScreen () : new LoginScreen (),
+            //     ),
           ),
 
           routes: {
-            // '/splash': (ctx) => new SplashScreen (),
+            '/splash': (ctx) => new SplashScreen (),
 
             '/register': (ctx) => new RegisterScreen (),
           },
