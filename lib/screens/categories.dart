@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
 import 'package:things/widgets/categories.dart';
-import 'package:things/widgets/change_value.dart';
+// import 'package:things/widgets/change_value.dart';
+import 'package:things/widgets/add_label.dart';
 
 import 'package:things/style/colors.dart';
 
@@ -20,61 +21,6 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey <ScaffoldState>();
 
-  final Map <String, String> _data = {
-    'name': '',
-    'description': '',
-  };
-
-  String validateName(value) {
-    if (value.isEmpty) return 'Name field is required!';
-    return null;
-  }
-
-  void saveName(value) {
-    this._data['name'] = value;
-  }
-
-  String validateDescription(value) {
-    if (value.isEmpty) return 'Description field is required!';
-    return null;
-  }
-
-  void saveDescription(value) {
-    this._data['description'] = value;
-  }
-
-  Future <void> _addLabel() async {
-    try {
-      // await Provider.of<Auth>(context, listen: false).changeName(
-      //   this._data['name']
-      // ).then((_) {
-
-        var things = Provider.of<Things>(context, listen: false);
-
-        things.addLabel(
-          things.categories[things.selectedCategoryIdx], 
-          this._data['name'], 
-          this._data['description'], 
-        );
-
-        FocusScope.of(context).requestFocus(FocusNode());
-        _scaffoldKey.currentState.showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              'Created new label!',
-              textAlign: TextAlign.center,
-            )
-          )
-        );
-      // });
-    }
-
-    catch (err) {
-      print(err);
-    }
-  }
-
   void _addLabelDialog() {
     showDialog(
       barrierDismissible: false,
@@ -84,21 +30,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))
           ),
-          child: new ChangeValue(
-            title: "Add label", 
-
-            placeholder: "Name",
-            mainObscure: false,
-            mainValidate: this.validateName,
-            mainSave: this.saveName,
-
-            subPlaceholder: "Description",
-            subObscure: false,
-            subValidate: this.validateDescription,
-            subSave: this.saveDescription,
-
-            callback: this._addLabel,
-          )
+          child: new AddLabel()
         );
       }
     );
@@ -112,7 +44,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: mainBlue,
+          color: label.color,
           borderRadius: BorderRadius.circular(6)
         ),
       ),

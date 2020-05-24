@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
 class Thing {
@@ -38,11 +39,15 @@ class Label {
   final String title;
   final String description;
 
+  final Color color;
+
   Label ({
     @required this.id,
 
     @required this.title,
     @required this.description,
+
+    @required this.color,
   });
 
 }
@@ -107,13 +112,14 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void addLabel(Category category, String title, String description) {
+  void addLabel(Category category, String title, String description, Color color) {
     Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
     Label label = new Label(
       id: DateTime.now().toString(),
       title: title, 
       description: description, 
+      color: color
     );
 
     cat.addLabel(label);
