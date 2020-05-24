@@ -7,11 +7,13 @@ import 'package:things/providers/things.dart';
 import 'package:things/style/colors.dart';
 
 class NoteScreen extends StatefulWidget {
+
   @override
   _NoteScreenState createState() => _NoteScreenState();
+  
 }
 
-class _NoteScreenState extends State<NoteScreen> {
+class _NoteScreenState extends State <NoteScreen> {
 
   final TextEditingController _titleEditingController = TextEditingController();
   final TextEditingController _textEditingController = TextEditingController();

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/screens/note.dart';
+import 'package:things/screens/categories.dart';
 
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
@@ -246,7 +247,12 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               color: Colors.white,
               icon: Icon(Icons.category),
               iconSize: 42,
-              onPressed: () => print('Review categories'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new CategoriesScreen ()),
+                );
+              },
             )
           ),
         ),
