@@ -45,6 +45,9 @@ class Label {
 
   final Color color;
 
+  // category's id - used for easier local storage
+  final String category;
+
   Label ({
     @required this.id,
 
@@ -52,7 +55,56 @@ class Label {
     @required this.description,
 
     @required this.color,
+
+    @required this.category
   });
+
+  static Color _colorFromJson(String colorString) {
+    String valueString = colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+    return new Color(int.parse(valueString, radix: 16));
+  }
+
+  factory Label.fromJson(Map <String, dynamic> json) {
+    return new Label(
+      id : json['name'],
+      title : json['title'],
+      description : json['description'],
+      color : _colorFromJson(json['color']),
+      category : json['category']
+    );
+  }
+
+  Map <String, dynamic> toJson() => {
+    'id': this.id,
+    'title': this.title,
+    'description': this.description,
+    'color': this.color.toString(),
+    'category': this.category
+  };
+
+}
+
+class LabelDesSer extends DesSer <Label> {
+
+  @override
+  String get key => "PREF_LABEL";
+
+  @override
+  Label deserialize(String s) {
+    var map = json.decode(s);
+    return new Label(
+      id: map['id'] as String,
+      title: map['title'] as String, 
+      description: map['description'] as String,
+      color: Label._colorFromJson(map['color']),
+      category: map['category']
+    );
+  }
+
+  @override
+  String serialize(Label l) {
+    return json.encode(l);
+  }
 
 }
 
@@ -166,17 +218,43 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void addLabel(Category category, String title, String description, Color color) {
+  Future <void> addLabel(Category category, String title, String description, Color color) async {
     Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
     Label label = new Label(
       id: DateTime.now().toString(),
       title: title, 
       description: description, 
-      color: color
+      color: color,
+      category: cat.id
     );
 
     cat.addLabel(label);
+
+    // save to local storage
+    var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());
+    await repo.save(label);
+
+    notifyListeners();
+  }
+
+  Future <void> loadLabels() async {
+    try {
+      var repo = new FuturePreferencesRepository <Label> (new LabelDesSer ());
+      List <Label> labels = await repo.findAll();
+
+      for (var l in labels) {
+        for (var c in this._categories) {
+          if (l.category == c.id) {
+            c.addLabel(l);
+          }
+        }
+      }
+    }
+
+    catch (error) {
+      print('Failed to load labels from local storage!');
+    }
 
     notifyListeners();
   }
