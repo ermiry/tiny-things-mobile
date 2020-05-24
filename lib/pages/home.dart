@@ -296,6 +296,24 @@ class _ThingItemState extends State <_ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
+  Widget _button(Color color, IconData iconData) {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: color
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          iconData,
+        ),
+        onPressed: () {
+          
+        },
+      ),
+    );
+  }
+
   void _reviewThing() {
     showModalBottomSheet<dynamic>(
       context: context,
@@ -346,6 +364,18 @@ class _ThingItemState extends State <_ThingItem> {
                           ),
                         ],
                       ),
+
+                      // buttons
+                      SizedBox(height: 24.0),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          this._button(deleteColor, Icons.delete),
+                          this._button(importantColor, Icons.star),
+                          this._button(doneColor, Icons.check),
+                        ],
+                      )
                     ],
                   ),
                 )
