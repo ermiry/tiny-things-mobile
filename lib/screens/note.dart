@@ -13,13 +13,17 @@ class _NoteScreenState extends State<NoteScreen> {
   final TextEditingController _titleEditingController = TextEditingController();
   final TextEditingController _textEditingController = TextEditingController();
 
+  final FocusNode _titleFocusNode = new FocusNode ();
   final FocusNode _textFocusNode = new FocusNode ();
+
+  bool _first = true;
 
   @override
   void dispose() {
-    this._textEditingController.dispose();
     this._titleEditingController.dispose();
+    this._textEditingController.dispose();
 
+    this._titleFocusNode.dispose();
     this._textFocusNode.dispose();
 
     super.dispose();
@@ -27,8 +31,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   Future <bool> _confirmDelete() async {
     // show confirm dialog
-    Future <bool> retval = new Future.value(false);
-    await showDialog(
+    return await showDialog(
       context: context,
       builder: (ctx) => AlertDialog (
         shape: RoundedRectangleBorder(
@@ -60,8 +63,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   highlightColor: Colors.transparent,
                   child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    retval = Future.value(false);
-                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pop(false);
                   },
                 ),
                 FlatButton(
@@ -71,8 +73,10 @@ class _NoteScreenState extends State<NoteScreen> {
                   highlightColor: Colors.transparent,
                   child: Text ('Okay', style: const TextStyle(color: mainRed, fontSize: 18, fontWeight: FontWeight.bold)),
                   onPressed: () async {
-                    retval = Future.value(true);
-                    Navigator.of(ctx).pop();
+                    this._titleEditingController.clear();
+                    this._textEditingController.clear();
+
+                    Navigator.of(ctx).pop(true);
                   },
                 )
               ],
@@ -81,13 +85,22 @@ class _NoteScreenState extends State<NoteScreen> {
         ),
       )
     );
-
-    return retval;
   }
 
   // Prevent route from poping
   Future <bool> _onWillPop() async {
-    return await _confirmDelete();
+    if (this._titleEditingController.text.isNotEmpty ||
+      this._textEditingController.text.isNotEmpty) {
+      bool value = await this._confirmDelete();
+      if (value) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        return new Future.value(true);
+      }
+
+      else return new Future.value(false);
+    }
+
+    return new Future.value(true);
   }
 
   @override
@@ -96,6 +109,11 @@ class _NoteScreenState extends State<NoteScreen> {
       DeviceOrientation.portraitUp,
       // DeviceOrientation.portraitDown,
     ]);
+
+    if (this._first) {
+      FocusScope.of(context).requestFocus(this._titleFocusNode);
+      this.setState(() => this._first = false);
+    }
 
     return WillPopScope(
       onWillPop: this._onWillPop,
@@ -115,9 +133,11 @@ class _NoteScreenState extends State<NoteScreen> {
                       size: 36,
                     ),
                     onPressed: () async {
-                      _confirmDelete().then((value) {
-                        if (value) Navigator.pop(context);
-                      });
+                      bool value = await this._onWillPop();
+                      if (value) {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        Navigator.pop(context);
+                      } 
                     },
                   ),
                 ),
@@ -126,6 +146,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   child: TextField(
+                    focusNode: this._titleFocusNode,
                     textCapitalization: TextCapitalization.sentences,
                     controller: this._titleEditingController,
                     maxLength: 128,
@@ -231,15 +252,18 @@ class _NoteScreenState extends State<NoteScreen> {
                         Icons.clear,
                       ),
                       onPressed: () {
-                        print('clear!');
+                        this._textEditingController.clear();
                       },
                     ),
 
                     // delete
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () {
-                        print('delete!');
+                      onPressed: () async {
+                        if (this._titleEditingController.text.isNotEmpty ||
+                          this._textEditingController.text.isNotEmpty) {
+                          await this._confirmDelete();
+                        }
                       },
                     ),
                   ],
