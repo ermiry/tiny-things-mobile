@@ -45,7 +45,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 4, vsync: this);
   }
 
   Widget _buildCategoryCard(int index, String title, int count) {
@@ -187,6 +187,15 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                   ),
                   Tab(
                     child: Text(
+                      'In Progress',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
                       'Completed',
                       style: TextStyle(
                         fontSize: 18,
@@ -207,6 +216,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
                 children: <Widget>[
                   _ThingsTab(),
                   _ImportantTab(),
+                  _ProgressTab(),
                   _CompletedTab(),
                 ],
               ),
@@ -392,6 +402,21 @@ class _ThingsTab extends StatelessWidget {
 }
 
 class _ImportantTab extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: <Widget>[
+
+      ],
+    );
+  }
+
+}
+
+class _ProgressTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
