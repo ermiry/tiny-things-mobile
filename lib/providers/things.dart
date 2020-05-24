@@ -95,6 +95,18 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  void addCategory(String title, String description) {
+    Category cat = new Category(
+      id: DateTime.now().toString(),
+      title: title, 
+      description: description
+    );
+
+    this._categories.add(cat);
+
+    notifyListeners();
+  }
+
   void addLabel(Category category, String title, String description) {
     Category cat = this._categories.firstWhere((c) => c.title == category.title);
 

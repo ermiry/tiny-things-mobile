@@ -48,6 +48,11 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
       // await Provider.of<Auth>(context, listen: false).changeName(
       //   this._data['name']
       // ).then((_) {
+        Provider.of<Things>(context, listen: false).addCategory(
+          this._data['name'], 
+          this._data['description'], 
+        );
+
         FocusScope.of(context).requestFocus(FocusNode());
         Scaffold.of(context).showSnackBar(
           SnackBar(
@@ -84,7 +89,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
             mainSave: this.saveName,
 
             subPlaceholder: "Description",
-            subObscure: true,
+            subObscure: false,
             subValidate: this.validateDescription,
             subSave: this.saveDescription,
 
