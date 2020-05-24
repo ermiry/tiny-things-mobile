@@ -132,6 +132,10 @@ class Category {
     this._labels.add(label);
   }
 
+  void removeLabel(String id) {
+    this._labels.removeWhere((l) => l.id == id);
+  }
+
   void addThing(Thing thing) {
     this._things.add(thing);
   }
@@ -219,21 +223,45 @@ class Things with ChangeNotifier {
   }
 
   Future <void> addLabel(Category category, String title, String description, Color color) async {
-    Category cat = this._categories.firstWhere((c) => c.title == category.title);
+    try {
+      Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
-    Label label = new Label(
-      id: DateTime.now().toString(),
-      title: title, 
-      description: description, 
-      color: color,
-      category: cat.id
-    );
+      Label label = new Label(
+        id: DateTime.now().toString(),
+        title: title, 
+        description: description, 
+        color: color,
+        category: cat.id
+      );
 
-    cat.addLabel(label);
+      cat.addLabel(label);
 
-    // save to local storage
-    var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());
-    await repo.save(label);
+      // save to local storage
+      var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());
+      await repo.save(label);
+    }
+
+    catch (error) {
+      print('Failed to add label!');
+    } 
+
+    notifyListeners();
+  }
+
+  // FIXME: also remove from things
+  void deleteLabel(Category cat, String id) {
+    try {
+      // remove from memory
+      cat.removeLabel(id);
+
+      // remove from local storage
+      var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());
+      repo.removeWhere((l) => l.id == id);
+    }
+
+    catch (error) {
+      print('Failed to delete label!');
+    }
 
     notifyListeners();
   }

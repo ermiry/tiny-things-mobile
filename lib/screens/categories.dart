@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
 import 'package:things/widgets/categories.dart';
-// import 'package:things/widgets/change_value.dart';
 import 'package:things/widgets/add_label.dart';
 
 import 'package:things/style/colors.dart';
@@ -37,42 +36,104 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
   }
 
   Widget _label(Label label) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-      leading: Container(
-        margin: EdgeInsets.only(right: 4, bottom: 4),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: label.color,
-          borderRadius: BorderRadius.circular(6)
+    return new Dismissible(
+      key: ValueKey (label.id),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        var things = Provider.of<Things>(context, listen: false);
+        things.deleteLabel(
+          things.categories[things.selectedCategoryIdx],
+          label.id
+        );
+      },
+      confirmDismiss: (dir) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog (
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12.0))
+            ),
+            title: Text (
+              'Are you sure?', 
+              style: const TextStyle(color: mainDarkBlue, fontSize: 28),
+              textAlign: TextAlign.center,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text (
+                  'Do you want to delete this label?',
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 16),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                    ),
+                    FlatButton(
+                      child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )
+        );
+      },
+      background: Container (
+        color: Theme.of(context).errorColor,
+        child: Icon (
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
         ),
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 20),
       ),
-      title: new Text(
-        label.title,
-        style: const TextStyle(
-          // color: Colors.black,
-          color: Color(0xFF2F3446),
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 32),
+        leading: Container(
+          margin: EdgeInsets.only(right: 4, bottom: 4),
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: label.color,
+            borderRadius: BorderRadius.circular(6)
+          ),
         ),
-      ),
-      subtitle: new Text(
-        label.description,
-        style: const TextStyle(
-          color: Colors.black54,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+        title: new Text(
+          label.title,
+          style: const TextStyle(
+            // color: Colors.black,
+            color: Color(0xFF2F3446),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      trailing: Text(
-        '0',
-        style: const TextStyle(
-          color: Color(0xFF0F1426),
-          fontSize: 32.0,
-          fontWeight: FontWeight.bold,
+        subtitle: new Text(
+          label.description,
+          style: const TextStyle(
+            color: Colors.black54,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-      ),
+        trailing: Text(
+          '0',
+          style: const TextStyle(
+            color: Color(0xFF0F1426),
+            fontSize: 32.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      )
     );
   }
 

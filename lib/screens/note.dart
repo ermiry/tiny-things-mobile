@@ -44,7 +44,7 @@ class _NoteScreenState extends State <NoteScreen> {
         ),
         title: Text (
           'Are you sure?', 
-          style: const TextStyle(color: mainRed, fontSize: 28),
+          style: const TextStyle(color: mainDarkBlue, fontSize: 28),
           textAlign: TextAlign.center,
         ),
         content: Column(

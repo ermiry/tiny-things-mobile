@@ -79,19 +79,14 @@ class _AddLabelState extends State <AddLabel> {
 
   Future <void> _addLabel() async {
     try {
-      // await Provider.of<Auth>(context, listen: false).changeName(
-      //   this._data['name']
-      // ).then((_) {
+      var things = Provider.of<Things>(context, listen: false);
 
-        var things = Provider.of<Things>(context, listen: false);
-
-        things.addLabel(
-          things.categories[things.selectedCategoryIdx], 
-          this._data['name'], 
-          this._data['description'], 
-          this._colors[this._selectedIdx]
-        );
-
+      await things.addLabel(
+        things.categories[things.selectedCategoryIdx], 
+        this._data['name'], 
+        this._data['description'], 
+        this._colors[this._selectedIdx]
+      ).then((_) {
         FocusScope.of(context).requestFocus(FocusNode());
         Scaffold.of(context).showSnackBar(
           SnackBar(
@@ -102,7 +97,7 @@ class _AddLabelState extends State <AddLabel> {
             )
           )
         );
-      // });
+      });
     }
 
     catch (err) {
