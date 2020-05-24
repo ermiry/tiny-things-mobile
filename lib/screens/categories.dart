@@ -40,9 +40,17 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
       subtitle: new Text(
         'Related to testing',
         style: const TextStyle(
-          color: Colors.black87,
+          color: Colors.black54,
           fontSize: 16,
           fontWeight: FontWeight.w500,
+        ),
+      ),
+      trailing: Text(
+        '0',
+        style: const TextStyle(
+          color: Color(0xFF0F1426),
+          fontSize: 32.0,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -58,6 +66,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
+        fit: StackFit.expand,
         children: <Widget>[
           SingleChildScrollView(
             child: Column(
@@ -126,6 +135,29 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
                   ],
                 ),
               ],
+            ),
+          ),
+
+          Positioned(
+            bottom: MediaQuery.of(context).size.width * 0.05,
+            left: MediaQuery.of(context).size.width * 0.83,
+            child: Container(
+              decoration: ShapeDecoration(
+                shape: CircleBorder (),
+                color: mainBlue
+              ),
+              child: IconButton(
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                color: Colors.white,
+                icon: Icon(Icons.label),
+                onPressed: () {
+                  print('Label');
+                },
+                iconSize: 42
+              )
             ),
           ),
         ],
