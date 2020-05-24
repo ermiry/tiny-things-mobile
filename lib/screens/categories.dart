@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// import 'package:provider/provider.dart';
-// import 'package:things/providers/things.dart';
+import 'package:provider/provider.dart';
+import 'package:things/providers/things.dart';
 
 import 'package:things/widgets/categories.dart';
 import 'package:things/widgets/change_value.dart';
@@ -48,6 +48,15 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
       // await Provider.of<Auth>(context, listen: false).changeName(
       //   this._data['name']
       // ).then((_) {
+
+        var things = Provider.of<Things>(context, listen: false);
+
+        things.addLabel(
+          things.categories[things.selectedCategoryIdx], 
+          this._data['name'], 
+          this._data['description'], 
+        );
+
         FocusScope.of(context).requestFocus(FocusNode());
         _scaffoldKey.currentState.showSnackBar(
           SnackBar(
@@ -84,7 +93,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
             mainSave: this.saveName,
 
             subPlaceholder: "Description",
-            subObscure: true,
+            subObscure: false,
             subValidate: this.validateDescription,
             subSave: this.saveDescription,
 
@@ -95,7 +104,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
     );
   }
 
-  Widget label() {
+  Widget _label(Label label) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 32),
       leading: Container(
@@ -108,7 +117,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
         ),
       ),
       title: new Text(
-        'Testing',
+        label.title,
         style: const TextStyle(
           color: Colors.black,
           fontSize: 22,
@@ -116,7 +125,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
         ),
       ),
       subtitle: new Text(
-        'Related to testing',
+        label.description,
         style: const TextStyle(
           color: Colors.black54,
           fontSize: 16,
@@ -196,22 +205,15 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
 
                 // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   itemCount: refris.length,
-                //   itemBuilder: (ctx, i) => new _RefriItem (refris[i])
-                // ),
-
-                ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    this.label(),
-                    this.label(),
-                    this.label(),
-                    this.label(),
-                  ],
+                Consumer <Things> (
+                  builder: (ctx, things, _) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: things.categories[things.selectedCategoryIdx].labels.length,
+                      itemBuilder: (ctx, i) => _label(things.categories[things.selectedCategoryIdx].labels[i])
+                    );
+                  }
                 ),
               ],
             ),

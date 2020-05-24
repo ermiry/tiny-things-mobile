@@ -31,12 +31,31 @@ class Thing {
 
 }
 
+class Label {
+
+  final String id;
+
+  final String title;
+  final String description;
+
+  Label ({
+    @required this.id,
+
+    @required this.title,
+    @required this.description,
+  });
+
+}
+
 class Category {
 
   final String id;
 
   final String title;
   final String description;
+
+  List <Label> _labels = [];
+  List <Label> get labels { return [...this._labels]; }
 
   List <Thing> _things = [];
   List <Thing> get things { return [...this._things]; }
@@ -48,7 +67,11 @@ class Category {
     @required this.description,
   });
 
-  void add(Thing thing) {
+  void addLabel(Label label) {
+    this._labels.add(label);
+  }
+
+  void addThing(Thing thing) {
     this._things.add(thing);
   }
 
@@ -72,6 +95,20 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  void addLabel(Category category, String title, String description) {
+    Category cat = this._categories.firstWhere((c) => c.title == category.title);
+
+    Label label = new Label(
+      id: DateTime.now().toString(),
+      title: title, 
+      description: description, 
+    );
+
+    cat.addLabel(label);
+
+    notifyListeners();
+  }
+
   void addThing(Category category, String title, String description) {
     Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
@@ -84,7 +121,7 @@ class Things with ChangeNotifier {
       date: DateTime.now()
     );
 
-    cat.add(thing);
+    cat.addThing(thing);
 
     notifyListeners();
   }
