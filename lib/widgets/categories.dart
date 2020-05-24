@@ -43,7 +43,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
     this._data['description'] = value;
   }
 
-  Future <void> addCategory() async {
+  Future <void> _addCategory() async {
     try {
       // await Provider.of<Auth>(context, listen: false).changeName(
       //   this._data['name']
@@ -66,7 +66,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
     }
   }
 
-  void _showNameChangeDialog() {
+  void _addCategoryDialog() {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -88,7 +88,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
             subValidate: this.validateDescription,
             subSave: this.saveDescription,
 
-            callback: this.addCategory,
+            callback: this._addCategory,
           )
         );
       }
@@ -121,7 +121,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
           ),
         ) 
       ),
-      onTap: () => this._showNameChangeDialog()
+      onTap: this._addCategoryDialog
     );
   }
 

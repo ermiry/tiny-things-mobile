@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 // import 'package:things/providers/things.dart';
 
 import 'package:things/widgets/categories.dart';
+import 'package:things/widgets/change_value.dart';
 
 import 'package:things/style/colors.dart';
 
@@ -16,6 +17,83 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State <CategoriesScreen> {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey <ScaffoldState>();
+
+  final Map <String, String> _data = {
+    'name': '',
+    'description': '',
+  };
+
+  String validateName(value) {
+    if (value.isEmpty) return 'Name field is required!';
+    return null;
+  }
+
+  void saveName(value) {
+    this._data['name'] = value;
+  }
+
+  String validateDescription(value) {
+    if (value.isEmpty) return 'Description field is required!';
+    return null;
+  }
+
+  void saveDescription(value) {
+    this._data['description'] = value;
+  }
+
+  Future <void> _addLabel() async {
+    try {
+      // await Provider.of<Auth>(context, listen: false).changeName(
+      //   this._data['name']
+      // ).then((_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Created new label!',
+              textAlign: TextAlign.center,
+            )
+          )
+        );
+      // });
+    }
+
+    catch (err) {
+      print(err);
+    }
+  }
+
+  void _addLabelDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: new ChangeValue(
+            title: "Add label", 
+
+            placeholder: "Name",
+            mainObscure: false,
+            mainValidate: this.validateName,
+            mainSave: this.saveName,
+
+            subPlaceholder: "Description",
+            subObscure: true,
+            subValidate: this.validateDescription,
+            subSave: this.saveDescription,
+
+            callback: this._addLabel,
+          )
+        );
+      }
+    );
+  }
 
   Widget label() {
     return ListTile(
@@ -64,6 +142,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
     ]);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       body: Stack(
         fit: StackFit.expand,
@@ -153,9 +232,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
                 highlightColor: Colors.transparent,
                 color: Colors.white,
                 icon: Icon(Icons.label),
-                onPressed: () {
-                  print('Label');
-                },
+                onPressed: this._addLabelDialog,
                 iconSize: 42
               )
             ),
