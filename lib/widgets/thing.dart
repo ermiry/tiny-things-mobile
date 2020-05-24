@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
 import 'package:things/style/colors.dart';
@@ -34,30 +34,66 @@ class _ThingItemState extends State <ThingItem> {
     );
   }
 
-  Widget _button(Color color, IconData iconData) {
-    return new Container(
-      decoration: ShapeDecoration(
-        shape: CircleBorder (),
-        color: color
-      ),
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(
-          iconData,
-        ),
-        onPressed: () {
-          
-        },
-      ),
-    );
-  }
-
   void _reviewThing() {
     showModalBottomSheet<dynamic>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (BuildContext bc) {
+        Widget _deleteButton() {
+          return new Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: deleteColor
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(
+                Icons.delete,
+              ),
+              onPressed: () {
+                Navigator.of(bc).pop('delete');
+              },
+            ),
+          );
+        }
+
+        Widget _importantButton() {
+          return new Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: importantColor
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(
+                Icons.star
+              ),
+              onPressed: () {
+                // Navigator.of(context).pop();
+              },
+            ),
+          );
+        }
+
+        Widget _doneButton() {
+          return new Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: doneColor
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(
+                Icons.check
+              ),
+              onPressed: () {
+                // Navigator.of(context).pop();
+              },
+            ),
+          );
+        }
+
         return Wrap(
           children: <Widget>[
             Padding(
@@ -148,9 +184,9 @@ class _ThingItemState extends State <ThingItem> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          this._button(deleteColor, Icons.delete),
-                          this._button(importantColor, Icons.star),
-                          this._button(doneColor, Icons.check),
+                          _deleteButton(),
+                          _importantButton(),
+                          _doneButton()
                         ],
                       )
                     ],
@@ -161,7 +197,19 @@ class _ThingItemState extends State <ThingItem> {
           ],
         );
       }
-    );
+    ).then((value) {
+      if (value == 'delete') {
+        // 24/05/2020 - dirty way of avoiding an exception because the
+        // parent widget gets destroyed before the modal bottom sheet's animation has finished
+        Future.delayed(const Duration(milliseconds: 500), () {
+          var things = Provider.of<Things>(context, listen: false);
+          things.deleteThing(
+            things.categories[things.selectedCategoryIdx],
+            this.widget.thing.id
+          );
+        });
+      }
+    });
   }
 
   @override

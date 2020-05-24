@@ -186,6 +186,10 @@ class Category {
     this._things.add(thing);
   }
 
+  void removeThing(String id) {
+    this._things.removeWhere((t) => t.id == id);
+  }
+
   Category.fromJson(Map <String, dynamic> json)
     : id = json['id'],
       title = json['title'],
@@ -360,9 +364,21 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteThing(String id) {
-    // this._things.removeWhere((t) => t.id == id);
-    // notifyListeners();
+  void deleteThing(Category cat, String id) {
+    try {
+      // remove from memory
+      cat.removeThing(id);
+
+      // remove from local storage
+      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer ());
+      repo.removeWhere((t) => t.id == id);
+    }
+
+    catch (error) {
+      print('Failed to delete thing!');
+    }
+
+    notifyListeners();
   }
 
   Future <void> loadThings() async {
