@@ -297,56 +297,61 @@ class _ThingItemState extends State <_ThingItem> {
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
   void _reviewThing() {
-    showModalBottomSheet(
+    showModalBottomSheet<dynamic>(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (BuildContext bc) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            // height: 300.0,
-            decoration: BoxDecoration(
-              // color: Colors.white,
-              color: Color(0xFFEFF4F6),
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            child: Container (
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // title
-                  Text(
-                    widget.thing.title,
-                    style: TextStyle(
-                      // color: Colors.black,
-                      color: Color(0xFF2F3446),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-
-                  SizedBox(height: 16.0),
-
-                  // date
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+        return Wrap(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                // height: 300.0,
+                decoration: BoxDecoration(
+                  // color: Colors.white,
+                  color: Color(0xFFEFF4F6),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: Container (
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      // title
                       Text(
-                        _dateFormatter.format(widget.thing.date),
+                        widget.thing.title,
                         style: TextStyle(
-                          color: Color(0xFFAFB4C6),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
+                          // color: Colors.black,
+                          color: Color(0xFF2F3446),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.start,
+                      ),
+
+                      SizedBox(height: 16.0),
+
+                      // date
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text(
+                            _dateFormatter.format(widget.thing.date),
+                            style: TextStyle(
+                              color: Color(0xFFAFB4C6),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                )
               ),
-            )
-          ),
+            ),
+          ],
         );
       }
     );
