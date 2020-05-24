@@ -7,10 +7,9 @@ import 'package:things/sidebar/navigation_bloc.dart';
 
 import 'package:things/screens/note.dart';
 
-import 'package:things/models/thing.dart';
-
 import 'package:provider/provider.dart';
-import 'package:things/providers/settings.dart';
+import 'package:things/providers/things.dart';
+// import 'package:things/providers/settings.dart';
 
 import 'package:things/style/colors.dart';
 
@@ -268,12 +267,16 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
 
 class _ThingItem extends StatefulWidget {
 
+  final Thing thing;
+
+  _ThingItem (this.thing);
+
   @override
-  _ThingState createState() => new _ThingState();
+  _ThingItemState createState() => new _ThingItemState();
 
 }
 
-class _ThingState extends State <_ThingItem> {
+class _ThingItemState extends State <_ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('hh:mm - dd MMM');
 
@@ -299,57 +302,70 @@ class _ThingState extends State <_ThingItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.0),
-        padding: EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: Color(0xFFEFF4F6),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Column(
-          children: <Widget>[
-            // title
-            Text(
-              things[0].title,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+    return Column(
+      children: <Widget>[
+        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+
+        GestureDetector(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Color(0xFFEFF4F6),
+              borderRadius: BorderRadius.circular(20.0),
             ),
-
-            SizedBox(height: 12.0),
-
-            // description
-            Text(
-              things[0].content,
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-
-            // date
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                // title
                 Text(
-                  _dateFormatter.format(things[0].date),
+                  widget.thing.title,
                   style: TextStyle(
-                    color: Color(0xFFAFB4C6),
-                    fontSize: 18.0,
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+
+                SizedBox(height: 12.0),
+
+                // description
+                Text(
+                  widget.thing.description,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+
+                SizedBox(height: 16.0),
+
+                // date
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      _dateFormatter.format(widget.thing.date),
+                      style: TextStyle(
+                        color: Color(0xFFAFB4C6),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
 
-      onTap: () => _reviewThing(),
+          onTap: () => _reviewThing(),
+        ),
+
+        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+      ],
     );
   }
 
@@ -359,19 +375,17 @@ class _ThingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      children: <Widget>[
-        _ThingItem(),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        _ThingItem(),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        _ThingItem(),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        _ThingItem(),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-      ],
+    return Consumer <Things> (
+      builder: (ctx, things, _) {
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: things.things.length,
+          itemBuilder: (ctx, idx) {
+            return _ThingItem (things.things[idx]);
+          }
+        );
+      }
     );
   }
 
