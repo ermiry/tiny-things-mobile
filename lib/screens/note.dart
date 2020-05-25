@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/widgets/choose_labels.dart';
+
 import 'package:things/style/colors.dart';
 
 class NoteScreen extends StatefulWidget {
@@ -106,6 +108,21 @@ class _NoteScreenState extends State <NoteScreen> {
     }
 
     return new Future.value(true);
+  }
+
+  void _labelSelect() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: new ChooseLabels()
+        );
+      }
+    );
   }
 
   @override
@@ -229,9 +246,7 @@ class _NoteScreenState extends State <NoteScreen> {
                     // select label
                     IconButton(
                       icon: Icon(Icons.label_outline),
-                      onPressed: () {
-                        print('label!');
-                      },
+                      onPressed: this._labelSelect
                     ),
 
                     // add
