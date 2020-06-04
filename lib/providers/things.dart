@@ -475,24 +475,22 @@ class Things with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future <void> doneThing(Category category, String id) async {
+  void setThingStatus(Thing thing, int status) {
     try {
-      Category cat = this._categories.firstWhere((c) => c.title == category.title);
+      if (thing != null) {
+        thing.status = status;
 
-      Thing thing = cat.things.firstWhere((t) => t.id == id);
+        // save to local storage
+        var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+        repo.updateWhere((t) => t.id == thing.id, thing);
 
-      thing.status = 2;
-
-      // save to local storage
-      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
-      await repo.save(thing);
-
-      notifyListeners();
+        notifyListeners();
+      }
     }
 
     catch (error) {
       print(error);
-      print('Failed to move thing to done!');
+      print('Failed to set thing status!');
     }
   }
 

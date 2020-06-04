@@ -85,12 +85,52 @@ class _ThingItemState extends State <ThingItem> {
             child: IconButton(
               color: Colors.white,
               icon: Icon(
-                Icons.check
+                Icons.done
               ),
               onPressed: () {
                 Navigator.of(context).pop('done');
               },
             ),
+          );
+        }
+
+        Widget _todoButton() {
+          return new Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: mainBlue
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(
+                Icons.arrow_back
+              ),
+              onPressed: () {
+                Navigator.of(context).pop('todo');
+              },
+            ),
+          );
+        }
+
+        Widget _todoButtonRow() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _deleteButton(),
+              _importantButton(),
+              _doneButton()
+            ],
+          );
+        }
+
+        Widget _doneButtonRow() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _deleteButton(),
+              _importantButton(),
+              _todoButton()
+            ],
           );
         }
 
@@ -179,14 +219,8 @@ class _ThingItemState extends State <ThingItem> {
                       // buttons
                       SizedBox(height: 24.0),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          _deleteButton(),
-                          _importantButton(),
-                          _doneButton()
-                        ],
-                      )
+                      this.widget.thing.status == 0 || this.widget.thing.status == 1 ?
+                        _todoButtonRow() : _doneButtonRow()
                     ],
                   ),
                 )
@@ -196,13 +230,17 @@ class _ThingItemState extends State <ThingItem> {
         );
       }
     ).then((value) {
-      if (value == 'done') {
+      if (value == 'todo') {
         Future.delayed(const Duration(milliseconds: 500), () {
           var things = Provider.of<Things>(context, listen: false);
-          things.doneThing(
-            things.categories[things.selectedCategoryIdx],
-            this.widget.thing.id
-          );
+          things.setThingStatus(this.widget.thing, 0);
+        });
+      }
+
+      else if (value == 'done') {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          var things = Provider.of<Things>(context, listen: false);
+          things.setThingStatus(this.widget.thing, 2);
         });
       }
 
