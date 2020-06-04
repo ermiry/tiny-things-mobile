@@ -58,7 +58,7 @@ class _ThingItemState extends State <ThingItem> {
           );
         }
 
-        Widget _importantButton() {
+        Widget _progressButton() {
           return new Container(
             decoration: ShapeDecoration(
               shape: CircleBorder (),
@@ -67,10 +67,10 @@ class _ThingItemState extends State <ThingItem> {
             child: IconButton(
               color: Colors.white,
               icon: Icon(
-                Icons.star
+                Icons.forward
               ),
               onPressed: () {
-                // Navigator.of(context).pop();
+                Navigator.of(context).pop('progress');
               },
             ),
           );
@@ -117,7 +117,17 @@ class _ThingItemState extends State <ThingItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _deleteButton(),
-              _importantButton(),
+              _progressButton(),
+              _doneButton()
+            ],
+          );
+        }
+
+        Widget _progressButtonRow() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _deleteButton(),
               _doneButton()
             ],
           );
@@ -128,10 +138,23 @@ class _ThingItemState extends State <ThingItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _deleteButton(),
-              _importantButton(),
+              _progressButton(),
               _todoButton()
             ],
           );
+        }
+
+        Widget _buttonRow() {
+          Widget retval = Container ();
+          switch (this.widget.thing.status) {
+            case 0: retval = _todoButtonRow(); break;
+            case 1: retval = _progressButtonRow(); break;
+            case 2: retval = _doneButtonRow(); break;
+
+            default: break;
+          }
+
+          return retval;
         }
 
         return Wrap(
@@ -219,8 +242,7 @@ class _ThingItemState extends State <ThingItem> {
                       // buttons
                       SizedBox(height: 24.0),
 
-                      this.widget.thing.status == 0 || this.widget.thing.status == 1 ?
-                        _todoButtonRow() : _doneButtonRow()
+                      _buttonRow()
                     ],
                   ),
                 )
@@ -230,31 +252,30 @@ class _ThingItemState extends State <ThingItem> {
         );
       }
     ).then((value) {
-      if (value == 'todo') {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          var things = Provider.of<Things>(context, listen: false);
+      // 24/05/2020 - dirty way of avoiding an exception because the
+      // parent widget gets destroyed before the modal bottom sheet's animation has finished
+      Future.delayed(const Duration(milliseconds: 500), () {
+        var things = Provider.of<Things>(context, listen: false);
+
+        if (value == 'todo') {
           things.setThingStatus(this.widget.thing, 0);
-        });
-      }
+        }
 
-      else if (value == 'done') {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          var things = Provider.of<Things>(context, listen: false);
+        else if (value == 'progress') {
+          things.setThingStatus(this.widget.thing, 1);
+        }
+
+        else if (value == 'done') {
           things.setThingStatus(this.widget.thing, 2);
-        });
-      }
+        }
 
-      else if (value == 'delete') {
-        // 24/05/2020 - dirty way of avoiding an exception because the
-        // parent widget gets destroyed before the modal bottom sheet's animation has finished
-        Future.delayed(const Duration(milliseconds: 500), () {
-          var things = Provider.of<Things>(context, listen: false);
+        else if (value == 'delete') {
           things.deleteThing(
             things.categories[things.selectedCategoryIdx],
             this.widget.thing.id
           );
-        });
-      }
+        }
+      });
     });
   }
 
