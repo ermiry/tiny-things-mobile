@@ -206,15 +206,17 @@ class _ThingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int selectedIdx = Provider.of<Things>(context).selectedCategoryIdx;
     return Consumer <Things> (
       builder: (ctx, things, _) {
+        int selectedIdx = things.selectedCategoryIdx;
+        List <Thing> todo = things.categories[selectedIdx].todo();
+
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: things.categories[selectedIdx].things.length,
+          itemCount: todo.length,
           itemBuilder: (ctx, idx) {
-            return ThingItem (things.categories[selectedIdx].things[idx]);
+            return ThingItem (todo[idx]);
           }
         );
       }
@@ -242,12 +244,20 @@ class _ProgressTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      children: <Widget>[
+    return Consumer <Things> (
+      builder: (ctx, things, _) {
+        int selectedIdx = things.selectedCategoryIdx;
+        List <Thing> progress = things.categories[selectedIdx].progress();
 
-      ],
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: progress.length,
+          itemBuilder: (ctx, idx) {
+            return ThingItem (progress[idx]);
+          }
+        );
+      }
     );
   }
 
@@ -257,12 +267,20 @@ class _CompletedTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      children: <Widget>[
+    return Consumer <Things> (
+      builder: (ctx, things, _) {
+        int selectedIdx = things.selectedCategoryIdx;
+        List <Thing> done = things.categories[selectedIdx].done();
 
-      ],
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: done.length,
+          itemBuilder: (ctx, idx) {
+            return ThingItem (done[idx]);
+          }
+        );
+      }
     );
   }
 

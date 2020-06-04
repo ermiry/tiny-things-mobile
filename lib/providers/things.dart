@@ -233,6 +233,39 @@ class Category {
     this._things.removeWhere((t) => t.id == id);
   }
 
+  List <Thing> todo() {
+    List <Thing> retval = [];
+    for (var t in this._things) {
+      if (t.status == 0) {
+        retval.add(t);
+      }
+    }
+
+    return retval;
+  }
+
+  List <Thing> progress() {
+    List <Thing> retval = [];
+    for (var t in this._things) {
+      if (t.status == 1) {
+        retval.add(t);
+      }
+    }
+
+    return retval;
+  }
+
+  List <Thing> done() {
+    List <Thing> retval = [];
+    for (var t in this._things) {
+      if (t.status == 2) {
+        retval.add(t);
+      }
+    }
+
+    return retval;
+  }
+
   Category.fromJson(Map <String, dynamic> json)
     : id = json['id'],
       title = json['title'],
