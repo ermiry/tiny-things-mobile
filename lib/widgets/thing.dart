@@ -88,7 +88,7 @@ class _ThingItemState extends State <ThingItem> {
                 Icons.check
               ),
               onPressed: () {
-                // Navigator.of(context).pop();
+                Navigator.of(context).pop('done');
               },
             ),
           );
@@ -196,7 +196,17 @@ class _ThingItemState extends State <ThingItem> {
         );
       }
     ).then((value) {
-      if (value == 'delete') {
+      if (value == 'done') {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          var things = Provider.of<Things>(context, listen: false);
+          things.doneThing(
+            things.categories[things.selectedCategoryIdx],
+            this.widget.thing.id
+          );
+        });
+      }
+
+      else if (value == 'delete') {
         // 24/05/2020 - dirty way of avoiding an exception because the
         // parent widget gets destroyed before the modal bottom sheet's animation has finished
         Future.delayed(const Duration(milliseconds: 500), () {

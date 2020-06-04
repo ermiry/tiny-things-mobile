@@ -16,7 +16,7 @@ class Thing {
   // 0 -> todo
   // 1 -> in progress
   // 2 -> done
-  final int status;
+  int status;
 
   // category's id - used for easier local storage
   final String category;
@@ -474,6 +474,27 @@ class Things with ChangeNotifier {
 
   //   notifyListeners();
   // }
+
+  Future <void> doneThing(Category category, String id) async {
+    try {
+      Category cat = this._categories.firstWhere((c) => c.title == category.title);
+
+      Thing thing = cat.things.firstWhere((t) => t.id == id);
+
+      thing.status = 2;
+
+      // save to local storage
+      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+      await repo.save(thing);
+
+      notifyListeners();
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to move thing to done!');
+    }
+  }
 
   void deleteThing(Category cat, String id) {
     try {
