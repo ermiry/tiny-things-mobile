@@ -130,6 +130,11 @@ class _ChooseLabelState extends State <ChooseLabel> {
           this.setState(() {
             this._selected = !this._selected;
           });
+
+          if (this._selected) {
+            var things = Provider.of<Things>(context, listen: false);
+            things.selectedLabels.add(this.widget.label);
+          }
         },
       )
     );

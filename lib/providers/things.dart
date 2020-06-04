@@ -21,6 +21,10 @@ class Thing {
   // category's id - used for easier local storage
   final String category;
 
+  // labels' ids
+  List <Label> _labels = [];
+  List <Label> get labels { return [...this._labels]; }
+
   final DateTime date;
 
   Thing ({
@@ -35,6 +39,15 @@ class Thing {
     @required this.date
   });
 
+  void addLabel(Label label) {
+    this._labels.add(label);
+  }
+
+  void removeLabel(String id) {
+    this._labels.removeWhere((l) => l.id == id);
+  }
+
+  // FIXME: add labels
   factory Thing.fromJson(Map <String, dynamic> json) {
     return new Thing(
       id : json['id'] as String,
@@ -46,6 +59,7 @@ class Thing {
     );
   }
 
+  // FIXME: add labels
   Map <String, dynamic> toJson() => {
     'id': this.id,
     'title': this.title,
@@ -272,6 +286,9 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  // 04/06/2020 -- used to select labels for a new thing
+  List <Label> selectedLabels = [];
+
   Future <void> addLabel(Category category, String title, String description, Color color) async {
     try {
       Category cat = this._categories.firstWhere((c) => c.title == category.title);
@@ -350,6 +367,21 @@ class Things with ChangeNotifier {
         date: DateTime.now()
       );
 
+      // 04/06/2020 -- add the list of selected labels
+      for (var l in this.selectedLabels) {
+        thing.addLabel(
+          new Label(
+            id: l.id, 
+            title: l.title, 
+            description: l.description, 
+            color: l.color, 
+            category: l.description
+          )
+        );
+      }
+
+      this.selectedLabels = [];
+
       cat.addThing(thing);
 
       // save to local storage
@@ -363,6 +395,23 @@ class Things with ChangeNotifier {
 
     notifyListeners();
   }
+
+  // FIXME: used when adding a label after a thing is created
+  // Future <void> addLabelToThing(Thing thing, Label label) {
+  //   try {
+  //     thing.addLabel(label);
+
+  //     // save to local storage
+  //     var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+  //     repo.updateWhere((t) => t.id == thing.id, thing);
+  //   }
+
+  //   catch (error) {
+  //     print('Failed to update thing!');
+  //   } 
+
+  //   notifyListeners();
+  // }
 
   void deleteThing(Category cat, String id) {
     try {
