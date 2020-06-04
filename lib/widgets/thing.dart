@@ -22,13 +22,13 @@ class _ThingItemState extends State <ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
-  Widget _label() {
+  Widget _label(Label label) {
     return Container(
       margin: EdgeInsets.only(right: 4, bottom: 4),
       // width: 24,
       // height: 24,
       decoration: BoxDecoration(
-        color: mainBlue,
+        color: label.color,
         borderRadius: BorderRadius.circular(6)
       ),
     );
@@ -148,16 +148,14 @@ class _ThingItemState extends State <ThingItem> {
                       // labels
                       Container(
                         width: MediaQuery.of(context).size.width * 0.64,
-                        child: GridView.count(
+                        child: GridView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 8,
-                          children: <Widget>[
-                            this._label(),
-                            this._label(),
-                            this._label(),
-                            this._label(),
-                          ],
+                          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                          itemCount: this.widget.thing.labels.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return this._label(this.widget.thing.labels[index]);
+                          }
                         )
                       ),
 
@@ -267,20 +265,16 @@ class _ThingItemState extends State <ThingItem> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // labels
                     Container(
                       width: MediaQuery.of(context).size.width * 0.46,
-                      child: GridView.count(
+                      child: GridView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        crossAxisCount: 8,
-                        children: <Widget>[
-                          this._label(),
-                          this._label(),
-                          this._label(),
-                          this._label(),
-                          this._label(),
-                        ],
+                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                        itemCount: this.widget.thing.labels.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return this._label(this.widget.thing.labels[index]);
+                        }
                       )
                     ),
 
