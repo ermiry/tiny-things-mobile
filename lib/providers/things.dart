@@ -21,9 +21,11 @@ class Thing {
   // category's id - used for easier local storage
   final String category;
 
+  List <Label> labels = [];
+  // List <Label> get labels { return [...this._labels]; }
+
   // labels' ids
-  List <Label> _labels = [];
-  List <Label> get labels { return [...this._labels]; }
+  List <String> loadedLabels;
 
   final DateTime date;
 
@@ -39,15 +41,37 @@ class Thing {
     @required this.date
   });
 
+  Thing.load({
+    @required this.id,
+
+    @required this.title,
+    @required this.description,
+    @required this.status,
+
+    @required this.category,
+
+    @required this.date,
+
+    this.loadedLabels
+  });
+
   void addLabel(Label label) {
-    this._labels.add(label);
+    this.labels.add(label);
   }
 
   void removeLabel(String id) {
-    this._labels.removeWhere((l) => l.id == id);
+    this.labels.removeWhere((l) => l.id == id);
   }
 
-  // FIXME: add labels
+  List <String> encodeLabels() {
+    List <String> jsonLabels = [];
+    for (var l in this.labels) {
+      jsonLabels.add(l.id);
+    }
+
+    return jsonLabels;
+  }
+
   factory Thing.fromJson(Map <String, dynamic> json) {
     return new Thing(
       id : json['id'] as String,
@@ -59,14 +83,14 @@ class Thing {
     );
   }
 
-  // FIXME: add labels
   Map <String, dynamic> toJson() => {
     'id': this.id,
     'title': this.title,
     'description': this.description,
     'status': this.status,
     'category': this.category,
-    'date': this.date.toIso8601String()
+    'date': this.date.toIso8601String(),
+    'labels': this.encodeLabels()
   };
 
 }
@@ -79,13 +103,18 @@ class ThingDesSer extends DesSer <Thing> {
   @override
   Thing deserialize(String s) {
     var map = json.decode(s);
-    return new Thing(
+
+    var labelsJson = jsonDecode(s)['labels'];
+    List <String> labels = labelsJson != null ? List.from(labelsJson) : null;
+
+    return new Thing.load(
       id: map['id'] as String,
       title: map['title'] as String, 
       description: map['description'] as String,
       status: map['status'] as int,
       category: map['category'] as String,
       date: DateTime.parse(map['date'] as String),
+      loadedLabels: labels
     );
   }
 
@@ -439,12 +468,29 @@ class Things with ChangeNotifier {
         for (var c in this._categories) {
           if (t.category == c.id) {
             c.addThing(t);
+
+            for (var l in t.loadedLabels) {
+              for (var foundLabel in c.labels) {
+                if (foundLabel.id == l) {
+                  t.addLabel(
+                    new Label(
+                      id: foundLabel.id, 
+                      title: foundLabel.title, 
+                      description: foundLabel.description, 
+                      color: foundLabel.color, 
+                      category: null
+                    )
+                  );
+                }
+              }
+            }
           }
         }
       }
     }
 
     catch (error) {
+      print(error);
       print('Failed to load things from local storage!');
     }
 
