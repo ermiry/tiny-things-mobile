@@ -16,56 +16,6 @@ class ChooseLabels extends StatefulWidget {
 
 class _ChooseLabelsState extends State <ChooseLabels> {
 
-  Widget _label(Label label) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-      leading: Container(
-        margin: EdgeInsets.only(right: 4, bottom: 4),
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: label.color,
-          borderRadius: BorderRadius.circular(6)
-        ),
-      ),
-      title: new Text(
-        label.title,
-        style: const TextStyle(
-          // color: Colors.black,
-          color: Color(0xFF2F3446),
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(height: 4),
-
-          new Text(
-            label.description,
-            style: const TextStyle(
-              color: Colors.black54,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-      trailing: IconButton(
-        icon: Icon(
-          Icons.check_circle_outline,
-          color: mainDarkBlue,
-          size: 28,
-        ),
-        onPressed: () {
-          // FocusScope.of(context).requestFocus(FocusNode());
-          // Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer <Things> (
@@ -93,7 +43,7 @@ class _ChooseLabelsState extends State <ChooseLabels> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: things.categories[things.selectedCategoryIdx].labels.length,
-                itemBuilder: (ctx, i) => _label(things.categories[things.selectedCategoryIdx].labels[i])
+                itemBuilder: (ctx, i) => new ChooseLabel(things.categories[things.selectedCategoryIdx].labels[i])
               ),
 
               const SizedBox(height: 16),
@@ -113,6 +63,75 @@ class _ChooseLabelsState extends State <ChooseLabels> {
           ),
         );
       }
+    );
+  }
+
+}
+
+class ChooseLabel extends StatefulWidget {
+
+  final Label label;
+
+  ChooseLabel (this.label);
+
+  @override
+  _ChooseLabelState createState() => _ChooseLabelState();
+
+}
+
+class _ChooseLabelState extends State <ChooseLabel> {
+
+  bool _selected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 32),
+      leading: Container(
+        margin: EdgeInsets.only(right: 4, bottom: 4),
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: this.widget.label.color,
+          borderRadius: BorderRadius.circular(6)
+        ),
+      ),
+      title: new Text(
+        this.widget.label.title,
+        style: const TextStyle(
+          // color: Colors.black,
+          color: Color(0xFF2F3446),
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(height: 4),
+
+          new Text(
+            this.widget.label.description,
+            style: const TextStyle(
+              color: Colors.black54,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+      trailing: IconButton (
+        icon: Icon(
+          this._selected ? Icons.check_circle : Icons.check_circle_outline,
+          color: mainDarkBlue,
+          size: 28,
+        ),
+        onPressed: () {
+          this.setState(() {
+            this._selected = !this._selected;
+          });
+        },
+      )
     );
   }
 
