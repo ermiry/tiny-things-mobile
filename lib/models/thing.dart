@@ -33,6 +33,12 @@ class Thing with ChangeNotifier {
 
   bool star = false;
 
+  Thing.empty(
+    this.id,
+    this.category,
+    this.date
+  );
+
   Thing ({
     @required this.id,
 

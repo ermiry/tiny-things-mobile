@@ -134,7 +134,7 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  Future <void> addThing(Category category, String title, String description) async {
+  Future <void> addThing(Category category, String title, String description, bool star) async {
     try {
       Category cat = this._categories.firstWhere((c) => c.title == category.title);
 
@@ -146,6 +146,8 @@ class Things with ChangeNotifier {
         category: cat.id, 
         date: DateTime.now()
       );
+
+      thing.star = star;
 
       // 04/06/2020 -- add the list of selected labels
       for (var l in this.selectedLabels) {
