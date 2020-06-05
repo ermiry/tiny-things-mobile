@@ -7,7 +7,7 @@ import 'package:things/models/label.dart';
 
 import 'package:pref_dessert/pref_dessert.dart';
 
-class Thing {
+class Thing with ChangeNotifier {
 
   final String id;
 

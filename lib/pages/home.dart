@@ -218,7 +218,10 @@ class _ThingsTab extends StatelessWidget {
           shrinkWrap: true,
           itemCount: todo.length,
           itemBuilder: (ctx, idx) {
-            return ThingItem (todo[idx]);
+            return ChangeNotifierProvider.value(
+              value: todo[idx],
+              child: new ThingItem (),
+            );
           }
         );
       }
@@ -256,7 +259,10 @@ class _ProgressTab extends StatelessWidget {
           shrinkWrap: true,
           itemCount: progress.length,
           itemBuilder: (ctx, idx) {
-            return ThingItem (progress[idx]);
+            return ChangeNotifierProvider.value(
+              value: progress[idx],
+              child: new ThingItem (),
+            );
           }
         );
       }
@@ -279,7 +285,10 @@ class _CompletedTab extends StatelessWidget {
           shrinkWrap: true,
           itemCount: done.length,
           itemBuilder: (ctx, idx) {
-            return ThingItem (done[idx]);
+            return ChangeNotifierProvider.value(
+              value: done[idx],
+              child: new ThingItem (),
+            );
           }
         );
       }

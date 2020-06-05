@@ -14,10 +14,6 @@ import 'package:things/style/colors.dart';
 
 class ThingItem extends StatefulWidget {
 
-  final Thing thing;
-
-  ThingItem (this.thing);
-
   @override
   _ThingItemState createState() => new _ThingItemState();
 
@@ -39,17 +35,17 @@ class _ThingItemState extends State <ThingItem> {
     );
   }
 
-  void deleteThing() {
+  void deleteThing(Thing thing) {
      Future.delayed(const Duration(milliseconds: 500), () {
       var things = Provider.of<Things>(context, listen: false);
       things.deleteThing(
         things.categories[things.selectedCategoryIdx],
-        this.widget.thing.id
+        thing.id
       );
     });
   }
 
-  void _confirmDelete() {
+  void _confirmDelete(Thing thing) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog (
@@ -95,12 +91,12 @@ class _ThingItemState extends State <ThingItem> {
     ).then((value) {
       if (value) {
         Navigator.of(context).pop();
-        deleteThing();
+        deleteThing(thing);
       }
     });
   }
 
-  void _reviewThing() {
+  void _reviewThing(Thing thing) {
     showModalBottomSheet<dynamic>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -118,7 +114,7 @@ class _ThingItemState extends State <ThingItem> {
                 Icons.delete,
               ),
               onPressed: () {
-                this._confirmDelete();
+                this._confirmDelete(thing);
               },
             ),
           );
@@ -138,12 +134,12 @@ class _ThingItemState extends State <ThingItem> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => new NoteScreen (this.widget.thing)),
+                  MaterialPageRoute(builder: (context) => new NoteScreen (thing)),
                 ).then((value) {
                   if (value != null) {
                     if (value == 'delete') {
                       Navigator.of(context).pop();
-                      deleteThing();
+                      deleteThing(thing);
                     }
                   }
                 });
@@ -243,7 +239,7 @@ class _ThingItemState extends State <ThingItem> {
 
         Widget _buttonRow() {
           Widget retval = Container ();
-          switch (this.widget.thing.status) {
+          switch (thing.status) {
             case 0: retval = _todoButtonRow(); break;
             case 1: retval = _progressButtonRow(); break;
             case 2: retval = _doneButtonRow(); break;
@@ -272,7 +268,7 @@ class _ThingItemState extends State <ThingItem> {
                     children: <Widget>[
                       // title
                       Text(
-                        widget.thing.title,
+                        thing.title,
                         style: TextStyle(
                           // color: Colors.black,
                           color: Color(0xFF2F3446),
@@ -282,14 +278,14 @@ class _ThingItemState extends State <ThingItem> {
                         textAlign: TextAlign.start,
                       ),
 
-                      this.widget.thing.description.isNotEmpty ? 
+                      thing.description.isNotEmpty ? 
                         Column (
                           children: <Widget>[
                             SizedBox(height: 12.0),
 
                             // description
                             Text(
-                              this.widget.thing.description,
+                              thing.description,
                               style: TextStyle(
                                 color: Colors.black87,
                                 fontSize: 18,
@@ -312,9 +308,9 @@ class _ThingItemState extends State <ThingItem> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                          itemCount: this.widget.thing.labels.length,
+                          itemCount: thing.labels.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return this._label(this.widget.thing.labels[index]);
+                            return this._label(thing.labels[index]);
                           }
                         )
                       ),
@@ -326,7 +322,7 @@ class _ThingItemState extends State <ThingItem> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           Text(
-                            _dateFormatter.format(widget.thing.date),
+                            _dateFormatter.format(thing.date),
                             style: TextStyle(
                               color: Color(0xFFAFB4C6),
                               fontSize: 18.0,
@@ -355,15 +351,15 @@ class _ThingItemState extends State <ThingItem> {
         var things = Provider.of<Things>(context, listen: false);
 
         if (value == 'todo') {
-          things.setThingStatus(this.widget.thing, 0);
+          things.setThingStatus(thing, 0);
         }
 
         else if (value == 'progress') {
-          things.setThingStatus(this.widget.thing, 1);
+          things.setThingStatus(thing, 1);
         }
 
         else if (value == 'done') {
-          things.setThingStatus(this.widget.thing, 2);
+          things.setThingStatus(thing, 2);
         }
       });
     });
@@ -371,96 +367,100 @@ class _ThingItemState extends State <ThingItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+    return Consumer <Thing> (
+      builder: (ctx, thing, _) {
+        return Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
 
-        GestureDetector(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0),
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Color(0xFFEFF4F6),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // title
-                Text(
-                  this.widget.thing.title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.start,
+            GestureDetector(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color(0xFFEFF4F6),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-
-                this.widget.thing.description.isNotEmpty ? 
-                  Column (
-                    children: <Widget>[
-                      SizedBox(height: 12.0),
-
-                      // description
-                      Text(
-                        this.widget.thing.description,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  )
-
-                :
-
-                  Container (),
-
-                SizedBox(height: 16.0),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.46,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                        itemCount: this.widget.thing.labels.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return this._label(this.widget.thing.labels[index]);
-                        }
-                      )
+                    // title
+                    Text(
+                      thing.title,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
 
-                    // date
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.36,
-                      child: Text(
-                        _dateFormatter.format(this.widget.thing.date),
-                        style: TextStyle(
-                          color: Color(0xFFAFB4C6),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
+                    thing.description.isNotEmpty ? 
+                      Column (
+                        children: <Widget>[
+                          SizedBox(height: 12.0),
+
+                          // description
+                          Text(
+                            thing.description,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )
+
+                    :
+
+                      Container (),
+
+                    SizedBox(height: 16.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.46,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                            itemCount: thing.labels.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return this._label(thing.labels[index]);
+                            }
+                          )
                         ),
-                        textAlign: TextAlign.end,
-                      ),
+
+                        // date
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.36,
+                          child: Text(
+                            _dateFormatter.format(thing.date),
+                            style: TextStyle(
+                              color: Color(0xFFAFB4C6),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
+
+              onTap: () => _reviewThing(thing),
             ),
-          ),
 
-          onTap: () => _reviewThing(),
-        ),
-
-        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-      ],
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          ],
+        );
+      }
     );
   }
 
