@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 // import 'package:things/providers/settings.dart';
 
+import 'package:things/models/thing.dart';
+
 import 'package:things/widgets/thing.dart';
 import 'package:things/widgets/categories.dart';
 

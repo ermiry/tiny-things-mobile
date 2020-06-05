@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/models/thing.dart';
+
 import 'package:things/widgets/choose_labels.dart';
 
 import 'package:things/style/colors.dart';

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/models/label.dart';
+
 import 'package:things/widgets/categories.dart';
 import 'package:things/widgets/add_label.dart';
 

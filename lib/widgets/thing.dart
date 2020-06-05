@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/models/thing.dart';
+import 'package:things/models/label.dart';
+
 import 'package:things/screens/note.dart';
 
 import 'package:things/style/colors.dart';

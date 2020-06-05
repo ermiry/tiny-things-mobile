@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/models/label.dart';
+
 import 'package:things/widgets/custom/button.dart';
 
 import 'package:things/style/colors.dart';
