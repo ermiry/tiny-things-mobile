@@ -12,6 +12,27 @@ import 'package:things/screens/note.dart';
 
 import 'package:things/style/colors.dart';
 
+class _LabelItem extends StatelessWidget {
+
+  final Label label;
+
+  _LabelItem (this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 4, bottom: 4),
+      // width: 24,
+      // height: 24,
+      decoration: BoxDecoration(
+        color: label.color,
+        borderRadius: BorderRadius.circular(6)
+      ),
+    );
+  }
+
+}
+
 class ThingItem extends StatefulWidget {
 
   @override
@@ -23,17 +44,159 @@ class _ThingItemState extends State <ThingItem> {
 
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
-  Widget _label(Label label) {
-    return Container(
-      margin: EdgeInsets.only(right: 4, bottom: 4),
-      // width: 24,
-      // height: 24,
-      decoration: BoxDecoration(
-        color: label.color,
-        borderRadius: BorderRadius.circular(6)
-      ),
+  void _reviewThing(Thing thing) {
+    showModalBottomSheet<dynamic>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext bc) {
+        return ChangeNotifierProvider.value(
+          value: thing,
+          child: new ReviewThing (),
+        );
+      }
+    ).then((value) {
+      // 24/05/2020 - dirty way of avoiding an exception because the
+      // parent widget gets destroyed before the modal bottom sheet's animation has finished
+      Future.delayed(const Duration(milliseconds: 500), () {
+        var things = Provider.of<Things>(context, listen: false);
+
+        if (value == 'todo') {
+          things.setThingStatus(thing, 0);
+        }
+
+        else if (value == 'progress') {
+          things.setThingStatus(thing, 1);
+        }
+
+        else if (value == 'done') {
+          things.setThingStatus(thing, 2);
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer <Thing> (
+      builder: (ctx, thing, _) {
+        return Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+
+            GestureDetector(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color(0xFFEFF4F6),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // title
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          thing.title,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+
+                        Icon(
+                          thing.star ? Icons.star : Icons.star_border,
+                          size: 24,
+                        ),
+                      ],
+                    ),
+
+                    thing.description.isNotEmpty ? 
+                      Column (
+                        children: <Widget>[
+                          SizedBox(height: 12.0),
+
+                          // description
+                          Text(
+                            thing.description,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )
+
+                    :
+
+                      Container (),
+
+                    SizedBox(height: 16.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.46,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                            itemCount: thing.labels.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return new _LabelItem(thing.labels[index]);
+                            }
+                          )
+                        ),
+
+                        // date
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.36,
+                          child: Text(
+                            _dateFormatter.format(thing.date),
+                            style: TextStyle(
+                              color: Color(0xFFAFB4C6),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              onTap: () => _reviewThing(thing),
+            ),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          ],
+        );
+      }
     );
   }
+
+}
+
+class ReviewThing extends StatefulWidget {
+
+  @override
+  _ReviewThingState createState() => new _ReviewThingState();
+
+}
+
+class _ReviewThingState extends State <ReviewThing> {
+
+  final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
   void deleteThing(Thing thing) {
      Future.delayed(const Duration(milliseconds: 500), () {
@@ -96,160 +259,158 @@ class _ThingItemState extends State <ThingItem> {
     });
   }
 
-  void _reviewThing(Thing thing) {
-    showModalBottomSheet<dynamic>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (BuildContext bc) {
-        Widget _deleteButton() {
-          return new Container(
-            decoration: ShapeDecoration(
-              shape: CircleBorder (),
-              color: deleteColor
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.delete,
-              ),
-              onPressed: () {
-                this._confirmDelete(thing);
-              },
-            ),
-          );
-        }
+  Widget _deleteButton(Thing thing) {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: deleteColor
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          Icons.delete,
+        ),
+        onPressed: () {
+          this._confirmDelete(thing);
+        },
+      ),
+    );
+  }
 
-        Widget _editButton() {
-          return new Container(
-            decoration: ShapeDecoration(
-              shape: CircleBorder (),
-              color: mainBlue
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.edit,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => new NoteScreen (thing)),
-                ).then((value) {
-                  if (value != null) {
-                    if (value == 'delete') {
-                      Navigator.of(context).pop();
-                      deleteThing(thing);
-                    }
-                  }
-                });
-              },
-            ),
-          );
-        }
+  Widget _editButton(Thing thing) {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: mainBlue
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          Icons.edit,
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => new NoteScreen (thing)),
+          ).then((value) {
+            if (value != null) {
+              if (value == 'delete') {
+                Navigator.of(context).pop();
+                deleteThing(thing);
+              }
+            }
+          });
+        },
+      ),
+    );
+  }
 
-        Widget _progressButton() {
-          return new Container(
-            decoration: ShapeDecoration(
-              shape: CircleBorder (),
-              color: importantColor
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.forward
-              ),
-              onPressed: () {
-                Navigator.of(context).pop('progress');
-              },
-            ),
-          );
-        }
+  Widget _progressButton() {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: importantColor
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          Icons.forward
+        ),
+        onPressed: () {
+          Navigator.of(context).pop('progress');
+        },
+      ),
+    );
+  }
 
-        Widget _doneButton() {
-          return new Container(
-            decoration: ShapeDecoration(
-              shape: CircleBorder (),
-              color: doneColor
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.done
-              ),
-              onPressed: () {
-                Navigator.of(context).pop('done');
-              },
-            ),
-          );
-        }
+  Widget _doneButton() {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: doneColor
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          Icons.done
+        ),
+        onPressed: () {
+          Navigator.of(context).pop('done');
+        },
+      ),
+    );
+  }
 
-        Widget _todoButton() {
-          return new Container(
-            decoration: ShapeDecoration(
-              shape: CircleBorder (),
-              color: mainBlue
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(
-                Icons.arrow_back
-              ),
-              onPressed: () {
-                Navigator.of(context).pop('todo');
-              },
-            ),
-          );
-        }
+  Widget _todoButton() {
+    return new Container(
+      decoration: ShapeDecoration(
+        shape: CircleBorder (),
+        color: mainBlue
+      ),
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(
+          Icons.arrow_back
+        ),
+        onPressed: () {
+          Navigator.of(context).pop('todo');
+        },
+      ),
+    );
+  }
 
-        Widget _todoButtonRow() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _deleteButton(),
-              _editButton(),
-              _progressButton(),
-              _doneButton()
-            ],
-          );
-        }
+  Widget _todoButtonRow(Thing thing) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _deleteButton(thing),
+        _editButton(thing),
+        _progressButton(),
+        _doneButton()
+      ],
+    );
+  }
 
-        Widget _progressButtonRow() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _deleteButton(),
-              _editButton(),
-              _doneButton()
-            ],
-          );
-        }
+  Widget _progressButtonRow(Thing thing) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _deleteButton(thing),
+        _editButton(thing),
+        _doneButton()
+      ],
+    );
+  }
 
-        Widget _doneButtonRow() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _deleteButton(),
-              _editButton(),
-              _progressButton(),
-              _todoButton()
-            ],
-          );
-        }
+  Widget _doneButtonRow(Thing thing) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _deleteButton(thing),
+        _editButton(thing),
+        _progressButton(),
+        _todoButton()
+      ],
+    );
+  }
 
-        Widget _buttonRow() {
-          Widget retval = Container ();
-          switch (thing.status) {
-            case 0: retval = _todoButtonRow(); break;
-            case 1: retval = _progressButtonRow(); break;
-            case 2: retval = _doneButtonRow(); break;
+  Widget _buttonRow(Thing thing) {
+    Widget retval = Container ();
+    switch (thing.status) {
+      case 0: retval = _todoButtonRow(thing); break;
+      case 1: retval = _progressButtonRow(thing); break;
+      case 2: retval = _doneButtonRow(thing); break;
 
-            default: break;
-          }
+      default: break;
+    }
 
-          return retval;
-        }
+    return retval;
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Consumer <Thing> (
+      builder: (ctx, thing, _) {
         return Wrap(
           children: <Widget>[
             Padding(
@@ -267,15 +428,31 @@ class _ThingItemState extends State <ThingItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // title
-                      Text(
-                        thing.title,
-                        style: TextStyle(
-                          // color: Colors.black,
-                          color: Color(0xFF2F3446),
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            thing.title,
+                            style: TextStyle(
+                              // color: Colors.black,
+                              color: Color(0xFF2F3446),
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+
+                          IconButton(
+                            color: mainBlue,
+                            icon: Icon(
+                              thing.star ? Icons.star : Icons.star_border,
+                              size: 32,
+                            ),
+                            onPressed: () {
+                              thing.toggleStar();
+                            },
+                          ),
+                        ],
                       ),
 
                       thing.description.isNotEmpty ? 
@@ -310,7 +487,7 @@ class _ThingItemState extends State <ThingItem> {
                           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
                           itemCount: thing.labels.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return this._label(thing.labels[index]);
+                            return new _LabelItem(thing.labels[index]);
                           }
                         )
                       ),
@@ -335,129 +512,12 @@ class _ThingItemState extends State <ThingItem> {
                       // buttons
                       SizedBox(height: 24.0),
 
-                      _buttonRow()
+                      _buttonRow(thing)
                     ],
                   ),
                 )
               ),
             ),
-          ],
-        );
-      }
-    ).then((value) {
-      // 24/05/2020 - dirty way of avoiding an exception because the
-      // parent widget gets destroyed before the modal bottom sheet's animation has finished
-      Future.delayed(const Duration(milliseconds: 500), () {
-        var things = Provider.of<Things>(context, listen: false);
-
-        if (value == 'todo') {
-          things.setThingStatus(thing, 0);
-        }
-
-        else if (value == 'progress') {
-          things.setThingStatus(thing, 1);
-        }
-
-        else if (value == 'done') {
-          things.setThingStatus(thing, 2);
-        }
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer <Thing> (
-      builder: (ctx, thing, _) {
-        return Column(
-          children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-
-            GestureDetector(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFFEFF4F6),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // title
-                    Text(
-                      thing.title,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-
-                    thing.description.isNotEmpty ? 
-                      Column (
-                        children: <Widget>[
-                          SizedBox(height: 12.0),
-
-                          // description
-                          Text(
-                            thing.description,
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      )
-
-                    :
-
-                      Container (),
-
-                    SizedBox(height: 16.0),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.46,
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                            itemCount: thing.labels.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return this._label(thing.labels[index]);
-                            }
-                          )
-                        ),
-
-                        // date
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.36,
-                          child: Text(
-                            _dateFormatter.format(thing.date),
-                            style: TextStyle(
-                              color: Color(0xFFAFB4C6),
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              onTap: () => _reviewThing(thing),
-            ),
-
-            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ],
         );
       }
