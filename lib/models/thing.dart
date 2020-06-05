@@ -31,6 +31,8 @@ class Thing with ChangeNotifier {
 
   final DateTime date;
 
+  bool star = false;
+
   Thing ({
     @required this.id,
 
@@ -54,7 +56,9 @@ class Thing with ChangeNotifier {
 
     @required this.date,
 
-    this.loadedLabels
+    this.loadedLabels,
+
+    this.star
   });
 
   void addLabel(Label label) {
@@ -72,6 +76,23 @@ class Thing with ChangeNotifier {
     }
 
     return jsonLabels;
+  }
+
+  void toggleStar() {
+    try {
+      this.star = !this.star;
+
+      // save to local storage
+      var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+      repo.updateWhere((t) => t.id == this.id, this);
+
+      notifyListeners();
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to star thing!');
+    }
   }
 
   factory Thing.fromJson(Map <String, dynamic> json) {
@@ -92,7 +113,8 @@ class Thing with ChangeNotifier {
     'status': this.status,
     'category': this.category,
     'date': this.date.toIso8601String(),
-    'labels': this.encodeLabels()
+    'labels': this.encodeLabels(),
+    'star': this.star
   };
 
 }
@@ -116,7 +138,8 @@ class ThingDesSer extends DesSer <Thing> {
       status: map['status'] as int,
       category: map['category'] as String,
       date: DateTime.parse(map['date'] as String),
-      loadedLabels: labels
+      loadedLabels: labels,
+      star: map['star'] as bool
     );
   }
 
