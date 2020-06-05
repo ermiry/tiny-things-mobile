@@ -28,6 +28,7 @@ class _NoteScreenState extends State <NoteScreen> {
   final FocusNode _textFocusNode = new FocusNode ();
 
   bool _start = true;
+  bool _edit = false;
   bool _first = true;
 
   @override
@@ -106,7 +107,13 @@ class _NoteScreenState extends State <NoteScreen> {
       bool value = false;
 
       if (this.widget.thing != null) {
-        value = await this._confirmExit('Changes to your current thing won\'t be saved');
+        if (this._edit) {
+          value = await this._confirmExit('Changes to your current thing won\'t be saved');
+        }
+
+        else {
+          value = true;
+        }
       }
 
       else {
@@ -210,7 +217,10 @@ class _NoteScreenState extends State <NoteScreen> {
                       // note.title = value;
                     },
                     onChanged: (value) {
-                      // note.title = value;
+                      if (this.widget.thing != null) {
+                        // this.setState(() { this._edit = true; });
+                        this._edit = true;
+                      }
                     },
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(
@@ -241,7 +251,10 @@ class _NoteScreenState extends State <NoteScreen> {
                       // note.text = value;
                     },
                     onChanged: (value) {
-                      // note.text = value;
+                      if (this.widget.thing != null) {
+                        // this.setState(() { this._edit = true; });
+                        this._edit = true;
+                      }
                     },
                   ),
                 ),
