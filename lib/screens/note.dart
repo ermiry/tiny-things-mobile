@@ -12,9 +12,9 @@ import 'package:things/style/colors.dart';
 
 class NoteScreen extends StatefulWidget {
 
-  final Thing thing;
+  final Thing baseThing;
 
-  NoteScreen(this.thing);
+  NoteScreen(this.baseThing);
 
   @override
   _NoteScreenState createState() => _NoteScreenState();
@@ -107,7 +107,7 @@ class _NoteScreenState extends State <NoteScreen> {
       this._textEditingController.text.isNotEmpty) {
       bool value = false;
 
-      if (this.widget.thing != null) {
+      if (this.widget.baseThing != null) {
         if (this._edit) {
           value = await this._confirmExit('Changes to your current thing won\'t be saved');
         }
@@ -152,6 +152,208 @@ class _NoteScreenState extends State <NoteScreen> {
     );
   }
 
+  Widget _actions(Thing thing) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            // add to favorites / importants
+            IconButton(
+              icon: Icon(thing.star ? Icons.star : Icons.star_border,),
+              onPressed: () {
+                thing.toggleStar();
+              },
+            ),
+
+            // select label
+            IconButton(
+              icon: Icon(Provider.of<Things>(context, listen: false).selectedLabels.length > 0 ? Icons.label : Icons.label_outline),
+              onPressed: this._labelSelect
+            ),
+
+            // add
+            Container(
+              decoration: ShapeDecoration(
+                shape: CircleBorder (),
+                color: mainBlue
+              ),
+              child: IconButton(
+                color: Colors.white,
+                icon: Icon(
+                  this.widget.baseThing != null ? Icons.check : Icons.add,
+                ),
+                onPressed: () async {
+                  var things = Provider.of<Things>(context, listen: false);
+
+                  if (this.widget.baseThing != null) {
+                    things.updateThing(
+                      this.widget.baseThing, 
+                      this._titleEditingController.text, 
+                      this._textEditingController.text
+                    );
+                  }
+
+                  else {
+                    await things.addThing(
+                      things.categories[things.selectedCategoryIdx],
+                      this._titleEditingController.text, 
+                      this._textEditingController.text,
+                      thing.star
+                    );
+                  }
+
+                  // return to home screen
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+
+            // clear
+            IconButton(
+              icon: Icon(
+                Icons.clear,
+              ),
+              onPressed: () {
+                if (this._textEditingController.text.isNotEmpty) {
+                  this._textEditingController.clear();
+                  if (this.widget.baseThing != null) {
+                    // this.setState(() { this._edit = true; });
+                    this._edit = true;
+                  }
+                }
+              },
+            ),
+
+            // delete
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () async {
+                if (this._titleEditingController.text.isNotEmpty ||
+                  this._textEditingController.text.isNotEmpty) {
+                  this._confirmExit('This action will delete the current note').then((value) {
+                    if (value) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      this._titleEditingController.clear();
+                      this._textEditingController.clear();
+
+                      var things = Provider.of<Things>(context, listen: false);
+                      things.selectedLabels = [];
+
+                      if (this.widget.baseThing != null) {
+                        Navigator.pop(context, 'delete');
+                      }
+
+                      else {
+                        Navigator.pop(context);
+                      }
+                    }
+                  });
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _body() {
+    return Column(
+      children: <Widget>[
+        SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+
+        ListTile(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: mainDarkBlue,
+              size: 36,
+            ),
+            onPressed: () async {
+              bool value = await this._onWillPop();
+              if (value) {
+                var things = Provider.of<Things>(context, listen: false);
+                things.selectedLabels = [];
+
+                FocusScope.of(context).requestFocus(FocusNode());
+                Navigator.pop(context);
+              } 
+            },
+          ),
+        ),
+
+        // title
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          child: TextField(
+            focusNode: this._titleFocusNode,
+            textCapitalization: TextCapitalization.sentences,
+            controller: this._titleEditingController,
+            maxLength: 128,
+            maxLines: null,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            style: TextStyle(
+              fontSize: 36,
+              color: mainDarkBlue,
+              fontWeight: FontWeight.bold
+            ),
+            decoration: InputDecoration(
+              hintText: 'Title', border: InputBorder.none
+            ),
+            onSubmitted: (value) {
+              // note.title = value;
+            },
+            onChanged: (value) {
+              if (this.widget.baseThing != null) {
+                // this.setState(() { this._edit = true; });
+                this._edit = true;
+              }
+            },
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(
+                this._textFocusNode
+              );
+            },
+          ),
+        ),
+
+        // description
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          child: TextField(
+            focusNode: this._textFocusNode,
+            textCapitalization: TextCapitalization.sentences,
+            controller: this._textEditingController,
+            keyboardType: TextInputType.multiline,
+            maxLength: 512,
+            maxLines: null,
+            style: TextStyle(
+              fontSize: 24, 
+              color: Colors.black87
+            ),
+            decoration: InputDecoration(
+              hintText: 'Description', border: InputBorder.none
+            ),
+            onSubmitted: (value) {
+              // note.text = value;
+            },
+            onChanged: (value) {
+              if (this.widget.baseThing != null) {
+                // this.setState(() { this._edit = true; });
+                this._edit = true;
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -161,11 +363,11 @@ class _NoteScreenState extends State <NoteScreen> {
 
     if (this._start) {
       var things = Provider.of<Things>(context, listen: false);
-      if (this.widget.thing != null) {
-        this._titleEditingController.text = this.widget.thing.title;
-        this._textEditingController.text = this.widget.thing.description;
+      if (this.widget.baseThing != null) {
+        this._titleEditingController.text = this.widget.baseThing.title;
+        this._textEditingController.text = this.widget.baseThing.description;
 
-        things.selectedLabels = this.widget.thing.labels;
+        things.selectedLabels = this.widget.baseThing.labels;
       }
 
       else {
@@ -184,209 +386,16 @@ class _NoteScreenState extends State <NoteScreen> {
       onWillPop: this._onWillPop,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Stack(
-          children: <Widget>[
-            Column(
+        body: Consumer <Thing> (
+          builder: (ctx, thing, _) {
+            return Stack(
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-
-                ListTile(
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: mainDarkBlue,
-                      size: 36,
-                    ),
-                    onPressed: () async {
-                      bool value = await this._onWillPop();
-                      if (value) {
-                        var things = Provider.of<Things>(context, listen: false);
-                        things.selectedLabels = [];
-
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Navigator.pop(context);
-                      } 
-                    },
-                  ),
-                ),
-
-                // title
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  child: TextField(
-                    focusNode: this._titleFocusNode,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: this._titleEditingController,
-                    maxLength: 128,
-                    maxLines: null,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(
-                      fontSize: 36,
-                      color: mainDarkBlue,
-                      fontWeight: FontWeight.bold
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Title', border: InputBorder.none
-                    ),
-                    onSubmitted: (value) {
-                      // note.title = value;
-                    },
-                    onChanged: (value) {
-                      if (this.widget.thing != null) {
-                        // this.setState(() { this._edit = true; });
-                        this._edit = true;
-                      }
-                    },
-                    onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(
-                        this._textFocusNode
-                      );
-                    },
-                  ),
-                ),
-
-                // description
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  child: TextField(
-                    focusNode: this._textFocusNode,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: this._textEditingController,
-                    keyboardType: TextInputType.multiline,
-                    maxLength: 512,
-                    maxLines: null,
-                    style: TextStyle(
-                      fontSize: 24, 
-                      color: Colors.black87
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Description', border: InputBorder.none
-                    ),
-                    onSubmitted: (value) {
-                      // note.text = value;
-                    },
-                    onChanged: (value) {
-                      if (this.widget.thing != null) {
-                        // this.setState(() { this._edit = true; });
-                        this._edit = true;
-                      }
-                    },
-                  ),
-                ),
+                this._body(),
+                this._actions(thing)
               ],
-            ),
-
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    // add to favorites / importants
-                    IconButton(
-                      // icon: Icon(
-                      //     note.starred == 0 ? Icons.star_border : Icons.star,
-                      //     color: myTheme.mainAccentColor),
-                      icon: Icon(Icons.star_border),
-                      onPressed: () {
-                        print('star!');
-                      },
-                    ),
-
-                    // select label
-                    IconButton(
-                      icon: Icon(Provider.of<Things>(context, listen: false).selectedLabels.length > 0 ? Icons.label : Icons.label_outline),
-                      onPressed: this._labelSelect
-                    ),
-
-                    // add
-                    Container(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder (),
-                        color: mainBlue
-                      ),
-                      child: IconButton(
-                        color: Colors.white,
-                        icon: Icon(
-                          this.widget.thing != null ? Icons.check : Icons.add,
-                        ),
-                        onPressed: () async {
-                          var things = Provider.of<Things>(context, listen: false);
-
-                          if (this.widget.thing != null) {
-                            things.updateThing(
-                              this.widget.thing, 
-                              this._titleEditingController.text, 
-                              this._textEditingController.text
-                            );
-                          }
-
-                          else {
-                            await things.addThing(
-                              things.categories[things.selectedCategoryIdx],
-                              this._titleEditingController.text, 
-                              this._textEditingController.text
-                            );
-                          }
-
-                          // return to home screen
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-
-                    // clear
-                    IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                      ),
-                      onPressed: () {
-                        if (this._textEditingController.text.isNotEmpty) {
-                          this._textEditingController.clear();
-                          if (this.widget.thing != null) {
-                            // this.setState(() { this._edit = true; });
-                            this._edit = true;
-                          }
-                        }
-                      },
-                    ),
-
-                    // delete
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () async {
-                        if (this._titleEditingController.text.isNotEmpty ||
-                          this._textEditingController.text.isNotEmpty) {
-                          this._confirmExit('This action will delete the current note').then((value) {
-                            if (value) {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              this._titleEditingController.clear();
-                              this._textEditingController.clear();
-
-                              var things = Provider.of<Things>(context, listen: false);
-                              things.selectedLabels = [];
-
-                              if (this.widget.thing != null) {
-                                Navigator.pop(context, 'delete');
-                              }
-
-                              else {
-                                Navigator.pop(context);
-                              }
-                            }
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+            );
+          }
+        )
       ),
     );
   }

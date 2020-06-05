@@ -291,7 +291,14 @@ class _ReviewThingState extends State <ReviewThing> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => new NoteScreen (thing)),
+            MaterialPageRoute(
+              builder: (_) {
+                return ChangeNotifierProvider.value(
+                  value: thing,
+                  child: new NoteScreen (thing)
+                );
+              }
+            ),
           ).then((value) {
             if (value != null) {
               if (value == 'delete') {
