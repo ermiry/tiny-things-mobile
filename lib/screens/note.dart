@@ -281,15 +281,26 @@ class _NoteScreenState extends State <NoteScreen> {
                       child: IconButton(
                         color: Colors.white,
                         icon: Icon(
-                          Icons.add,
+                          this.widget.thing != null ? Icons.check : Icons.add,
                         ),
                         onPressed: () async {
                           var things = Provider.of<Things>(context, listen: false);
-                          await things.addThing(
-                            things.categories[things.selectedCategoryIdx],
-                            this._titleEditingController.text, 
-                            this._textEditingController.text
-                          );
+
+                          if (this.widget.thing != null) {
+                            things.updateThing(
+                              this.widget.thing, 
+                              this._titleEditingController.text, 
+                              this._textEditingController.text
+                            );
+                          }
+
+                          else {
+                            await things.addThing(
+                              things.categories[things.selectedCategoryIdx],
+                              this._titleEditingController.text, 
+                              this._textEditingController.text
+                            );
+                          }
 
                           // return to home screen
                           FocusScope.of(context).requestFocus(FocusNode());

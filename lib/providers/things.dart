@@ -9,8 +9,8 @@ class Thing {
 
   final String id;
 
-  final String title;
-  final String description;
+  String title;
+  String description;
 
   // Things status:
   // 0 -> todo
@@ -504,6 +504,27 @@ class Things with ChangeNotifier {
     catch (error) {
       print(error);
       print('Failed to set thing status!');
+    }
+  }
+
+  // FIXME: take into account labels
+  void updateThing(Thing thing, String title, String description) {
+    try {
+      if (thing != null) {
+        thing.title = title;
+        thing.description = description;
+
+        // save to local storage
+        var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+        repo.updateWhere((t) => t.id == thing.id, thing);
+
+        notifyListeners();
+      }
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to update thing!');
     }
   }
 
