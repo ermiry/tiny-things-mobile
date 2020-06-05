@@ -377,6 +377,7 @@ class _ReviewThingState extends State <ReviewThing> {
       children: <Widget>[
         _deleteButton(thing),
         _editButton(thing),
+        _todoButton(),
         _doneButton()
       ],
     );
