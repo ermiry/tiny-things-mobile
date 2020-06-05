@@ -328,7 +328,13 @@ class _NoteScreenState extends State <NoteScreen> {
                         Icons.clear,
                       ),
                       onPressed: () {
-                        this._textEditingController.clear();
+                        if (this._textEditingController.text.isNotEmpty) {
+                          this._textEditingController.clear();
+                          if (this.widget.thing != null) {
+                            // this.setState(() { this._edit = true; });
+                            this._edit = true;
+                          }
+                        }
                       },
                     ),
 
