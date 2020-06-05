@@ -126,7 +126,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
           ),
         ),
         trailing: Text(
-          '0',
+          Provider.of<Things>(context, listen: false).countLabelThings(label).toString(),
           style: const TextStyle(
             color: Color(0xFF0F1426),
             fontSize: 32.0,

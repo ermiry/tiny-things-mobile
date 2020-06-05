@@ -395,6 +395,19 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  int countLabelThings(Label label) {
+    int count = 0;
+    for (var t in this._categories[this._selectedCategoryIdx].things) {
+      for (var l in t.labels) {
+        if (l.id == label.id) {
+          count += 1;
+        }
+      }
+    }
+
+    return count;
+  }
+
   Future <void> loadLabels() async {
     try {
       var repo = new FuturePreferencesRepository <Label> (new LabelDesSer ());
