@@ -131,9 +131,13 @@ class _ChooseLabelState extends State <ChooseLabel> {
             this._selected = !this._selected;
           });
 
+          var things = Provider.of<Things>(context, listen: false);
           if (this._selected) {
-            var things = Provider.of<Things>(context, listen: false);
             things.selectedLabels.add(this.widget.label);
+          }
+
+          else {
+            things.selectedLabels.removeWhere((l) => l.id == this.widget.label.id);
           }
         },
       )
