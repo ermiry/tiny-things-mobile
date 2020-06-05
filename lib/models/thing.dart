@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:things/models/label.dart';
+
 import 'package:pref_dessert/pref_dessert.dart';
 
 class Thing {
