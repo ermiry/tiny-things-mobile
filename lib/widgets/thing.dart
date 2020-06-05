@@ -34,6 +34,63 @@ class _ThingItemState extends State <ThingItem> {
     );
   }
 
+  void _confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog (
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))
+        ),
+        title: Text (
+          'Are you sure?', 
+          style: const TextStyle(color: mainDarkBlue, fontSize: 28),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text (
+              'Do you want to delete this thing?',
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 16),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                FlatButton(
+                  child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () async {
+                    Navigator.of(ctx).pop(true);
+                  },
+                )
+              ],
+            )
+          ],
+        ),
+      )
+    ).then((value) {
+      if (value) {
+        Navigator.of(context).pop();
+        Future.delayed(const Duration(milliseconds: 500), () {
+          var things = Provider.of<Things>(context, listen: false);
+          things.deleteThing(
+            things.categories[things.selectedCategoryIdx],
+            this.widget.thing.id
+          );
+        });
+      }
+    });
+  }
+
   void _reviewThing() {
     showModalBottomSheet<dynamic>(
       context: context,
@@ -52,7 +109,7 @@ class _ThingItemState extends State <ThingItem> {
                 Icons.delete,
               ),
               onPressed: () {
-                Navigator.of(bc).pop('delete');
+                this._confirmDelete();
               },
             ),
           );
@@ -288,13 +345,6 @@ class _ThingItemState extends State <ThingItem> {
 
         else if (value == 'done') {
           things.setThingStatus(this.widget.thing, 2);
-        }
-
-        else if (value == 'delete') {
-          things.deleteThing(
-            things.categories[things.selectedCategoryIdx],
-            this.widget.thing.id
-          );
         }
       });
     });
