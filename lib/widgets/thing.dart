@@ -36,6 +36,16 @@ class _ThingItemState extends State <ThingItem> {
     );
   }
 
+  void deleteThing() {
+     Future.delayed(const Duration(milliseconds: 500), () {
+      var things = Provider.of<Things>(context, listen: false);
+      things.deleteThing(
+        things.categories[things.selectedCategoryIdx],
+        this.widget.thing.id
+      );
+    });
+  }
+
   void _confirmDelete() {
     showDialog(
       context: context,
@@ -82,13 +92,7 @@ class _ThingItemState extends State <ThingItem> {
     ).then((value) {
       if (value) {
         Navigator.of(context).pop();
-        Future.delayed(const Duration(milliseconds: 500), () {
-          var things = Provider.of<Things>(context, listen: false);
-          things.deleteThing(
-            things.categories[things.selectedCategoryIdx],
-            this.widget.thing.id
-          );
-        });
+        deleteThing();
       }
     });
   }
@@ -132,7 +136,14 @@ class _ThingItemState extends State <ThingItem> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => new NoteScreen (this.widget.thing)),
-                );
+                ).then((value) {
+                  if (value != null) {
+                    if (value == 'delete') {
+                      Navigator.of(context).pop();
+                      deleteThing();
+                    }
+                  }
+                });
               },
             ),
           );

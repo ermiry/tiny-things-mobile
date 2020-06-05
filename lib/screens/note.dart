@@ -86,9 +86,6 @@ class _NoteScreenState extends State <NoteScreen> {
                   highlightColor: Colors.transparent,
                   child: Text ('Okay', style: const TextStyle(color: mainRed, fontSize: 18, fontWeight: FontWeight.bold)),
                   onPressed: () async {
-                    this._titleEditingController.clear();
-                    this._textEditingController.clear();
-
                     Navigator.of(ctx).pop(true);
                   },
                 )
@@ -344,7 +341,21 @@ class _NoteScreenState extends State <NoteScreen> {
                       onPressed: () async {
                         if (this._titleEditingController.text.isNotEmpty ||
                           this._textEditingController.text.isNotEmpty) {
-                          await this._confirmExit('This action will delete the current note');
+                          this._confirmExit('This action will delete the current note').then((value) {
+                            if (value) {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              this._titleEditingController.clear();
+                              this._textEditingController.clear();
+
+                              if (this.widget.thing != null) {
+                                Navigator.pop(context, 'delete');
+                              }
+
+                              else {
+                                Navigator.pop(context);
+                              }
+                            }
+                          });
                         }
                       },
                     ),
