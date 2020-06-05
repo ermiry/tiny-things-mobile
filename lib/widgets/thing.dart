@@ -58,6 +58,24 @@ class _ThingItemState extends State <ThingItem> {
           );
         }
 
+        Widget _editButton() {
+          return new Container(
+            decoration: ShapeDecoration(
+              shape: CircleBorder (),
+              color: mainBlue
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(
+                Icons.edit,
+              ),
+              onPressed: () {
+                Navigator.of(bc).pop('edit');
+              },
+            ),
+          );
+        }
+
         Widget _progressButton() {
           return new Container(
             decoration: ShapeDecoration(
@@ -117,6 +135,7 @@ class _ThingItemState extends State <ThingItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _deleteButton(),
+              _editButton(),
               _progressButton(),
               _doneButton()
             ],
@@ -128,6 +147,7 @@ class _ThingItemState extends State <ThingItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _deleteButton(),
+              _editButton(),
               _doneButton()
             ],
           );
@@ -138,6 +158,7 @@ class _ThingItemState extends State <ThingItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _deleteButton(),
+              _editButton(),
               _progressButton(),
               _todoButton()
             ],
