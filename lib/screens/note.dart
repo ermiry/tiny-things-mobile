@@ -41,7 +41,7 @@ class _NoteScreenState extends State <NoteScreen> {
     super.dispose();
   }
 
-  Future <bool> _confirmDelete() async {
+  Future <bool> _confirmExit(String description) async {
     // show confirm dialog
     return await showDialog(
       context: context,
@@ -58,7 +58,7 @@ class _NoteScreenState extends State <NoteScreen> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text (
-              'This action will delete the current note',
+              description,
               style: const TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
@@ -103,7 +103,16 @@ class _NoteScreenState extends State <NoteScreen> {
   Future <bool> _onWillPop() async {
     if (this._titleEditingController.text.isNotEmpty ||
       this._textEditingController.text.isNotEmpty) {
-      bool value = await this._confirmDelete();
+      bool value = false;
+
+      if (this.widget.thing != null) {
+        value = await this._confirmExit('Changes to your current thing won\'t be saved');
+      }
+
+      else {
+        value = await this._confirmExit('This action will delete the current note');
+      }
+
       if (value) {
         FocusScope.of(context).requestFocus(FocusNode());
         return new Future.value(true);
@@ -142,7 +151,7 @@ class _NoteScreenState extends State <NoteScreen> {
         this._titleEditingController.text = this.widget.thing.title;
         this._textEditingController.text = this.widget.thing.description;
       }
-      
+
       this._start = false;
     }
 
@@ -305,7 +314,7 @@ class _NoteScreenState extends State <NoteScreen> {
                       onPressed: () async {
                         if (this._titleEditingController.text.isNotEmpty ||
                           this._textEditingController.text.isNotEmpty) {
-                          await this._confirmDelete();
+                          await this._confirmExit('This action will delete the current note');
                         }
                       },
                     ),
