@@ -471,23 +471,6 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  // FIXME: used when adding a label after a thing is created
-  // Future <void> addLabelToThing(Thing thing, Label label) {
-  //   try {
-  //     thing.addLabel(label);
-
-  //     // save to local storage
-  //     var repo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
-  //     repo.updateWhere((t) => t.id == thing.id, thing);
-  //   }
-
-  //   catch (error) {
-  //     print('Failed to update thing!');
-  //   } 
-
-  //   notifyListeners();
-  // }
-
   void setThingStatus(Thing thing, int status) {
     try {
       if (thing != null) {
@@ -507,7 +490,6 @@ class Things with ChangeNotifier {
     }
   }
 
-  // FIXME: take into account labels
   void updateThing(Thing thing, String title, String description) {
     try {
       if (thing != null) {

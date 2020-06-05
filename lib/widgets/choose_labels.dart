@@ -43,7 +43,19 @@ class _ChooseLabelsState extends State <ChooseLabels> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: things.categories[things.selectedCategoryIdx].labels.length,
-                itemBuilder: (ctx, i) => new ChooseLabel(things.categories[things.selectedCategoryIdx].labels[i])
+                itemBuilder: (ctx, i) {
+                  bool selected = false;
+                  for (var l in things.selectedLabels) {
+                    if (l.id == things.categories[things.selectedCategoryIdx].labels[i].id) {
+                      selected = true;
+                    }
+                  }
+
+                  return new ChooseLabel(
+                    things.categories[things.selectedCategoryIdx].labels[i],
+                    selected
+                  );
+                }
               ),
 
               const SizedBox(height: 16),
@@ -71,8 +83,9 @@ class _ChooseLabelsState extends State <ChooseLabels> {
 class ChooseLabel extends StatefulWidget {
 
   final Label label;
+  final bool selected;
 
-  ChooseLabel (this.label);
+  ChooseLabel (this.label, this.selected);
 
   @override
   _ChooseLabelState createState() => _ChooseLabelState();
@@ -81,10 +94,16 @@ class ChooseLabel extends StatefulWidget {
 
 class _ChooseLabelState extends State <ChooseLabel> {
 
+  bool _first = true;
   bool _selected = false;
 
   @override
   Widget build(BuildContext context) {
+    if (this._first) {
+      this._selected = this.widget.selected;
+      this._first = false;
+    }
+
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 32),
       leading: Container(

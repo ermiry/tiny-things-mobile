@@ -99,6 +99,8 @@ class _NoteScreenState extends State <NoteScreen> {
 
   // Prevent route from poping
   Future <bool> _onWillPop() async {
+    bool retval = true;
+
     if (this._titleEditingController.text.isNotEmpty ||
       this._textEditingController.text.isNotEmpty) {
       bool value = false;
@@ -119,13 +121,18 @@ class _NoteScreenState extends State <NoteScreen> {
 
       if (value) {
         FocusScope.of(context).requestFocus(FocusNode());
-        return new Future.value(true);
+        return retval = true;
       }
 
-      else return new Future.value(false);
+      else retval = false;
     }
 
-    return new Future.value(true);
+    if (retval) {
+      var things = Provider.of<Things>(context, listen: false);
+      things.selectedLabels = [];
+    }
+
+    return new Future.value(retval);
   }
 
   void _labelSelect() {
@@ -151,9 +158,16 @@ class _NoteScreenState extends State <NoteScreen> {
     ]);
 
     if (this._start) {
+      var things = Provider.of<Things>(context, listen: false);
       if (this.widget.thing != null) {
         this._titleEditingController.text = this.widget.thing.title;
         this._textEditingController.text = this.widget.thing.description;
+
+        things.selectedLabels = this.widget.thing.labels;
+      }
+
+      else {
+        things.selectedLabels = [];
       }
 
       this._start = false;
@@ -184,6 +198,9 @@ class _NoteScreenState extends State <NoteScreen> {
                     onPressed: () async {
                       bool value = await this._onWillPop();
                       if (value) {
+                        var things = Provider.of<Things>(context, listen: false);
+                        things.selectedLabels = [];
+
                         FocusScope.of(context).requestFocus(FocusNode());
                         Navigator.pop(context);
                       } 
@@ -278,7 +295,7 @@ class _NoteScreenState extends State <NoteScreen> {
 
                     // select label
                     IconButton(
-                      icon: Icon(Icons.label_outline),
+                      icon: Icon(Provider.of<Things>(context, listen: false).selectedLabels.length > 0 ? Icons.label : Icons.label_outline),
                       onPressed: this._labelSelect
                     ),
 
@@ -346,6 +363,9 @@ class _NoteScreenState extends State <NoteScreen> {
                               FocusScope.of(context).requestFocus(FocusNode());
                               this._titleEditingController.clear();
                               this._textEditingController.clear();
+
+                              var things = Provider.of<Things>(context, listen: false);
+                              things.selectedLabels = [];
 
                               if (this.widget.thing != null) {
                                 Navigator.pop(context, 'delete');
