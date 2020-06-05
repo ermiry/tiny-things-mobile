@@ -10,6 +10,10 @@ import 'package:things/style/colors.dart';
 
 class NoteScreen extends StatefulWidget {
 
+  final Thing thing;
+
+  NoteScreen(this.thing);
+
   @override
   _NoteScreenState createState() => _NoteScreenState();
   
@@ -23,6 +27,7 @@ class _NoteScreenState extends State <NoteScreen> {
   final FocusNode _titleFocusNode = new FocusNode ();
   final FocusNode _textFocusNode = new FocusNode ();
 
+  bool _start = true;
   bool _first = true;
 
   @override
@@ -131,6 +136,15 @@ class _NoteScreenState extends State <NoteScreen> {
       DeviceOrientation.portraitUp,
       // DeviceOrientation.portraitDown,
     ]);
+
+    if (this._start) {
+      if (this.widget.thing != null) {
+        this._titleEditingController.text = this.widget.thing.title;
+        this._textEditingController.text = this.widget.thing.description;
+      }
+      
+      this._start = false;
+    }
 
     if (this._first) {
       FocusScope.of(context).requestFocus(this._titleFocusNode);

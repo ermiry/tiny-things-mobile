@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/screens/note.dart';
+
 import 'package:things/style/colors.dart';
 
 class ThingItem extends StatefulWidget {
@@ -127,7 +129,10 @@ class _ThingItemState extends State <ThingItem> {
                 Icons.edit,
               ),
               onPressed: () {
-                Navigator.of(bc).pop('edit');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new NoteScreen (this.widget.thing)),
+                );
               },
             ),
           );

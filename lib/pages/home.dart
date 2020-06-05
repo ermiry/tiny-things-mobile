@@ -190,7 +190,7 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => new NoteScreen ()),
+                  MaterialPageRoute(builder: (context) => new NoteScreen (null)),
                 );
               },
               iconSize: 42
