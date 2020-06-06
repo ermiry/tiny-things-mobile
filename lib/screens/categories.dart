@@ -31,7 +31,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))
           ),
-          child: new AddLabel()
+          child: new AddLabel(null)
         );
       }
     );
@@ -182,6 +182,21 @@ class LabelItem extends StatelessWidget {
 
   LabelItem (this.label);
 
+  void reviewLabel(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: new AddLabel(label)
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Dismissible(
@@ -281,6 +296,9 @@ class LabelItem extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        onTap: () {
+          this.reviewLabel(context);
+        },
       )
     );
   }
