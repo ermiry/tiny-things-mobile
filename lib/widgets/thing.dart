@@ -60,18 +60,32 @@ class _ThingItemState extends State <ThingItem> {
       // parent widget gets destroyed before the modal bottom sheet's animation has finished
       Future.delayed(const Duration(milliseconds: 500), () {
         var things = Provider.of<Things>(context, listen: false);
+        String text;
 
         if (value == 'todo') {
           things.setThingStatus(thing, 0);
+          text = 'Label moved to todo!';
         }
 
         else if (value == 'progress') {
           things.setThingStatus(thing, 1);
+          text = 'Label moved to in progress!';
         }
 
         else if (value == 'done') {
           things.setThingStatus(thing, 2);
+          text = 'Label moved to done!';
         }
+
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              text,
+              textAlign: TextAlign.center,
+            )
+          )
+        );
       });
     });
   }
