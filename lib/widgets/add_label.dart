@@ -7,7 +7,6 @@ import 'package:things/providers/things.dart';
 import 'package:things/models/label.dart';
 
 // import 'package:pocket/widgets/custom/textfield.dart';
-import 'package:things/widgets/custom/modal_action_button.dart';
 
 import 'package:things/style/colors.dart';
 
@@ -33,6 +32,7 @@ class _AddLabelState extends State <AddLabel> {
 
   bool _start = true;
   bool _loading = false;
+  bool _edit = false;
 
   int _selectedIdx = -1;
   List <Color> _colors = [
@@ -120,12 +120,40 @@ class _AddLabelState extends State <AddLabel> {
         this.widget.baseLabel,
         this._data['name'], 
         this._data['description'], 
-        this._colors[this._selectedIdx]
+        // this._colors[this._selectedIdx]
+        null
       );
     }
 
     catch (err) {
       print(err);
+    }
+  }
+
+  Future <void> _save() async {
+    if (this._formKey.currentState.validate()) {
+      this._formKey.currentState.save();
+
+      bool fail = false;
+      setState(() => this._loading = true);
+      try {
+        if (this.widget.baseLabel != null) {
+          this._updateLabel();
+        }
+
+        else {
+          await this._addLabel();
+        }
+      }
+
+      catch (err) {
+        fail = true;
+      }
+
+      finally { 
+        if (!fail) Navigator.of(context).pop();
+        setState(() => this._loading = false); 
+      }
     }
   }
 
@@ -158,6 +186,11 @@ class _AddLabelState extends State <AddLabel> {
         this._subTextControler.text = this.widget.baseLabel.description;
       }
 
+      else {
+        this._mainTextControler.clear();
+        this._subTextControler.clear();
+      }
+
       this.setState(() { this._start = false; });
     }
 
@@ -181,7 +214,7 @@ class _AddLabelState extends State <AddLabel> {
           children: <Widget>[
             Center(
               child: Text(
-                "Add label",
+                this.widget.baseLabel != null ? "Edit label" : "Add label",
                 style: TextStyle(
                   fontSize: 24, 
                   fontWeight: FontWeight.bold, 
@@ -211,6 +244,9 @@ class _AddLabelState extends State <AddLabel> {
                   this._descriptionFocusNode
                 );
               },
+              onChanged: (value) {
+                this.setState(() => this._edit = true );
+              },
             ),
             
             const SizedBox(height: 16),
@@ -229,6 +265,9 @@ class _AddLabelState extends State <AddLabel> {
               obscureText: false,
               validator: this.validateDescription,
               onSaved: this.saveDescription,
+              onChanged: (value) {
+                this.setState(() => this._edit = true );
+              },
             ),
 
             const SizedBox(height: 16),
@@ -247,37 +286,36 @@ class _AddLabelState extends State <AddLabel> {
 
             const SizedBox(height: 16),
 
-            CustomModalActionButton(
-              onClose: () {
-                Navigator.of(context).pop();
-              },
-              onSave: () async {
-                if (this._formKey.currentState.validate()) {
-                  this._formKey.currentState.save();
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // close
+                MaterialButton(
+                  child: Text("Close"),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  padding: const EdgeInsets.all(14.0),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
 
-                  bool fail = false;
-                  setState(() => this._loading = true);
-                  try {
-                    if (this.widget.baseLabel != null) {
-                      this._updateLabel();
-                    }
-
-                    else {
-                      await this._addLabel();
-                    }
-                  }
-
-                  catch (err) {
-                    fail = true;
-                  }
-
-                  finally { 
-                    if (!fail) Navigator.of(context).pop();
-                    setState(() => this._loading = false); 
-                  }
-                }
-              },
-            )
+                // save / edit
+                MaterialButton(
+                  child: Text(this.widget.baseLabel != null ? "Edit" : "Add"),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  color: mainBlue,
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(14.0),
+                  onPressed: this._edit ? this._save : null,
+                )
+              ],
+            ),
           ],
         ),
       ),

@@ -87,6 +87,16 @@ class Things with ChangeNotifier {
     try {
       if (cat != null && label != null) {
         label.title = title;
+        label.description = description;
+
+        // FIXME:
+        // label.color = color;
+
+        // save to local storage
+        var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());
+        repo.updateWhere((l) => l.id == label.id, label);
+
+        notifyListeners();
       }
     }
 
