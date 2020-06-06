@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
+import 'package:things/models/label.dart';
+
 // import 'package:pocket/widgets/custom/textfield.dart';
 import 'package:things/widgets/custom/modal_action_button.dart';
 
 import 'package:things/style/colors.dart';
 
 class AddLabel extends StatefulWidget {
+
+  final Label baseLabel;
+
+  AddLabel (this.baseLabel);
 
   @override
   _AddLabelState createState() => _AddLabelState();
@@ -25,6 +31,7 @@ class _AddLabelState extends State <AddLabel> {
 
   final FocusNode _descriptionFocusNode = new FocusNode ();
 
+  bool _start = true;
   bool _loading = false;
 
   int _selectedIdx = -1;
@@ -128,8 +135,14 @@ class _AddLabelState extends State <AddLabel> {
 
   @override
   Widget build(BuildContext context) {
-    // this._mainTextControler.clear();
-    // this._subTextControler.clear();
+    if (this._start) {
+      if (this.widget.baseLabel != null) {
+        this._mainTextControler.text = this.widget.baseLabel.title;
+        this._subTextControler.text = this.widget.baseLabel.description;
+      }
+
+      this.setState(() { this._start = false; });
+    }
 
     return this._loading ?
       Container(
