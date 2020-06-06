@@ -56,37 +56,47 @@ class _ThingItemState extends State <ThingItem> {
         );
       }
     ).then((value) {
-      // 24/05/2020 - dirty way of avoiding an exception because the
-      // parent widget gets destroyed before the modal bottom sheet's animation has finished
-      Future.delayed(const Duration(milliseconds: 500), () {
-        var things = Provider.of<Things>(context, listen: false);
-        String text;
+      if (value != null) {
+        // 24/05/2020 - dirty way of avoiding an exception because the
+        // parent widget gets destroyed before the modal bottom sheet's animation has finished
+        Future.delayed(const Duration(milliseconds: 500), () {
+          var things = Provider.of<Things>(context, listen: false);
+          String text;
 
-        if (value == 'todo') {
-          things.setThingStatus(thing, 0);
-          text = 'Label moved to todo!';
-        }
+          if (value == 'todo') {
+            things.setThingStatus(thing, 0);
+            text = 'Thing moved to todo!';
+          }
 
-        else if (value == 'progress') {
-          things.setThingStatus(thing, 1);
-          text = 'Label moved to in progress!';
-        }
+          else if (value == 'progress') {
+            things.setThingStatus(thing, 1);
+            text = 'Thing moved to in progress!';
+          }
 
-        else if (value == 'done') {
-          things.setThingStatus(thing, 2);
-          text = 'Label moved to done!';
-        }
+          else if (value == 'done') {
+            things.setThingStatus(thing, 2);
+            text = 'Thing moved to done!';
+          }
 
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              text,
-              textAlign: TextAlign.center,
+          else if (value == 'delete') {
+            things.deleteThing(
+              things.categories[things.selectedCategoryIdx],
+              thing.id
+            );
+            text = 'Thing has been deleted!';
+          }
+
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                text,
+                textAlign: TextAlign.center,
+              )
             )
-          )
-        );
-      });
+          );
+        });
+      }
     });
   }
 
@@ -212,16 +222,6 @@ class _ReviewThingState extends State <ReviewThing> {
 
   final DateFormat _dateFormatter = DateFormat('HH:mm - dd MMM');
 
-  void deleteThing(Thing thing) {
-     Future.delayed(const Duration(milliseconds: 500), () {
-      var things = Provider.of<Things>(context, listen: false);
-      things.deleteThing(
-        things.categories[things.selectedCategoryIdx],
-        thing.id
-      );
-    });
-  }
-
   void _confirmDelete(Thing thing) {
     showDialog(
       context: context,
@@ -267,8 +267,7 @@ class _ReviewThingState extends State <ReviewThing> {
       )
     ).then((value) {
       if (value) {
-        Navigator.of(context).pop();
-        deleteThing(thing);
+        Navigator.of(context).pop('delete');
       }
     });
   }
@@ -316,8 +315,7 @@ class _ReviewThingState extends State <ReviewThing> {
           ).then((value) {
             if (value != null) {
               if (value == 'delete') {
-                Navigator.of(context).pop();
-                deleteThing(thing);
+                Navigator.of(context).pop('delete');
               }
             }
           });
