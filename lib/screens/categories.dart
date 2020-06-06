@@ -269,7 +269,19 @@ class LabelItem extends StatelessWidget {
                     ),
                     FlatButton(
                       child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
-                      onPressed: () => Navigator.of(ctx).pop(true),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(true);
+
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                              'Label has been deleted!',
+                              textAlign: TextAlign.center,
+                            )
+                          )
+                        );
+                      },
                     )
                   ],
                 )
