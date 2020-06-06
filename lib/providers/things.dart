@@ -82,15 +82,13 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLabel(Category cat, Label label, 
+  void updateLabel(Label label, 
     String title, String description, Color color) {
     try {
-      if (cat != null && label != null) {
+      if (label != null) {
         label.title = title;
         label.description = description;
-
-        // FIXME:
-        // label.color = color;
+        label.color = color;
 
         // save to local storage
         var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());

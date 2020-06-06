@@ -116,12 +116,10 @@ class _AddLabelState extends State <AddLabel> {
     try {
       var things = Provider.of<Things>(context, listen: false);
       things.updateLabel(
-        things.categories[things.selectedCategoryIdx],
         this.widget.baseLabel,
         this._data['name'], 
         this._data['description'], 
-        // this._colors[this._selectedIdx]
-        null
+        this._colors[this._selectedIdx]
       );
     }
 
@@ -184,6 +182,16 @@ class _AddLabelState extends State <AddLabel> {
       if (this.widget.baseLabel != null) {
         this._mainTextControler.text = this.widget.baseLabel.title;
         this._subTextControler.text = this.widget.baseLabel.description;
+
+        var idx = 0;
+        for (var c = 0; c < this._colors.length; c++) {
+          if (this.widget.baseLabel.color == this._colors[c]) {
+            idx = c;
+            break;
+          }
+        }
+
+        this.setState(() => this._selectedIdx = idx);
       }
 
       else {
