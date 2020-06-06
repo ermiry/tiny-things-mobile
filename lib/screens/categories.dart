@@ -34,7 +34,21 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
           child: new AddLabel(null)
         );
       }
-    );
+    ).then((value) {
+      if (value != null) {
+        if (value == 'add') {
+          _scaffoldKey.currentState..showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                'Created a new label!',
+                textAlign: TextAlign.center,
+              )
+            )
+          );
+        }
+      }
+    });
   }
 
   @override
@@ -194,7 +208,21 @@ class LabelItem extends StatelessWidget {
           child: new AddLabel(label)
         );
       }
-    );
+    ).then((value) {
+      if (value != null) {
+        if (value == 'edit') {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                'Label has been edited!',
+                textAlign: TextAlign.center,
+              )
+            )
+          );
+        }
+      }
+    });
   }
 
   @override

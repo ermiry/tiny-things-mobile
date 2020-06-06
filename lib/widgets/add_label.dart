@@ -95,15 +95,6 @@ class _AddLabelState extends State <AddLabel> {
         this._colors[this._selectedIdx]
       ).then((_) {
         FocusScope.of(context).requestFocus(FocusNode());
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              'Created new label!',
-              textAlign: TextAlign.center,
-            )
-          )
-        );
       });
     }
 
@@ -121,6 +112,8 @@ class _AddLabelState extends State <AddLabel> {
         this._data['description'], 
         this._colors[this._selectedIdx]
       );
+
+      FocusScope.of(context).requestFocus(FocusNode());
     }
 
     catch (err) {
@@ -133,13 +126,16 @@ class _AddLabelState extends State <AddLabel> {
       this._formKey.currentState.save();
 
       bool fail = false;
+      String retval;
       setState(() => this._loading = true);
       try {
         if (this.widget.baseLabel != null) {
+          retval = 'edit';
           this._updateLabel();
         }
 
         else {
+          retval = 'add';
           await this._addLabel();
         }
       }
@@ -149,7 +145,7 @@ class _AddLabelState extends State <AddLabel> {
       }
 
       finally { 
-        if (!fail) Navigator.of(context).pop();
+        if (!fail) Navigator.of(context).pop(retval);
         setState(() => this._loading = false); 
       }
     }
