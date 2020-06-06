@@ -9,10 +9,10 @@ class Label {
 
   final String id;
 
-  final String title;
-  final String description;
+  String title;
+  String description;
 
-  final Color color;
+  Color color;
 
   // category's id - used for easier local storage
   final String category;

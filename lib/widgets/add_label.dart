@@ -112,6 +112,23 @@ class _AddLabelState extends State <AddLabel> {
     }
   }
 
+  void _updateLabel() {
+    try {
+      var things = Provider.of<Things>(context, listen: false);
+      things.updateLabel(
+        things.categories[things.selectedCategoryIdx],
+        this.widget.baseLabel,
+        this._data['name'], 
+        this._data['description'], 
+        this._colors[this._selectedIdx]
+      );
+    }
+
+    catch (err) {
+      print(err);
+    }
+  }
+
   Widget _label(int idx) {
     return GestureDetector(
       child: Container(
@@ -241,7 +258,13 @@ class _AddLabelState extends State <AddLabel> {
                   bool fail = false;
                   setState(() => this._loading = true);
                   try {
-                    await this._addLabel();
+                    if (this.widget.baseLabel != null) {
+                      this._updateLabel();
+                    }
+
+                    else {
+                      await this._addLabel();
+                    }
                   }
 
                   catch (err) {

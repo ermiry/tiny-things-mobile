@@ -82,6 +82,20 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateLabel(Category cat, Label label, 
+    String title, String description, Color color) {
+    try {
+      if (cat != null && label != null) {
+        label.title = title;
+      }
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to update label!');
+    }
+  }
+
   // FIXME: also remove from things
   void deleteLabel(Category cat, String id) {
     try {
