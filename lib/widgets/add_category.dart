@@ -63,6 +63,68 @@ class _AddCategoryState extends State <AddCategory> {
     this._data['description'] = value;
   }
 
+  Future <void> _addCategory() async {
+    try {
+      var things = Provider.of<Things>(context, listen: false);
+
+      await things.addCategory(
+        this._data['name'], 
+        this._data['description'], 
+      ).then((_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+      });
+    }
+
+    catch (err) {
+      print(err);
+    }
+  }
+
+  void _updateCategory() {
+    try {
+      var things = Provider.of<Things>(context, listen: false);
+      things.updateCategory(
+        this.widget.baseCategory,
+        this._data['name'], 
+        this._data['description'], 
+      );
+
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
+
+    catch (err) {
+      print(err);
+    }
+  }
+
+  Future <void> _save() async {
+    if (this._formKey.currentState.validate()) {
+      this._formKey.currentState.save();
+
+      bool fail = false;
+      String retval;
+      try {
+        if (this.widget.baseCategory != null) {
+          retval = 'edit';
+          this._updateCategory();
+        }
+
+        else {
+          retval = 'add';
+          await this._addCategory();
+        }
+      }
+
+      catch (err) {
+        fail = true;
+      }
+
+      finally { 
+        if (!fail) Navigator.of(context).pop(retval);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (this._start) {
