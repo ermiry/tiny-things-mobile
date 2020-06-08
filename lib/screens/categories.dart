@@ -54,6 +54,35 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
     });
   }
 
+  Widget _showEditCategory() {
+    if (Provider.of<Things>(context).selectedCategoryIdx == 0) {
+      return Container ();
+    }
+
+    else {
+      return Positioned(
+        bottom: MediaQuery.of(context).size.width * 0.05 + 78,
+        left: MediaQuery.of(context).size.width * 0.83,
+        child: Container(
+          decoration: ShapeDecoration(
+            shape: CircleBorder (),
+            color: mainBlue
+          ),
+          child: IconButton(
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            color: Colors.white,
+            icon: Icon(Icons.edit),
+            iconSize: 42,
+            onPressed: this._editCategoryDialog,
+          )
+        ),
+      );
+    }
+  }
+
   void _addLabelDialog() {
     showDialog(
       barrierDismissible: false,
@@ -196,26 +225,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
           ),
 
           // edit selected category
-          Positioned(
-            bottom: MediaQuery.of(context).size.width * 0.05 + 78,
-            left: MediaQuery.of(context).size.width * 0.83,
-            child: Container(
-              decoration: ShapeDecoration(
-                shape: CircleBorder (),
-                color: mainBlue
-              ),
-              child: IconButton(
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                color: Colors.white,
-                icon: Icon(Icons.edit),
-                iconSize: 42,
-                onPressed: this._editCategoryDialog,
-              )
-            ),
-          ),
+          this._showEditCategory(),
 
           // add a new label
           Positioned(
