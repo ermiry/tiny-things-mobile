@@ -469,7 +469,8 @@ class _ReviewThingState extends State <ReviewThing> {
                               size: 32,
                             ),
                             onPressed: () {
-                              thing.toggleStar();
+                              // thing.toggleStar();
+                              Provider.of<Things>(context, listen: false).toggleThingStar(thing);
                             },
                           ),
                         ],

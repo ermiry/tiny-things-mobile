@@ -219,6 +219,21 @@ class Things with ChangeNotifier {
     }
   }
 
+  void toggleThingStar(Thing thing) {
+    try {
+      if (thing != null) {
+        thing.toggleStar();
+
+        notifyListeners();
+      }
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to toggle thing star!');
+    }
+  }
+
   void updateThing(Thing thing, String title, String description) {
     try {
       if (thing != null) {
