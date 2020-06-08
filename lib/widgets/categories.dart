@@ -33,7 +33,6 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
         );
       }
     ).then((value) {
-      FocusScope.of(context).requestFocus(FocusNode());
       if (value != null) {
         if (value == 'add') {
           Scaffold.of(context).showSnackBar(

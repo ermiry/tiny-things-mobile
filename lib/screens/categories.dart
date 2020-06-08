@@ -7,6 +7,7 @@ import 'package:things/providers/things.dart';
 import 'package:things/models/label.dart';
 
 import 'package:things/widgets/categories.dart';
+import 'package:things/widgets/add_category.dart';
 import 'package:things/widgets/add_label.dart';
 
 import 'package:things/style/colors.dart';
@@ -20,7 +21,38 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State <CategoriesScreen> {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey <ScaffoldState>();
+  final GlobalKey <ScaffoldState> _scaffoldKey = new GlobalKey <ScaffoldState>();
+
+  void _editCategoryDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        var things = Provider.of<Things>(context, listen: false);
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: new AddCategory(things.categories[things.selectedCategoryIdx])
+        );
+      }
+    ).then((value) {
+      if (value != null) {
+        if (value == 'edit') {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                'Category has been edited!',
+                textAlign: TextAlign.center,
+              )
+            )
+          );
+        }
+      }
+    });
+  }
 
   void _addLabelDialog() {
     showDialog(
@@ -37,7 +69,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
     ).then((value) {
       if (value != null) {
         if (value == 'add') {
-          _scaffoldKey.currentState..showSnackBar(
+          _scaffoldKey.currentState.showSnackBar(
             SnackBar(
               backgroundColor: Colors.green,
               content: Text(
@@ -163,6 +195,29 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
             ),
           ),
 
+          // edit selected category
+          Positioned(
+            bottom: MediaQuery.of(context).size.width * 0.05 + 78,
+            left: MediaQuery.of(context).size.width * 0.83,
+            child: Container(
+              decoration: ShapeDecoration(
+                shape: CircleBorder (),
+                color: mainBlue
+              ),
+              child: IconButton(
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                color: Colors.white,
+                icon: Icon(Icons.edit),
+                iconSize: 42,
+                onPressed: this._editCategoryDialog,
+              )
+            ),
+          ),
+
+          // add a new label
           Positioned(
             bottom: MediaQuery.of(context).size.width * 0.05,
             left: MediaQuery.of(context).size.width * 0.83,

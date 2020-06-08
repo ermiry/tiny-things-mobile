@@ -40,6 +40,27 @@ class Things with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateCategory(Category category, 
+    String title, String description) {
+    try {
+      if (category != null) {
+        category.title = title;
+        category.description = description;
+
+        // save to local storage
+        var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
+        repo.updateWhere((c) => c.id == category.id, category);
+
+        notifyListeners();
+      }
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to update label!');
+    }
+  }
+
   Future <void> loadCategories() async {
     try {
       var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer ());

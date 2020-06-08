@@ -12,8 +12,8 @@ class Category {
 
   final String id;
 
-  final String title;
-  final String description;
+  String title;
+  String description;
 
   List <Label> _labels = [];
   List <Label> get labels { return [...this._labels]; }
