@@ -125,6 +125,99 @@ class _AddCategoryState extends State <AddCategory> {
     }
   }
 
+  void _confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog (
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))
+        ),
+        title: Text (
+          'Are you sure?', 
+          style: const TextStyle(color: mainDarkBlue, fontSize: 28),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text (
+              'This action will also delete all labels and things associated with this category',
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 16),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                FlatButton(
+                  child: Text ('No', style: const TextStyle(color: mainBlue, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () => Navigator.of(ctx).pop(false),
+                ),
+                FlatButton(
+                  child: Text ('Okay', style: const TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                )
+              ],
+            )
+          ],
+        ),
+      )
+    ).then((value) {
+      if (value) {
+        var things = Provider.of<Things>(context, listen: false);
+        things.deleteCategory(
+          things.categories[things.selectedCategoryIdx]
+        );
+
+        Navigator.of(context).pop('delete');
+      }
+    });
+  }
+
+  Widget _deleteButton() {
+    if (this.widget.baseCategory != null) {
+      return Column (
+        children: <Widget>[
+          const SizedBox(height: 8),
+
+          new Container(
+            height: 42,
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: mainRed
+            ),
+            child: Center(
+              child: RawMaterialButton(
+                hoverColor: Colors.transparent,
+                fillColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                elevation: 0,
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800
+                ),
+                child: Text("Delete"),
+                onPressed: this._confirmDelete,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+        ],
+      );
+    }
+
+    else {
+      return Container ();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (this._start) {
@@ -207,6 +300,8 @@ class _AddCategoryState extends State <AddCategory> {
             ),
 
             const SizedBox(height: 16),
+
+            this._deleteButton(),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

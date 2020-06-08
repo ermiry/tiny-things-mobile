@@ -61,6 +61,42 @@ class Things with ChangeNotifier {
     }
   }
 
+  // we expect to delete the current selected category
+  void deleteCategory(Category cat) {
+    try {
+      // delete labels
+      var labelsRepo = new FuturePreferencesRepository <Label> (new LabelDesSer());
+      for (var label in cat.labels) {
+        cat.removeLabel(label.id);
+        labelsRepo.removeWhere((l) => l.id == label.id);
+      }
+
+      // delete things
+      var thingsRepo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+      for (var thing in cat.things) {
+        cat.removeThing(thing.id);
+        thingsRepo.removeWhere((t) => t.id == thing.id);
+      }
+
+      // remove from memory
+      this._categories.removeWhere((c) => c.id == cat.id);
+
+      // remove from local storage
+      var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
+      repo.removeWhere((c) => c.id == cat.id);
+
+      // set new idx
+      this.selectedCategoryIdx -= 1;
+
+      notifyListeners();
+    }
+
+    catch (error) {
+      print(error);
+      print('Failed to delete category!');
+    }
+  }
+
   Future <void> loadCategories() async {
     try {
       var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer ());

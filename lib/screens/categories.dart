@@ -50,6 +50,18 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
             )
           );
         }
+
+        else if (value == 'delete') {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                'Category has been deleted!',
+                textAlign: TextAlign.center,
+              )
+            )
+          );
+        }
       }
     });
   }
