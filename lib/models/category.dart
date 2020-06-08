@@ -55,6 +55,17 @@ class Category {
     return retval;
   }
 
+  List <Thing> important() {
+    List <Thing> retval = [];
+    for (var t in this._things) {
+      if (t.status == 0 && t.star) {
+        retval.add(t);
+      }
+    }
+
+    return retval;
+  }
+
   List <Thing> progress() {
     List <Thing> retval = [];
     for (var t in this._things) {

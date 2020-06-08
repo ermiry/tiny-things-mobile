@@ -241,12 +241,23 @@ class _ImportantTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      children: <Widget>[
+    return Consumer <Things> (
+      builder: (ctx, things, _) {
+        int selectedIdx = things.selectedCategoryIdx;
+        List <Thing> progress = things.categories[selectedIdx].important();
 
-      ],
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: progress.length,
+          itemBuilder: (ctx, idx) {
+            return ChangeNotifierProvider.value(
+              value: progress[idx],
+              child: new ThingItem (),
+            );
+          }
+        );
+      }
     );
   }
 
