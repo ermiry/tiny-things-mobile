@@ -82,8 +82,8 @@ class Things with ChangeNotifier {
       this._categories.removeWhere((c) => c.id == cat.id);
 
       // remove from local storage
-      var repo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
-      repo.removeWhere((c) => c.id == cat.id);
+      var catRepo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
+      catRepo.removeWhere((c) => c.id == cat.id);
 
       // set new idx
       this.selectedCategoryIdx -= 1;
@@ -161,11 +161,13 @@ class Things with ChangeNotifier {
     }
   }
 
-  // FIXME: also remove from things
   void deleteLabel(Category cat, String id) {
     try {
       // remove from memory
       cat.removeLabel(id);
+
+      var catRepo = new FuturePreferencesRepository <Category> (new CategoryDesSer());
+      catRepo.updateWhere((c) => c.id == cat.id, cat);
 
       // remove from local storage
       var repo = new FuturePreferencesRepository <Label> (new LabelDesSer());

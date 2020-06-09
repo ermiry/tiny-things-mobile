@@ -33,6 +33,15 @@ class Category {
   }
 
   void removeLabel(String id) {
+    var thingsRepo = new FuturePreferencesRepository <Thing> (new ThingDesSer());
+    for (var thing in this._things) {
+      // remove from memory
+      thing.labels.removeWhere((l) => l.id == id);
+
+      // save to local storage
+      thingsRepo.updateWhere((t) => t.id == thing.id, thing);
+    }
+
     this._labels.removeWhere((l) => l.id == id);
   }
 
