@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:animated_dialog/AnimatedDialog.dart';
+
 import 'package:provider/provider.dart';
 import 'package:things/providers/things.dart';
 
@@ -25,12 +27,19 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12))
-          ),
+        return new AnimatedDialog(
+          changeToDialog: true,
+          borderRadius: BorderRadius.all(Radius.circular(12)),
           child: new AddCategory(null)
+
         );
+
+        // return Dialog(
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.all(Radius.circular(12))
+        //   ),
+        //   child: new AddCategory(null)
+        // );
       }
     ).then((value) {
       if (value != null) {

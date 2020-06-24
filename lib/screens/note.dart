@@ -142,6 +142,12 @@ class _NoteScreenState extends State <NoteScreen> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
+        // return new AnimatedDialog(
+        //   changeToDialog: true,
+        //   borderRadius: BorderRadius.all(Radius.circular(12)),
+        //   child: new ChooseLabels()
+        // );
+
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))
