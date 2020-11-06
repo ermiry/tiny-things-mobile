@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:things/sidebar/navigation_bloc.dart';
-
 import 'package:provider/provider.dart';
 import 'package:things/providers/auth.dart';
 
@@ -13,7 +11,7 @@ import 'package:things/widgets/change_value.dart';
 import 'package:things/style/colors.dart';
 // import 'package:pocket/style/style.dart';
 
-class AccountPage extends StatefulWidget with NavigationStates {
+class AccountPage extends StatefulWidget {
 
   @override
   AccountPageState createState() => AccountPageState();

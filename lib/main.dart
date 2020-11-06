@@ -14,7 +14,6 @@ import 'package:things/screens/loading.dart';
 import 'package:things/screens/welcome.dart';
 import 'package:things/screens/auth/login.dart';
 import 'package:things/screens/auth/register.dart';
-import 'package:things/sidebar/sidebar_layout.dart';
 import 'package:things/style/colors.dart';
 
 void main() => runApp(new TinyThings ());

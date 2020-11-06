@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:things/sidebar/navigation_bloc.dart';
-
 import 'package:things/style/colors.dart';
 
-class AboutPage extends StatelessWidget with NavigationStates {
+class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

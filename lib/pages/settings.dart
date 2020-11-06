@@ -4,11 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:things/providers/settings.dart';
 
-import 'package:things/sidebar/navigation_bloc.dart';
-
 import 'package:things/style/colors.dart';
 
-class SettingsPage extends StatelessWidget with NavigationStates {
+class SettingsPage extends StatelessWidget {
 
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(

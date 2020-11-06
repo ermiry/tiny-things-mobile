@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:things/sidebar/navigation_bloc.dart';
-
 import 'package:things/screens/note.dart';
 import 'package:things/screens/categories.dart';
 
@@ -17,7 +15,7 @@ import 'package:things/widgets/categories.dart';
 
 import 'package:things/style/colors.dart';
 
-class HomePage extends StatelessWidget with NavigationStates {
+class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
