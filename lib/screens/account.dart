@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
+import 'package:things/providers/ui.dart';
 import 'package:things/providers/auth.dart';
 
 import 'package:things/widgets/change_value.dart';
@@ -11,14 +11,14 @@ import 'package:things/widgets/change_value.dart';
 import 'package:things/style/colors.dart';
 // import 'package:pocket/style/style.dart';
 
-class AccountPage extends StatefulWidget {
+class AccountScreen extends StatefulWidget {
 
   @override
-  AccountPageState createState() => AccountPageState();
+  AccountScreenState createState() => AccountScreenState();
 
 }
 
-class AccountPageState extends State <AccountPage> {
+class AccountScreenState extends State <AccountScreen> {
 
   bool _loading = false;
 
@@ -249,30 +249,59 @@ class AccountPageState extends State <AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      // DeviceOrientation.portraitDown,
-    ]);
-
     return Stack(
       children: <Widget>[
-        SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
+        Container (
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: ListView (
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-              Center(
-                child: Text(
-                  "Account",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: mainBlue,
-                    fontWeight: FontWeight.w800
-                  ),
+              Consumer <UI> (
+                builder: (ctx, ui, _) => Row (
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 16.0),
+
+                    ui.isDrawerOpen ? IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        // setState(() {
+                        //   xOffset = 0;
+                        //   yOffset = 0;
+                        //   scaleFactor = 1;
+                        //   isDrawerOpen = false;
+                        // });
+                      },
+                    )
+
+                    :
+
+                    IconButton(
+                      icon: Icon(Icons.menu),
+                      onPressed: () {
+                        if (!ui.isDrawerOpen) {
+                          ui.openDrawer();
+                        }
+                      }
+                    ),
+
+                    const SizedBox(width: 20.0),
+
+                    Text(
+                      'Account',
+                      style: TextStyle(
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2F3446)
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
               Consumer <Auth> (
                 builder: (ctx, auth, _) => new Container(
@@ -374,23 +403,24 @@ class AccountPageState extends State <AccountPage> {
                         ),
                       ),
 
-                      Container(
-                        // padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(
-                            width: 0.7,
-                            color: mainDarkBlue.withAlpha(204)
-                          ))
-                        ),
-                        child: ListTile(
-                          dense: true,
-                          title: Text ('Member Since', style: new TextStyle(fontSize: 16)),
-                          subtitle: Text(
-                            DateFormat('dd/MM/yyyy - HH:mm').format(DateTime.parse(auth.userValues['memberSince']).toLocal()),
-                            style: new TextStyle(fontSize: 14)
-                          ),
-                        ),
-                      ),
+                      // FIXME:
+                      // Container(
+                      //   // padding: const EdgeInsets.symmetric(horizontal: 12),
+                      //   decoration: BoxDecoration(
+                      //     border: Border(bottom: BorderSide(
+                      //       width: 0.7,
+                      //       color: mainDarkBlue.withAlpha(204)
+                      //     ))
+                      //   ),
+                      //   child: ListTile(
+                      //     dense: true,
+                      //     title: Text ('Member Since', style: new TextStyle(fontSize: 16)),
+                      //     subtitle: Text(
+                      //       DateFormat('dd/MM/yyyy - HH:mm').format(DateTime.parse(auth.userValues['memberSince']).toLocal()),
+                      //       style: new TextStyle(fontSize: 14)
+                      //     ),
+                      //   ),
+                      // ),
 
                       new SizedBox(height: MediaQuery.of(context).size.height * 0.1),
 
