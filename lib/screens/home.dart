@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:things/screens/note.dart';
 import 'package:things/screens/categories.dart';
 
 import 'package:provider/provider.dart';
+import 'package:things/providers/ui.dart';
 import 'package:things/providers/things.dart';
 // import 'package:things/providers/settings.dart';
 
@@ -15,31 +15,14 @@ import 'package:things/widgets/categories.dart';
 
 import 'package:things/style/colors.dart';
 
-class HomePage extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
 
   @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      // DeviceOrientation.portraitDown,
-    ]);
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: _NotesScreen(),
-    );
-  }
+  HomeScreenState createState() => new HomeScreenState();
 
 }
 
-class _NotesScreen extends StatefulWidget {
-
-  @override
-  _NotesScreenState createState() => new _NotesScreenState();
-
-}
-
-class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderStateMixin {
+class HomeScreenState extends State <HomeScreen> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
 
@@ -53,102 +36,149 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Stack (
       children: <Widget>[
-        ListView(
-          children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-            
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(width: 20.0),
-                  Text(
-                    'Home',
-                    style: TextStyle(
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2F3446)
+        Container (
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: ListView(
+            children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+
+              Consumer <UI> (
+                builder: (ctx, ui, _) => Row (
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 16.0),
+
+                    ui.isDrawerOpen ? IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        // setState(() {
+                        //   xOffset = 0;
+                        //   yOffset = 0;
+                        //   scaleFactor = 1;
+                        //   isDrawerOpen = false;
+                        // });
+                      },
+                    )
+
+                    :
+
+                    IconButton(
+                      icon: Icon(Icons.menu),
+                      onPressed: () {
+                        if (!ui.isDrawerOpen) {
+                          ui.openDrawer();
+                        }
+                      }
                     ),
-                  ),
-                ],
+
+                    const SizedBox(width: 20.0),
+
+                    Text(
+                      'Home',
+                      style: TextStyle(
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2F3446)
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 30.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: <Widget>[
+              //       SizedBox(width: 20.0),
+              //       Text(
+              //         'Home',
+              //         style: TextStyle(
+              //           fontSize: 28.0,
+              //           fontWeight: FontWeight.bold,
+              //           color: Color(0xFF2F3446)
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-            new CategoriesDisplay (false),
+              new CategoriesDisplay (false),
 
-            Center(
-              child: TabBar(
-                controller: _tabController,
-                labelColor: Color(0xFF2F3446),
-                unselectedLabelColor: Color(0xFFAFB4C6),
-                indicatorColor: mainBlue,
-                indicatorSize: TabBarIndicatorSize.label,
-                indicatorWeight: 4.0,
-                isScrollable: true,
-                tabs: <Widget>[
-                  Tab(
-                    child: Text(
-                      'Things',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+              Center(
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: Color(0xFF2F3446),
+                  unselectedLabelColor: Color(0xFFAFB4C6),
+                  indicatorColor: mainBlue,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorWeight: 4.0,
+                  isScrollable: true,
+                  tabs: <Widget>[
+                    Tab(
+                      child: Text(
+                        'Things',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'Important',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Tab(
+                      child: Text(
+                        'Important',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'In Progress',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Tab(
+                      child: Text(
+                        'In Progress',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Tab(
+                      child: Text(
+                        'Done',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            SizedBox(height: 20.0),
+              SizedBox(height: 20.0),
 
-            Container(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: TabBarView(
-                controller: this._tabController,
-                children: <Widget>[
-                  _ThingsTab(),
-                  _ImportantTab(),
-                  _ProgressTab(),
-                  _CompletedTab(),
-                ],
+              Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: TabBarView(
+                  controller: this._tabController,
+                  children: <Widget>[
+                    _ThingsTab(),
+                    _ImportantTab(),
+                    _ProgressTab(),
+                    _CompletedTab(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
 
         Positioned(
-          bottom: MediaQuery.of(context).size.width * 0.05 + 78,
-          left: MediaQuery.of(context).size.width * 0.83,
+          bottom: MediaQuery.of(context).size.width * 0.12 + 78,
+          left: MediaQuery.of(context).size.width * 0.8,
           child: Container(
             decoration: ShapeDecoration(
               shape: CircleBorder (),
@@ -173,8 +203,8 @@ class _NotesScreenState extends State <_NotesScreen> with SingleTickerProviderSt
         ),
 
         Positioned(
-          bottom: MediaQuery.of(context).size.width * 0.05,
-          left: MediaQuery.of(context).size.width * 0.83,
+          bottom: MediaQuery.of(context).size.width * 0.12,
+          left: MediaQuery.of(context).size.width * 0.8,
           child: Container(
             decoration: ShapeDecoration(
               shape: CircleBorder (),
