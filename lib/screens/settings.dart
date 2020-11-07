@@ -6,7 +6,7 @@ import 'package:things/providers/settings.dart';
 
 import 'package:things/style/colors.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsScreen extends StatelessWidget {
 
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
