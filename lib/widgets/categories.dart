@@ -92,7 +92,7 @@ class _CategoriesDisplayState extends State <CategoriesDisplay> {
     int selectedIdx = Provider.of<Things>(context).selectedCategoryIdx;
     return GestureDetector(
       onTap: () {
-        Provider.of<Things>(context).selectedCategoryIdx = index;
+        Provider.of<Things>(context, listen: false).selectedCategoryIdx = index;
       },
       child: Container(
         margin: EdgeInsets.only(
