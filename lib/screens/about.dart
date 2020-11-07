@@ -157,8 +157,6 @@ class AboutScreen extends StatelessWidget {
 
               const Text('www.flaticon.com/authors/dmitri13'),
 
-              const SizedBox(height: 10),
-
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
 
               const Text(
