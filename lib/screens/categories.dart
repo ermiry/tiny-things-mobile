@@ -111,7 +111,7 @@ class _CategoriesScreenState extends State <CategoriesScreen> {
         return new AnimatedDialog(
           changeToDialog: true,
           borderRadius: BorderRadius.all(Radius.circular(12)),
-          child: new AddCategory(null)
+          child: new AddLabel(null)
 
         );
 
