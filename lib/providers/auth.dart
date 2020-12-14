@@ -36,16 +36,21 @@ class Auth with ChangeNotifier {
     var confirmBytes = utf8.encode(confirm);
     var confirmDigest = sha256.convert(confirmBytes);
 
+    var data = {
+      'name': name.replaceAll(new RegExp(r'\t'), ''), 
+      'username': username.replaceAll(new RegExp(r'\t'), ''), 
+      'email': email.replaceAll(new RegExp(r'\t'), ''), 
+      'password': passwordDigest.toString(),
+      'confirm': confirmDigest.toString()
+    };
+
+    var body = json.encode(data);
+
     try {
        final res = await http.post(
-        serverURL + '/api/users/register', 
-        body: {
-          'name': name.replaceAll(new RegExp(r'\t'), ''), 
-          'username': username.replaceAll(new RegExp(r'\t'), ''), 
-          'email': email.replaceAll(new RegExp(r'\t'), ''), 
-          'password': passwordDigest.toString(),
-          'confirm': confirmDigest.toString()
-        }
+        serverURL + '/api/users/register',
+        headers: { "Content-Type": "application/json" }, 
+        body: body
       );
 
       switch (res.statusCode) {
@@ -62,7 +67,18 @@ class Auth with ChangeNotifier {
           prefs.setString('user_token', this._token);
         } break;
 
-        default: throw HttpException (res.body.toString()); break;
+        case 400: {
+          String actualError;
+          var jsonError = json.decode(res.body);
+          if (jsonError['email'] != null) actualError = jsonError['email'];
+          else if (jsonError['username'] != null) actualError = jsonError['username'];
+          else if (jsonError['password'] != null) actualError = jsonError['password'];
+          else actualError = jsonError['error'];
+
+          throw HttpException (actualError);
+        } break;
+
+        default: throw HttpException ("Failed to create account"); break;
       }
 
       notifyListeners();
@@ -81,16 +97,19 @@ class Auth with ChangeNotifier {
     var passwordBytes = utf8.encode(password);
     var passwordDigest = sha256.convert(passwordBytes);
 
+    var data = { 
+      'email': email.replaceAll(new RegExp(r'\t'), ''), 
+      'password': passwordDigest.toString()
+    };
+
+    var body = json.encode(data);
+
     try {
       final res = await http.post(
-        serverURL + '/api/users/login', 
-        body: {
-          'email': email.replaceAll(new RegExp(r'\t'), ''), 
-          'password': passwordDigest.toString(),
-        }
+        serverURL + '/api/users/login',
+        headers: { "Content-Type": "application/json" },
+        body: body
       );
-
-      print(res.body);
 
       switch (res.statusCode) {
         case 200: {
@@ -109,11 +128,14 @@ class Auth with ChangeNotifier {
 
         case 400:
         case 404: {
-          print(res.body);
-          var actualRes = json.decode(res.body);
-          print(actualRes);
-          throw HttpException (actualRes['error']);
-          // throw HttpException ("Failed to authenticate!");
+          String actualError;
+          var jsonError = json.decode(res.body);
+          if (jsonError['email'] != null) actualError = jsonError['email'];
+          else if (jsonError['username'] != null) actualError = jsonError['username'];
+          else if (jsonError['password'] != null) actualError = jsonError['password'];
+          else actualError = jsonError['error'];
+
+          throw HttpException (actualError);
         } break;
 
         default: throw HttpException ("Failed to authenticate!"); break;
