@@ -133,16 +133,7 @@ class _RegisterScreenState extends State <RegisterScreen> {
         );
         fail = false;
       } on HttpException catch (error) {
-        var jsonError = json.decode(error.toString());
-
-        String actualError;
-        if (jsonError['email'] != null) actualError = jsonError['email'];
-        else if (jsonError['username'] != null) actualError = jsonError['username'];
-        else if (jsonError['password'] != null) actualError = jsonError['password'];
-
-        // print(actualError);
-
-        _showErrorDialog(actualError);
+        _showErrorDialog(error.toString());
         fail = true;
       }
 
